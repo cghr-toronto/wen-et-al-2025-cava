@@ -4,3 +4,20 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: "Richard Wen <richard.wen@unityhealth.to>"
 output: html_notebook
 ---
+
+```{r}
+calc_pccc <- function(actual, pred, k = 1, N = NULL) {
+    
+    # Calc N if not known
+    N <- if (is.null(N)) length(unique(c(actual, pred))) else N
+    
+    # Calc PCCC
+    C <- actual == pred # frac of deaths in top k causes
+    out <- (C - (k/N)) / (1 - (k/N))
+    return(out)
+}
+
+calc_csmfa <- function() {
+    return(out)
+}
+```

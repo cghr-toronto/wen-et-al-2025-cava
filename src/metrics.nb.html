@@ -1757,8 +1757,26 @@ display: none;
 
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7XG4gICAgXG4gICAgIyBDYWxjIE4gaWYgbm90IGtub3duXG4gICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE5cbiAgICBcbiAgICAjIENhbGMgUENDQ1xuICAgIEMgPC0gYWN0dWFsID09IHByZWQgIyBmcmFjIG9mIGRlYXRocyBpbiB0b3AgayBjYXVzZXNcbiAgICBvdXQgPC0gKEMgLSAoay9OKSkgLyAoMSAtIChrL04pKVxuICAgIHJldHVybihvdXQpXG59XG5cbmNhbGNfY3NtZmEgPC0gZnVuY3Rpb24oKSB7XG4gICAgcmV0dXJuKG91dClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>calc_pccc &lt;- function(actual, pred, k = 1, N = NULL) {
+    
+    # Calc N if not known
+    N &lt;- if (is.null(N)) length(unique(c(actual, pred))) else N
+    
+    # Calc PCCC
+    C &lt;- actual == pred # frac of deaths in top k causes
+    out &lt;- (C - (k/N)) / (1 - (k/N))
+    return(out)
+}
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWV0cmljcyIKZGF0ZTogImByIGZvcm1hdChTeXMudGltZSgpLCAnJUIgJWQsICVZJylgIgphdXRob3I6ICJSaWNoYXJkIFdlbiA8cmljaGFyZC53ZW5AdW5pdHloZWFsdGgudG8+IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCg==</div>
+calc_csmfa &lt;- function() {
+    return(out)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWV0cmljcyIKZGF0ZTogImByIGZvcm1hdChTeXMudGltZSgpLCAnJUIgJWQsICVZJylgIgphdXRob3I6ICJSaWNoYXJkIFdlbiA8cmljaGFyZC53ZW5AdW5pdHloZWFsdGgudG8+IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7CiAgICAKICAgICMgQ2FsYyBOIGlmIG5vdCBrbm93bgogICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE4KICAgIAogICAgIyBDYWxjIFBDQ0MKICAgIEMgPC0gYWN0dWFsID09IHByZWQgIyBmcmFjIG9mIGRlYXRocyBpbiB0b3AgayBjYXVzZXMKICAgIG91dCA8LSAoQyAtIChrL04pKSAvICgxIC0gKGsvTikpCiAgICByZXR1cm4ob3V0KQp9CgpjYWxjX2NzbWZhIDwtIGZ1bmN0aW9uKCkgewogICAgcmV0dXJuKG91dCkKfQpgYGA=</div>
 
 
 
