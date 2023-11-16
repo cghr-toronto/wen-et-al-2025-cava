@@ -11,7 +11,7 @@
 
 <meta name="author" content="Richard Wen richard.wen@unityhealth.to" />
 
-<meta name="date" content="2023-11-10" />
+<meta name="date" content="2023-11-16" />
 
 <title>Metrics</title>
 
@@ -1750,7 +1750,7 @@ display: none;
 
 <h1 class="title toc-ignore">Metrics</h1>
 <h4 class="author">Richard Wen <a href="mailto:richard.wen@unityhealth.to" class="email">richard.wen@unityhealth.to</a></h4>
-<h4 class="date">November 10, 2023</h4>
+<h4 class="date">November 16, 2023</h4>
 
 </div>
 
@@ -1758,25 +1758,53 @@ display: none;
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7XG4gICAgXG4gICAgIyBDYWxjIE4gaWYgbm90IGtub3duXG4gICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE5cbiAgICBcbiAgICAjIENhbGMgUENDQ1xuICAgIEMgPC0gYWN0dWFsID09IHByZWQgIyBmcmFjIG9mIGRlYXRocyBpbiB0b3AgayBjYXVzZXNcbiAgICBvdXQgPC0gKEMgLSAoay9OKSkgLyAoMSAtIChrL04pKVxuICAgIHJldHVybihvdXQpXG59XG5cbmNhbGNfY3NtZmEgPC0gZnVuY3Rpb24oKSB7XG4gICAgcmV0dXJuKG91dClcbn1cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7XG4gICAgXG4gICAgIyBDYWxjIE4gaWYgbm90IGtub3duXG4gICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE5cbiAgICBcbiAgICAjIENhbGMgZnJhYyBvZiBkZWF0aHMgaW4gdG9wIGsgY2F1c2VzXG4gICAgQyA8LSBzdW0oYWN0dWFsID09IHByZWQpIC8gbGVuKGFjdHVhbClcbiAgICBcbiAgICAjIENhbGMgUENDQ1xuICAgIG91dCA8LSAoQyAtIChrL04pKSAvICgxIC0gKGsvTikpXG4gICAgcmV0dXJuKG91dClcbn1cblxuY2FsY19jc21mX2FjYyA8LSBmdW5jdGlvbihhY3R1YWwsIHByZWQsIGNhdXNlcyA9IE5VTEwpIHtcbiAgICBcbiAgICAjIEdldCBhbGwgdW5pcXVlIGNhdXNlc1xuICAgIGNhdXNlcyA8LSB1bmlxdWUoYyhhY3R1YWwsIHByZWQpKVxuICAgIFxuICAgICMgR2V0IGNzbWZzXG4gICAgY2FzZXMgPC0gbGVuZ3RoKGFjdHVhbClcbiAgICBjc21mX3RydWUgPC0gdGFibGUoYWN0dWFsKSAvIGNhc2VzXG4gICAgY3NtZl9wcmVkIDwtIHRhYmxlKHByZWQpIC8gY2FzZXNcbiAgICBcbiAgICAjIENvcnJlY3QgZm9yIG1pc3NpbmcgY2F1c2VzIGluIGVpdGhlciBhY3R1YWwgb3IgcHJlZFxuICAgIGNzbWZfdHJ1ZSA8LSB2YXBwbHkoXG4gICAgICAgIGNhdXNlcyxcbiAgICAgICAgZnVuY3Rpb24oeCkgaWYgKHggJWluJSBuYW1lcyhjc21mX3RydWUpKSBjc21mX3RydWVbeF0gZWxzZSAwLFxuICAgICAgICBGVU4uVkFMVUUgPSBudW1lcmljKDEpXG4gICAgKVxuICAgIGNzbWZfcHJlZCA8LSB2YXBwbHkoXG4gICAgICAgIGNhdXNlcyxcbiAgICAgICAgZnVuY3Rpb24oeCkgaWYgKHggJWluJSBuYW1lcyhjc21mX3ByZWQpKSBjc21mX3ByZWRbeF0gZWxzZSAwLFxuICAgICAgICBGVU4uVkFMVUUgPSBudW1lcmljKDEpXG4gICAgKVxuICAgIFxuICAgICMgQ2FsYyBjc21mIG1heCBlcnJvclxuICAgIGNzbWZfbWF4X2Vycm9yIDwtIDIgKiAoMSAtIG1pbihjc21mX3RydWUpKVxuICAgIFxuICAgICMgQ2FsYyBjc21mIGFjY1xuICAgIG91dCA8LSAxIC0gKHN1bShhYnMoY3NtZl90cnVlIC0gY3NtZl9wcmVkKSkgLyBjc21mX21heF9lcnJvcilcbiAgICByZXR1cm4ob3V0KVxufVxuYGBgIn0= -->
 <pre class="r"><code>calc_pccc &lt;- function(actual, pred, k = 1, N = NULL) {
     
     # Calc N if not known
     N &lt;- if (is.null(N)) length(unique(c(actual, pred))) else N
     
+    # Calc frac of deaths in top k causes
+    C &lt;- sum(actual == pred) / len(actual)
+    
     # Calc PCCC
-    C &lt;- actual == pred # frac of deaths in top k causes
     out &lt;- (C - (k/N)) / (1 - (k/N))
     return(out)
 }
 
-calc_csmfa &lt;- function() {
+calc_csmf_acc &lt;- function(actual, pred, causes = NULL) {
+    
+    # Get all unique causes
+    causes &lt;- unique(c(actual, pred))
+    
+    # Get csmfs
+    cases &lt;- length(actual)
+    csmf_true &lt;- table(actual) / cases
+    csmf_pred &lt;- table(pred) / cases
+    
+    # Correct for missing causes in either actual or pred
+    csmf_true &lt;- vapply(
+        causes,
+        function(x) if (x %in% names(csmf_true)) csmf_true[x] else 0,
+        FUN.VALUE = numeric(1)
+    )
+    csmf_pred &lt;- vapply(
+        causes,
+        function(x) if (x %in% names(csmf_pred)) csmf_pred[x] else 0,
+        FUN.VALUE = numeric(1)
+    )
+    
+    # Calc csmf max error
+    csmf_max_error &lt;- 2 * (1 - min(csmf_true))
+    
+    # Calc csmf acc
+    out &lt;- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWV0cmljcyIKZGF0ZTogImByIGZvcm1hdChTeXMudGltZSgpLCAnJUIgJWQsICVZJylgIgphdXRob3I6ICJSaWNoYXJkIFdlbiA8cmljaGFyZC53ZW5AdW5pdHloZWFsdGgudG8+IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7CiAgICAKICAgICMgQ2FsYyBOIGlmIG5vdCBrbm93bgogICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE4KICAgIAogICAgIyBDYWxjIFBDQ0MKICAgIEMgPC0gYWN0dWFsID09IHByZWQgIyBmcmFjIG9mIGRlYXRocyBpbiB0b3AgayBjYXVzZXMKICAgIG91dCA8LSAoQyAtIChrL04pKSAvICgxIC0gKGsvTikpCiAgICByZXR1cm4ob3V0KQp9CgpjYWxjX2NzbWZhIDwtIGZ1bmN0aW9uKCkgewogICAgcmV0dXJuKG91dCkKfQpgYGA=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWV0cmljcyIKZGF0ZTogImByIGZvcm1hdChTeXMudGltZSgpLCAnJUIgJWQsICVZJylgIgphdXRob3I6ICJSaWNoYXJkIFdlbiA8cmljaGFyZC53ZW5AdW5pdHloZWFsdGgudG8+IgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KY2FsY19wY2NjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgayA9IDEsIE4gPSBOVUxMKSB7CiAgICAKICAgICMgQ2FsYyBOIGlmIG5vdCBrbm93bgogICAgTiA8LSBpZiAoaXMubnVsbChOKSkgbGVuZ3RoKHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpKSBlbHNlIE4KICAgIAogICAgIyBDYWxjIGZyYWMgb2YgZGVhdGhzIGluIHRvcCBrIGNhdXNlcwogICAgQyA8LSBzdW0oYWN0dWFsID09IHByZWQpIC8gbGVuKGFjdHVhbCkKICAgIAogICAgIyBDYWxjIFBDQ0MKICAgIG91dCA8LSAoQyAtIChrL04pKSAvICgxIC0gKGsvTikpCiAgICByZXR1cm4ob3V0KQp9CgpjYWxjX2NzbWZfYWNjIDwtIGZ1bmN0aW9uKGFjdHVhbCwgcHJlZCwgY2F1c2VzID0gTlVMTCkgewogICAgCiAgICAjIEdldCBhbGwgdW5pcXVlIGNhdXNlcwogICAgY2F1c2VzIDwtIHVuaXF1ZShjKGFjdHVhbCwgcHJlZCkpCiAgICAKICAgICMgR2V0IGNzbWZzCiAgICBjYXNlcyA8LSBsZW5ndGgoYWN0dWFsKQogICAgY3NtZl90cnVlIDwtIHRhYmxlKGFjdHVhbCkgLyBjYXNlcwogICAgY3NtZl9wcmVkIDwtIHRhYmxlKHByZWQpIC8gY2FzZXMKICAgIAogICAgIyBDb3JyZWN0IGZvciBtaXNzaW5nIGNhdXNlcyBpbiBlaXRoZXIgYWN0dWFsIG9yIHByZWQKICAgIGNzbWZfdHJ1ZSA8LSB2YXBwbHkoCiAgICAgICAgY2F1c2VzLAogICAgICAgIGZ1bmN0aW9uKHgpIGlmICh4ICVpbiUgbmFtZXMoY3NtZl90cnVlKSkgY3NtZl90cnVlW3hdIGVsc2UgMCwKICAgICAgICBGVU4uVkFMVUUgPSBudW1lcmljKDEpCiAgICApCiAgICBjc21mX3ByZWQgPC0gdmFwcGx5KAogICAgICAgIGNhdXNlcywKICAgICAgICBmdW5jdGlvbih4KSBpZiAoeCAlaW4lIG5hbWVzKGNzbWZfcHJlZCkpIGNzbWZfcHJlZFt4XSBlbHNlIDAsCiAgICAgICAgRlVOLlZBTFVFID0gbnVtZXJpYygxKQogICAgKQogICAgCiAgICAjIENhbGMgY3NtZiBtYXggZXJyb3IKICAgIGNzbWZfbWF4X2Vycm9yIDwtIDIgKiAoMSAtIG1pbihjc21mX3RydWUpKQogICAgCiAgICAjIENhbGMgY3NtZiBhY2MKICAgIG91dCA8LSAxIC0gKHN1bShhYnMoY3NtZl90cnVlIC0gY3NtZl9wcmVkKSkgLyBjc21mX21heF9lcnJvcikKICAgIHJldHVybihvdXQpCn0KYGBg</div>
 
 
 

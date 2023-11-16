@@ -11,13 +11,41 @@ calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     # Calc N if not known
     N <- if (is.null(N)) length(unique(c(actual, pred))) else N
     
+    # Calc frac of deaths in top k causes
+    C <- sum(actual == pred) / len(actual)
+    
     # Calc PCCC
-    C <- actual == pred # frac of deaths in top k causes
     out <- (C - (k/N)) / (1 - (k/N))
     return(out)
 }
 
-calc_csmfa <- function() {
+calc_csmf_acc <- function(actual, pred, causes = NULL) {
+    
+    # Get all unique causes
+    causes <- unique(c(actual, pred))
+    
+    # Get csmfs
+    cases <- length(actual)
+    csmf_true <- table(actual) / cases
+    csmf_pred <- table(pred) / cases
+    
+    # Correct for missing causes in either actual or pred
+    csmf_true <- vapply(
+        causes,
+        function(x) if (x %in% names(csmf_true)) csmf_true[x] else 0,
+        FUN.VALUE = numeric(1)
+    )
+    csmf_pred <- vapply(
+        causes,
+        function(x) if (x %in% names(csmf_pred)) csmf_pred[x] else 0,
+        FUN.VALUE = numeric(1)
+    )
+    
+    # Calc csmf max error
+    csmf_max_error <- 2 * (1 - min(csmf_true))
+    
+    # Calc csmf acc
+    out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }
 ```
