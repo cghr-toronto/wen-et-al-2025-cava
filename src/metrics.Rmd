@@ -213,6 +213,10 @@ for (icol in icd_cols) {
     mname <- str_remove(icol, "_icd10")
     cname <- paste0(mname, "_cghr10")
     
+    # Remove all whitespaces and keep only first icd10 code if multiple
+    models$all[[icol]] <- str_replace_all(models$all[[icol]], "\\s", "")
+    models$all[[icol]] <- str_extract(models$all[[icol]], "^[A-Za-z]\\d{2}")
+    
     # Join model wva to mapping wva
     models$all <- models$all %>%
     left_join(
