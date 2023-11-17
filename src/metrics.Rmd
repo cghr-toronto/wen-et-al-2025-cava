@@ -80,7 +80,7 @@ df <- list(
         col_types = cols(wva2016_code = col_double())
     ),
     icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
-    adult = bind_rows(
+    ages = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_adult_v1.csv",
             col_select = "rowid"
@@ -89,8 +89,6 @@ df <- list(
             "../tmp/healsl_rd2_adult_v1.csv",
             col_select = "rowid"
         ) %>% mutate(round = 2, age = "adult"),
-    ),
-    child = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_child_v1.csv",
             col_select = "rowid"
@@ -98,9 +96,7 @@ df <- list(
         read_csv(
             "../tmp/healsl_rd2_child_v1.csv",
             col_select = "rowid"
-        ) %>% mutate(round = 2, age = "child")
-    ),
-    neo = bind_rows(
+        ) %>% mutate(round = 2, age = "child"),
         read_csv(
             "../tmp/healsl_rd1_neo_v1.csv",
             col_select = "rowid"
@@ -119,7 +115,7 @@ df <- list(
             "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
-    ),
+    ) %>% rename(chatgpt3_icd10 = api_chat_icd),
     model_chatgpt4 = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
@@ -129,7 +125,7 @@ df <- list(
             "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
-    ),
+    ) %>% rename(chatgpt4_icd10 = api_chat_icd),
     model_insilicova = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
@@ -139,7 +135,7 @@ df <- list(
             "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
-    ),
+    ) %>% rename(insilicova_wva2016 = cause1_wva),
     model_interva5 = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_interva5_v1.csv",
@@ -149,7 +145,7 @@ df <- list(
             "../tmp/healsl_rd2_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
-    )
+    ) %>% rename(interva5_wva2016 = cause1_wva)
 )
 ```
 
@@ -162,49 +158,71 @@ for (i in names(df)) {
 
 ## Preprocess
 
+Combine all model predictions with their ages.
+
+```{r}
+models <- df[str_starts(names(df), "model_")]
+models$all <- df$ages
+for (i in 1:length(models)) {
+    models$all <- models$all %>%
+        left_join(
+            models[[i]],
+            by = c("rowid" = "rowid", "round" = "round"),
+            suffix = c("", "")
+        )
+}
+head(models$all)
+```
+
 Convert ICD-10 and WVA-2016 codes to CGHR-10 codes.
 
 ```{r}
 
-# Combine all models
-models <- df[str_starts(names(df), "model_")]
-
-# Add age groups to predictions
-df$chatgpt3 <- df$chatgpt3 %>%
-    left_join(
-        df$adult,
-        by = c(
-            "rowid" = "rowid",
-            "round" = "round"
-        ),
-        multiple = "first"
-    )
+# Get wva2016 cols for model preds
+wva_cols <- colnames(models$all)
+wva_cols <- wva_cols[!wva_cols %in% c("rowid", "round", "age")]
+wva_cols <- wva_cols[str_ends(wva_cols, "_wva2016")]
 
 # Convert wva2016 to icd10 via join
-df$insilicova <- df$insilicova %>%
+for (wcol in wva_cols) {
+    
+    # Create new converted col based on model name
+    mname <- str_remove(wcol, "_wva2016")
+    iname <- paste0(mname, "_icd10")
+    
+    # Join model wva to mapping wva
+    models$all <- models$all %>%
     left_join(
-        df$wva2016_icd10,
-        by = c("cause1_wva" = "wva2016_code"),
+        df$wva2016_icd10 %>%
+            select(wva2016_code, icd10_code) %>%
+            rename_with(~iname, icd10_code),
+        by = setNames("wva2016_code", wcol),
         multiple = "first"
     )
-df$interva5 <- df$interva5 %>%
-    left_join(
-        df$wva2016_icd10,
-        by = c("cause1_wva" = "wva2016_code"),
-        multiple = "first"
-    )
+}
+
+# Get icd10 cols for model preds
+icd_cols <- colnames(models$all)
+icd_cols <- icd_cols[!icd_cols %in% c("rowid", "round", "age")]
+icd_cols <- icd_cols[str_ends(icd_cols, "_icd10")]
 
 # Convert icd10 to cghr10 via join
-df$chatgpt3 <- df$chatgpt3 %>%
+for (icol in icd_cols) {
+    
+    # Create new converted col based on model name
+    mname <- str_remove(icol, "_icd10")
+    cname <- paste0(mname, "_cghr10")
+    
+    # Join model wva to mapping wva
+    models$all <- models$all %>%
     left_join(
-        df$icd10_cghr10,
-        by = c("api_chat_icd" = "icd10_code"),
+        df$icd10_cghr10 %>%
+            select(icd10_code, cghr10_title, cghr10_age) %>%
+            rename_with(~cname, cghr10_title),
+        by = setNames(c("icd10_code", "cghr10_age"), c(icol, "age")),
         multiple = "first"
     )
-df$interva5 <- df$interva5 %>%
-    left_join(
-        df$wva2016_icd10,
-        by = c("cause1_wva" = "wva2016_code"),
-        multiple = "first"
-    )
+}
+
+head(models$all)
 ```
