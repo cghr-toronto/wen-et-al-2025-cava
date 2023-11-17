@@ -5,10 +5,29 @@ author: "Richard Wen <richard.wen@unityhealth.to>"
 output: html_notebook
 ---
 
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  message=FALSE,
+  warning=FALSE
+)
+```
+
+## Libraries
+
+```{r}
+library(tidyverse)
+
+options(readr.show_col_types = FALSE)
+```
+
+## Functions
+
+Functions for PCCC and CSMF Accuracy.
+
 ```{r}
 calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     
-    # Calc N if not known
+    # Calc N num of causes if not known
     N <- if (is.null(N)) length(unique(c(actual, pred))) else N
     
     # Calc frac of deaths in top k causes
@@ -19,7 +38,7 @@ calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     return(out)
 }
 
-calc_csmf_acc <- function(actual, pred, causes = NULL) {
+calc_csmf_acc <- function(actual, pred) {
     
     # Get all unique causes
     causes <- unique(c(actual, pred))
@@ -48,4 +67,144 @@ calc_csmf_acc <- function(actual, pred, causes = NULL) {
     out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }
+```
+
+## Data
+
+Load data from `data` and `tmp` folders.
+
+```{r}
+df <- list(
+    wva2016_icd10 = read_csv(
+        "../data/wva2016_icd10_v1.csv",
+        col_types = cols(wva2016_code = col_double())
+    ),
+    icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
+    adult = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_adult_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 1, age = "adult"),
+        read_csv(
+            "../tmp/healsl_rd2_adult_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 2, age = "adult"),
+    ),
+    child = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_child_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 1, age = "child"),
+        read_csv(
+            "../tmp/healsl_rd2_child_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 2, age = "child")
+    ),
+    neo = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_neo_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 1, age = "neo"),
+        read_csv(
+            "../tmp/healsl_rd2_neo_v1.csv",
+            col_select = "rowid"
+        ) %>% mutate(round = 2, age = "neo")
+    ),
+    model_chatgpt3 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        )
+    ),
+    model_chatgpt4 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        )
+    ),
+    model_insilicova = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        )
+    ),
+    model_interva5 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_interva5_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_interva5_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        )
+    )
+)
+```
+
+```{r, echo=FALSE}
+for (i in names(df)) {
+    print(i)
+    print(head(df[[i]]))
+}
+```
+
+## Preprocess
+
+Convert ICD-10 and WVA-2016 codes to CGHR-10 codes.
+
+```{r}
+
+# Combine all models
+models <- df[str_starts(names(df), "model_")]
+
+# Add age groups to predictions
+df$chatgpt3 <- df$chatgpt3 %>%
+    left_join(
+        df$adult,
+        by = c(
+            "rowid" = "rowid",
+            "round" = "round"
+        ),
+        multiple = "first"
+    )
+
+# Convert wva2016 to icd10 via join
+df$insilicova <- df$insilicova %>%
+    left_join(
+        df$wva2016_icd10,
+        by = c("cause1_wva" = "wva2016_code"),
+        multiple = "first"
+    )
+df$interva5 <- df$interva5 %>%
+    left_join(
+        df$wva2016_icd10,
+        by = c("cause1_wva" = "wva2016_code"),
+        multiple = "first"
+    )
+
+# Convert icd10 to cghr10 via join
+df$chatgpt3 <- df$chatgpt3 %>%
+    left_join(
+        df$icd10_cghr10,
+        by = c("api_chat_icd" = "icd10_code"),
+        multiple = "first"
+    )
+df$interva5 <- df$interva5 %>%
+    left_join(
+        df$wva2016_icd10,
+        by = c("cause1_wva" = "wva2016_code"),
+        multiple = "first"
+    )
 ```

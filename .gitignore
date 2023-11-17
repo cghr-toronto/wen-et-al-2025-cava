@@ -356,5 +356,5 @@ TSWLatexianTemp*
 
 # Misc
 
-# Data
-data/
+# Temp folder
+tmp/
