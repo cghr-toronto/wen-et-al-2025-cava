@@ -1,0 +1,235 @@
+---
+title: "Preprocess"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+author: "Richard Wen <richard.wen@unityhealth.to>"
+output: html_notebook
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  message=FALSE,
+  warning=FALSE
+)
+options(readr.show_col_types = FALSE)
+```
+
+## Libraries
+
+```{r}
+library(tidyverse)
+```
+
+## Data
+
+Load data from `data` and `tmp` folders.
+
+```{r}
+# Physicians cols to keep and rename for consistency
+phy_cols <- c(
+    "rowid",
+    "p1_icd",
+    "p2_icd",
+    "p1_recon_icd",
+    "p2_recon_icd",
+    "adj_icd"
+)
+phy_adult_cols <- c(
+    "rowid",
+    "p1_icd_cod",
+    "p2_icd_cod",
+    "p1_recon_icd_cod",
+    "p2_recon_icd_cod",
+    "adj_icd_cod"
+)
+phy_adult_rename <- c(
+    p1_icd = "p1_icd_cod",
+    p2_icd = "p2_icd_cod",
+    p1_recon_icd = "p1_recon_icd_cod",
+    p2_recon_icd = "p2_recon_icd_cod",
+    adj_icd = "adj_icd_cod"
+)
+
+# Read data
+df <- list(
+    wva2016_icd10 = read_csv(
+        "../data/wva2016_icd10_v1.csv",
+        col_types = cols(wva2016_code = col_double())
+    ),
+    icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
+    physician = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_adult_v1.csv",
+            col_select = phy_adult_cols
+        ) %>%
+            mutate(round = 1, age = "adult") %>%
+            rename(all_of(phy_adult_rename)),
+        read_csv(
+            "../tmp/healsl_rd2_adult_v1.csv",
+            col_select = phy_adult_cols
+        ) %>%
+            mutate(round = 2, age = "adult") %>%
+            rename(all_of(phy_adult_rename)),
+        read_csv(
+            "../tmp/healsl_rd1_child_v1.csv",
+            col_select = phy_cols
+        ) %>% mutate(round = 1, age = "child"),
+        read_csv(
+            "../tmp/healsl_rd2_child_v1.csv",
+            col_select = phy_cols
+        ) %>% mutate(round = 2, age = "child"),
+        read_csv(
+            "../tmp/healsl_rd1_neo_v1.csv",
+            col_select = phy_cols
+        ) %>% mutate(round = 1, age = "neo"),
+        read_csv(
+            "../tmp/healsl_rd2_neo_v1.csv",
+            col_select = phy_cols
+        ) %>% mutate(round = 2, age = "neo")
+    ),
+    model_chatgpt3 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        )
+    ) %>% rename(chatgpt3_icd10 = api_chat_icd),
+    model_chatgpt4 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
+            col_select = c("rowid", "round", "api_chat_icd")
+        )
+    ) %>% rename(chatgpt4_icd10 = api_chat_icd),
+    model_insilicova = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        )
+    ) %>% rename(insilicova_wva2016 = cause1_wva),
+    model_interva5 = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_rapid_interva5_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_interva5_v1.csv",
+            col_select = c("rowid", "round", "cause1_wva")
+        )
+    ) %>% rename(interva5_wva2016 = cause1_wva)
+)
+```
+
+```{r, echo=FALSE}
+for (i in names(df)) {
+    print(i)
+    print(head(df[[i]]))
+}
+```
+
+## Method
+
+Create column for final physician ICD-10 codes based on the following rule:
+
+1. If an adjudicated code exists, use it as the final code
+2. If not, use physician 1's reconciled code if it exists
+3. Otherwise use physician 1's code
+
+```{r}
+df$physician <- df$physician %>%
+    mutate(physician_icd10 = coalesce(
+        adj_icd,
+        p1_recon_icd,
+        p1_icd
+    ))
+```
+
+Combine all model and physician predictions with their ages.
+
+```{r}
+models <- df[str_starts(names(df), "model_")]
+out <- df$physician
+for (i in 1:length(models)) {
+    out <- out %>%
+        left_join(
+            models[[i]],
+            by = c("rowid" = "rowid", "round" = "round"),
+            suffix = c("", "")
+        )
+}
+head(out)
+```
+
+Convert ICD-10 and WVA-2016 codes to CGHR-10 codes.
+
+```{r}
+
+# Get wva2016 cols for model preds
+wva_cols <- colnames(out)
+wva_cols <- wva_cols[!wva_cols %in% c("rowid", "round", "age")]
+wva_cols <- wva_cols[str_ends(wva_cols, "_wva2016")]
+
+# Convert wva2016 to icd10 via join
+for (wcol in wva_cols) {
+    
+    # Create new converted col based on model name
+    mname <- str_remove(wcol, "_wva2016")
+    iname <- paste0(mname, "_icd10")
+    
+    # Join model wva to mapping wva
+    out <- out %>%
+    left_join(
+        df$wva2016_icd10 %>%
+            select(wva2016_code, icd10_code) %>%
+            rename_with(~iname, icd10_code),
+        by = setNames("wva2016_code", wcol),
+        multiple = "first"
+    )
+}
+
+# Get icd10 cols for model preds
+icd_cols <- colnames(out)
+icd_cols <- icd_cols[!icd_cols %in% c("rowid", "round", "age")]
+icd_cols <- icd_cols[str_ends(icd_cols, "_icd10")]
+
+# Convert icd10 to cghr10 via join
+for (icol in icd_cols) {
+    
+    # Create new converted col based on model name
+    mname <- str_remove(icol, "_icd10")
+    cname <- paste0(mname, "_cghr10")
+    
+    # Remove all whitespaces and keep only first icd10 code if multiple
+    out[[icol]] <- str_replace_all(out[[icol]], "\\s", "")
+    out[[icol]] <- str_extract(out[[icol]], "^[A-Za-z]\\d{2}")
+    
+    # Join model wva to mapping wva
+    out <- out %>%
+    left_join(
+        df$icd10_cghr10 %>%
+            select(icd10_code, cghr10_title, cghr10_age) %>%
+            rename_with(~cname, cghr10_title),
+        by = setNames(c("icd10_code", "cghr10_age"), c(icol, "age")),
+        multiple = "first"
+    )
+}
+
+head(out)
+```
+
+## Results
+
+Save pre-processed data to `data` folder.
+
+```{r}
+write_csv(out, "../data/healsl_rd1to2_cod_v1.csv")
+```

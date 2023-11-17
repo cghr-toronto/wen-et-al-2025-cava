@@ -10,14 +10,13 @@ knitr::opts_chunk$set(
   message=FALSE,
   warning=FALSE
 )
+options(readr.show_col_types = FALSE)
 ```
 
 ## Libraries
 
 ```{r}
 library(tidyverse)
-
-options(readr.show_col_types = FALSE)
 ```
 
 ## Functions
@@ -28,10 +27,12 @@ Functions for PCCC and CSMF Accuracy.
 calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     
     # Calc N num of causes if not known
-    N <- if (is.null(N)) length(unique(c(actual, pred))) else N
+    N <- if (is.null(N)) length(unique(na.omit(c(actual, pred)))) else N
     
     # Calc frac of deaths in top k causes
-    C <- sum(actual == pred) / len(actual)
+    TP <- actual == pred
+    TP[is.na(TP) | is.null(TP)] <- FALSE # for no preds
+    C <- sum(TP) / length(actual)
     
     # Calc PCCC
     out <- (C - (k/N)) / (1 - (k/N))
@@ -71,219 +72,178 @@ calc_csmf_acc <- function(actual, pred) {
 
 ## Data
 
-Load data from `data` and `tmp` folders.
+Load data from `data` folder.
 
 ```{r}
-# Physicians cols to keep and rename for consistency
-phy_cols <- c(
-    "rowid",
-    "p1_icd",
-    "p2_icd",
-    "p1_recon_icd",
-    "p2_recon_icd",
-    "adj_icd"
-)
-phy_adult_cols <- c(
-    "rowid",
-    "p1_icd_cod",
-    "p2_icd_cod",
-    "p1_recon_icd_cod",
-    "p2_recon_icd_cod",
-    "adj_icd_cod"
-)
-phy_adult_rename <- c(
-    p1_icd = "p1_icd_cod",
-    p2_icd = "p2_icd_cod",
-    p1_recon_icd = "p1_recon_icd_cod",
-    p2_recon_icd = "p2_recon_icd_cod",
-    adj_icd = "adj_icd_cod"
-)
-
-# Read data
-df <- list(
-    wva2016_icd10 = read_csv(
-        "../data/wva2016_icd10_v1.csv",
-        col_types = cols(wva2016_code = col_double())
-    ),
-    icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
-    physician = bind_rows(
-        read_csv(
-            "../tmp/healsl_rd1_adult_v1.csv",
-            col_select = phy_adult_cols
-        ) %>%
-            mutate(round = 1, age = "adult") %>%
-            rename(all_of(phy_adult_rename)),
-        read_csv(
-            "../tmp/healsl_rd2_adult_v1.csv",
-            col_select = phy_adult_cols
-        ) %>%
-            mutate(round = 2, age = "adult") %>%
-            rename(all_of(phy_adult_rename)),
-        read_csv(
-            "../tmp/healsl_rd1_child_v1.csv",
-            col_select = phy_cols
-        ) %>% mutate(round = 1, age = "child"),
-        read_csv(
-            "../tmp/healsl_rd2_child_v1.csv",
-            col_select = phy_cols
-        ) %>% mutate(round = 2, age = "child"),
-        read_csv(
-            "../tmp/healsl_rd1_neo_v1.csv",
-            col_select = phy_cols
-        ) %>% mutate(round = 1, age = "neo"),
-        read_csv(
-            "../tmp/healsl_rd2_neo_v1.csv",
-            col_select = phy_cols
-        ) %>% mutate(round = 2, age = "neo")
-    ),
-    model_chatgpt3 = bind_rows(
-        read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        ),
-        read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        )
-    ) %>% rename(chatgpt3_icd10 = api_chat_icd),
-    model_chatgpt4 = bind_rows(
-        read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        ),
-        read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        )
-    ) %>% rename(chatgpt4_icd10 = api_chat_icd),
-    model_insilicova = bind_rows(
-        read_csv(
-            "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
-            col_select = c("rowid", "round", "cause1_wva")
-        ),
-        read_csv(
-            "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
-            col_select = c("rowid", "round", "cause1_wva")
-        )
-    ) %>% rename(insilicova_wva2016 = cause1_wva),
-    model_interva5 = bind_rows(
-        read_csv(
-            "../tmp/healsl_rd1_rapid_interva5_v1.csv",
-            col_select = c("rowid", "round", "cause1_wva")
-        ),
-        read_csv(
-            "../tmp/healsl_rd2_rapid_interva5_v1.csv",
-            col_select = c("rowid", "round", "cause1_wva")
-        )
-    ) %>% rename(interva5_wva2016 = cause1_wva)
-)
+df <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
 ```
 
 ```{r, echo=FALSE}
-for (i in names(df)) {
-    print(i)
-    print(head(df[[i]]))
-}
-```
 
-## Preprocess
+# Display num of cases
+cat("Number of Cases: ", nrow(df), "\n")
 
-Create column for final physician ICD-10 codes based on the following rule:
+# Get actual and pred
+actual <- df$physician_cghr10
+pred <- df %>% select(ends_with("_cghr10"), -physician_cghr10)
 
-1. If an adjudicated code exists, use it as the final code
-2. If not, use physician 1's reconciled code if it exists
-3. Otherwise use physician 1's code
+# Physician info
+cat(paste0(
+    "Physician Coded Cases (",
+    length(unique(na.omit(actual))), " CODs): ",
+    length(actual) - sum(is.na(actual) | is.null(actual)),
+    "\n"
+))
 
-```{r}
-df$physician <- df$physician %>%
-    mutate(physician_icd10 = coalesce(
-        adj_icd,
-        p1_recon_icd,
-        p1_icd
+# Models info
+for (mcol in colnames(pred)) {
+    cat(paste0(
+        toupper(str_remove(mcol, "_cghr10")), " Predicted Cases (", 
+        length(unique(na.omit(pred[[mcol]]))), " CODs): ",
+        length(pred[[mcol]]) - sum(is.na(pred[[mcol]]) | is.null(pred[[mcol]])),
+        "\n"
     ))
+}
+
+print(head(df))
 ```
 
-Combine all model predictions with their ages.
+Filter for cases that were coded by physicians.
 
 ```{r}
-models <- df[str_starts(names(df), "model_")]
-models$all <- df$physician
-for (i in 1:length(models)) {
-    models$all <- models$all %>%
-        left_join(
-            models[[i]],
-            by = c("rowid" = "rowid", "round" = "round"),
-            suffix = c("", "")
+df <- df %>%
+    filter(!is.na(physician_cghr10) & !is.null(physician_cghr10))
+```
+
+```{r, echo=FALSE}
+cat("Number of Cases for Metrics: ", nrow(df))
+print(head(df))
+```
+
+Create model combinations where if any of the models have the physician code, then set the combined model's output for the case to be the physician code. 
+
+```{r}
+df <- df %>%
+    mutate(
+        "chatgpt3_insilicova_cghr10" = if_else(
+            chatgpt3_cghr10 == physician_cghr10 | 
+                insilicova_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt3_cghr10
+        ),
+        "chatgpt4_insilicova_cghr10" = if_else(
+            chatgpt4_cghr10 == physician_cghr10 | 
+                insilicova_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt4_cghr10
+        ),
+        "chatgpt3_interva5_cghr10" = if_else(
+            chatgpt3_cghr10 == physician_cghr10 | 
+                interva5_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt3_cghr10
+        ),
+        "chatgpt4_interva5_cghr10" = if_else(
+            chatgpt4_cghr10 == physician_cghr10 | 
+                interva5_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt4_cghr10
+        ),
+        "chatgpt3_insilicova_interva5_cghr10" = if_else(
+            chatgpt3_cghr10 == physician_cghr10 | 
+                insilicova_cghr10 == physician_cghr10 |
+                interva5_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt3_cghr10
+        ),
+        "chatgpt4_insilicova_interva5_cghr10" = if_else(
+            chatgpt4_cghr10 == physician_cghr10 | 
+                insilicova_cghr10 == physician_cghr10 |
+                interva5_cghr10 == physician_cghr10,
+            physician_cghr10,
+            chatgpt4_cghr10
         )
-}
-head(models$all)
+    )
 ```
 
-Convert ICD-10 and WVA-2016 codes to CGHR-10 codes.
+```{r, echo=FALSE}
+print(head(df %>% select(
+    chatgpt3_insilicova_cghr10,
+    chatgpt4_insilicova_cghr10,
+    chatgpt3_interva5_cghr10,
+    chatgpt4_interva5_cghr10,
+    chatgpt3_insilicova_interva5_cghr10,
+    chatgpt4_insilicova_interva5_cghr10
+)))
+```
+
+Separate physician (actual) and model (predicted) CODs.
 
 ```{r}
+actual <- df$physician_cghr10
+pred <- df %>%
+    select(ends_with("_cghr10"), -physician_cghr10) %>%
+    rename_all(~toupper(str_replace(., "_cghr10", "")))
+```
 
-# Get wva2016 cols for model preds
-wva_cols <- colnames(models$all)
-wva_cols <- wva_cols[!wva_cols %in% c("rowid", "round", "age")]
-wva_cols <- wva_cols[str_ends(wva_cols, "_wva2016")]
+```{r, echo=FALSE}
+cat(paste0(
+    "Physician Coded Cases (",
+    length(unique(na.omit(actual))), " CODs): ",
+    length(actual) - sum(is.na(actual) | is.null(actual)),
+    "\n"
+))
+```
 
-# Convert wva2016 to icd10 via join
-for (wcol in wva_cols) {
-    
-    # Create new converted col based on model name
-    mname <- str_remove(wcol, "_wva2016")
-    iname <- paste0(mname, "_icd10")
-    
-    # Join model wva to mapping wva
-    models$all <- models$all %>%
-    left_join(
-        df$wva2016_icd10 %>%
-            select(wva2016_code, icd10_code) %>%
-            rename_with(~iname, icd10_code),
-        by = setNames("wva2016_code", wcol),
-        multiple = "first"
-    )
+```{r, echo=FALSE}
+for (mcol in colnames(pred)) {
+    cat(paste0(
+        mcol, " Predicted Cases (", 
+        length(unique(na.omit(pred[[mcol]]))), " CODs): ",
+        length(pred[[mcol]]) - sum(is.na(pred[[mcol]]) | is.null(pred[[mcol]])),
+        "\n"
+    ))
 }
-
-# Get icd10 cols for model preds
-icd_cols <- colnames(models$all)
-icd_cols <- icd_cols[!icd_cols %in% c("rowid", "round", "age")]
-icd_cols <- icd_cols[str_ends(icd_cols, "_icd10")]
-
-# Convert icd10 to cghr10 via join
-for (icol in icd_cols) {
-    
-    # Create new converted col based on model name
-    mname <- str_remove(icol, "_icd10")
-    cname <- paste0(mname, "_cghr10")
-    
-    # Remove all whitespaces and keep only first icd10 code if multiple
-    models$all[[icol]] <- str_replace_all(models$all[[icol]], "\\s", "")
-    models$all[[icol]] <- str_extract(models$all[[icol]], "^[A-Za-z]\\d{2}")
-    
-    # Join model wva to mapping wva
-    models$all <- models$all %>%
-    left_join(
-        df$icd10_cghr10 %>%
-            select(icd10_code, cghr10_title, cghr10_age) %>%
-            rename_with(~cname, cghr10_title),
-        by = setNames(c("icd10_code", "cghr10_age"), c(icol, "age")),
-        multiple = "first"
-    )
-}
-
-head(models$all)
 ```
 
 ## Methods
 
-Calculate PCCC for each model:
+### PCCC
+
+Calculate PCCC to evaluate indivudal performance for each model.
 
 ```{r}
+pccc <- pred %>%
+    pivot_longer(
+        everything(),
+        names_to = "Model",
+        values_to = "prediction"
+    ) %>%
+    group_by(Model) %>%
+    summarise(
+        PCCC = calc_pccc(actual, prediction, k = str_count(unique(Model), "_") + 1)
+    ) %>%
+    mutate(Model = str_replace_all(Model, "_", " & ")) %>%
+    arrange(desc(PCCC))
+pccc
 ```
 
-Calculate CSMF Accuracy for each model:
+### CSMF Accuracy
+
+Calculate CSMF Accuracy to evaluate population performance for each model.
 
 ```{r}
+csmf_acc <- pred %>%
+    pivot_longer(
+        everything(),
+        names_to = "Model",
+        values_to = "prediction"
+    ) %>%
+    group_by(Model) %>%
+    summarise(
+        "CSMF Accuracy" = calc_csmf_acc(actual, prediction)
+    ) %>%
+    mutate(Model = str_replace_all(Model, "_", " & ")) %>%
+    arrange(desc(`CSMF Accuracy`))
+csmf_acc
 ```
