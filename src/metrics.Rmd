@@ -74,36 +74,66 @@ calc_csmf_acc <- function(actual, pred) {
 Load data from `data` and `tmp` folders.
 
 ```{r}
+# Physicians cols to keep and rename for consistency
+phy_cols <- c(
+    "rowid",
+    "p1_icd",
+    "p2_icd",
+    "p1_recon_icd",
+    "p2_recon_icd",
+    "adj_icd"
+)
+phy_adult_cols <- c(
+    "rowid",
+    "p1_icd_cod",
+    "p2_icd_cod",
+    "p1_recon_icd_cod",
+    "p2_recon_icd_cod",
+    "adj_icd_cod"
+)
+phy_adult_rename <- c(
+    p1_icd = "p1_icd_cod",
+    p2_icd = "p2_icd_cod",
+    p1_recon_icd = "p1_recon_icd_cod",
+    p2_recon_icd = "p2_recon_icd_cod",
+    adj_icd = "adj_icd_cod"
+)
+
+# Read data
 df <- list(
     wva2016_icd10 = read_csv(
         "../data/wva2016_icd10_v1.csv",
         col_types = cols(wva2016_code = col_double())
     ),
     icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
-    ages = bind_rows(
+    physician = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_adult_v1.csv",
-            col_select = "rowid"
-        ) %>% mutate(round = 1, age = "adult"),
+            col_select = phy_adult_cols
+        ) %>%
+            mutate(round = 1, age = "adult") %>%
+            rename(all_of(phy_adult_rename)),
         read_csv(
             "../tmp/healsl_rd2_adult_v1.csv",
-            col_select = "rowid"
-        ) %>% mutate(round = 2, age = "adult"),
+            col_select = phy_adult_cols
+        ) %>%
+            mutate(round = 2, age = "adult") %>%
+            rename(all_of(phy_adult_rename)),
         read_csv(
             "../tmp/healsl_rd1_child_v1.csv",
-            col_select = "rowid"
+            col_select = phy_cols
         ) %>% mutate(round = 1, age = "child"),
         read_csv(
             "../tmp/healsl_rd2_child_v1.csv",
-            col_select = "rowid"
+            col_select = phy_cols
         ) %>% mutate(round = 2, age = "child"),
         read_csv(
             "../tmp/healsl_rd1_neo_v1.csv",
-            col_select = "rowid"
+            col_select = phy_cols
         ) %>% mutate(round = 1, age = "neo"),
         read_csv(
             "../tmp/healsl_rd2_neo_v1.csv",
-            col_select = "rowid"
+            col_select = phy_cols
         ) %>% mutate(round = 2, age = "neo")
     ),
     model_chatgpt3 = bind_rows(
@@ -158,11 +188,26 @@ for (i in names(df)) {
 
 ## Preprocess
 
+Create column for final physician ICD-10 codes based on the following rule:
+
+1. If an adjudicated code exists, use it as the final code
+2. If not, use physician 1's reconciled code if it exists
+3. Otherwise use physician 1's code
+
+```{r}
+df$physician <- df$physician %>%
+    mutate(physician_icd10 = coalesce(
+        adj_icd,
+        p1_recon_icd,
+        p1_icd
+    ))
+```
+
 Combine all model predictions with their ages.
 
 ```{r}
 models <- df[str_starts(names(df), "model_")]
-models$all <- df$ages
+models$all <- df$physician
 for (i in 1:length(models)) {
     models$all <- models$all %>%
         left_join(
@@ -229,4 +274,16 @@ for (icol in icd_cols) {
 }
 
 head(models$all)
+```
+
+## Methods
+
+Calculate PCCC for each model:
+
+```{r}
+```
+
+Calculate CSMF Accuracy for each model:
+
+```{r}
 ```
