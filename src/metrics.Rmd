@@ -72,6 +72,8 @@ calc_csmf_acc <- function(actual, pred) {
 
 ## Data
 
+### Raw Data
+
 Load data from `data` folder.
 
 ```{r}
@@ -108,6 +110,8 @@ for (mcol in colnames(pred)) {
 print(head(df))
 ```
 
+### Physician Cases
+
 Filter for cases that were coded by physicians.
 
 ```{r}
@@ -119,6 +123,8 @@ df <- df %>%
 cat("Number of Cases for Metrics: ", nrow(df))
 print(head(df))
 ```
+
+### Combined Models
 
 Create model combinations where if any of the models have the physician code, then set the combined model's output for the case to be the physician code. 
 
