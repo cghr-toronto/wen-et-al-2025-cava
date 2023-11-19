@@ -26,8 +26,6 @@ library(tidyverse)
 ## Settings
 
 ```{r}
-
-# Name formatting vars
 models_format <- c(
     "_cghr10" = "",
     "_" = " & ",
@@ -35,6 +33,12 @@ models_format <- c(
     "chatgpt4" = "ChatGPT-4",
     "insilicova" = "InSilicoVA",
     "interva5" = "InterVA-5"
+)
+stage_format <- c(
+    "is_" = "",
+    "recon" = "Reconciliation",
+    "agreed" = "Agreement",
+    "adj" = "Adjudication"
 )
 ```
 
@@ -128,6 +132,100 @@ calc_per_model <- function(actual, pred, func, name = "Metric", ...) {
     out <- out %>%
         mutate(Model = str_replace_all(Model, models_format)) %>%
         arrange(across({{name}}, desc))
+    return(out)
+}
+
+# Bulk calc per model based on age and physician coding stage
+calc_by_age_stage <- function(df, func, name = "Metric") {
+    out <- list()
+    
+    # Calc overall metric
+    out[[name]] <- calc_per_model(
+        actual = df %>% pull(physician_cghr10),
+        pred = df %>% select(ends_with("_cghr10"), -physician_cghr10),
+        func = func
+    ) %>% rename(
+        {{ name }} := Metric
+    )
+    
+    # Calc metric for va coding stage
+    for (stage in c("is_agreed", "is_recon", "is_adj")) {
+        
+        # Filter data for stage
+        df_filter <- df %>% filter(.[[stage]] == TRUE)
+        metric_name = paste0(
+            name,
+            " ",
+            str_replace_all(stage, stage_format)
+        )
+        
+        # Calc metric for stage
+        out[[metric_name]] <- calc_per_model(
+            actual = df_filter %>%
+                pull(physician_cghr10),
+            pred = df_filter %>%
+                select(ends_with("_cghr10"), -physician_cghr10),
+            func = func
+        ) %>% rename(
+             {{ metric_name }} := Metric
+        )
+    }
+    
+    # Calc pcc for each age group
+    for (age_group in c("adult", "child", "neo")) {
+        
+        # Filter data for age
+        df_filter <- df %>% filter(age == age_group)
+        metric_name = paste0(
+            name,
+            " ",
+            str_to_title(age_group)
+        )
+    
+        # Calc metric for age
+        out[[metric_name]] <- calc_per_model(
+            actual = df_filter %>%
+                pull(physician_cghr10),
+            pred = df_filter %>%
+                select(ends_with("_cghr10"), -physician_cghr10),
+            func = func
+        ) %>% rename(
+             {{ metric_name }} := Metric
+        )
+        
+        # Calc metric for each stage within age group
+        for (stage in c("is_agreed", "is_recon", "is_adj")) {
+        
+            # Filter data for stage within age group
+            df_filter <- df %>% filter(
+                .[[stage]] == TRUE & age == age_group
+            )
+            metric_name = paste0(
+                name,
+                " ",
+                str_to_title(age_group),
+                " ",
+                str_replace_all(stage, stage_format)
+            )
+            
+            # Calc metric for stage within age group
+            out[[metric_name]] <- calc_per_model(
+                actual = df_filter %>%
+                    pull(physician_cghr10),
+                pred = df_filter %>%
+                    select(ends_with("_cghr10"), -physician_cghr10),
+                func = func
+            ) %>% rename(
+                 {{ metric_name }} := Metric
+            )
+        }
+    }
+    
+    # Combine all pccc metrics
+    out <- reduce(out,
+        function(x, y) left_join(x, y, by = "Model")
+    ) %>%
+        arrange(across({{ name }}, desc))
     return(out)
 }
 ```
@@ -279,71 +377,18 @@ Calculate metrics from model outputs compared to physician codes.
 
 ### PCCC
 
-Calculate Partial Chance Corrected Concordance (PCCC) to evaluate indivudal performance for each model.
+Calculate Partial Chance Corrected Concordance (PCCC) to evaluate indivudal performance for each model by age and physician coding stage.
 
 ```{r}
-pccc <- list()
-
-# Calc overall pccc
-pccc$all <- calc_per_model(
-    actual = df %>% pull(physician_cghr10),
-    pred = df %>% select(ends_with("_cghr10"), -physician_cghr10),
-    func = calc_pccc
-) %>% rename(
-    PCCC = Metric
-)
-
-# Calc pcc for each age group
-for (age_group in c("adult", "child", "neo")) {
-    
-    # Filter data for age
-    df_age <- df %>% filter(age == age_group)
-    metric_name = paste0("PCCC ", str_to_title(age_group))
-
-    # Calc metric for age
-    pccc[[age_group]] <- calc_per_model(
-        actual = df_age %>%
-            pull(physician_cghr10),
-        pred = df_age %>%
-            select(ends_with("_cghr10"), -physician_cghr10),
-        func = calc_pccc
-    ) %>% rename(
-         {{ metric_name }} := Metric
-    )
-}
-
-# Combine all pccc metrics
-pccc <- reduce(
-    pccc,
-    function(x, y) left_join(x, y, by = "Model")
-) %>%
-    arrange(desc(PCCC))
+pccc <- calc_by_age_stage(df, calc_pccc, "PCCC")
 pccc
 ```
 
 ### CSMF Accuracy
 
-Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model.
+Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model by age and physician coding stage.
 
 ```{r}
-csmf_acc <- list()
-```
-
-#### Overall CSMF Accuracy
-
-```{r}
-csmf_acc <- calc_per_model(
-    physicians,
-    models,
-    calc_csmf_acc,
-    "CSMF Accuracy"
-)
+csmf_acc <- calc_by_age_stage(df, calc_csmf_acc, "CSMF Accuracy")
 csmf_acc
 ```
-
-#### Adult Accuracy
-
-#### Child Accuracy
-
-#### Neonate Accuracy
-
