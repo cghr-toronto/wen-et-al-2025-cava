@@ -1,0 +1,6 @@
+column,description,type
+wva2016_group,WVA-2016 group containing a range of codes.,text
+wva2016_code,WVA-2016 code from the 2016 WHO VA instrument.,text
+wva2016_group_title,Title for WVA-2016 group.,text
+wva2016_title,Title for the WVA-2016 code.,text
+icd10_code,ICD-10 codes that the WVA-2016 codes can be converted to.,text

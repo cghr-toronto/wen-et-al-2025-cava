@@ -356,5 +356,8 @@ TSWLatexianTemp*
 
 # Misc
 
+# Mac OS
+.DS_Store
+
 # Temp folder
 tmp/
