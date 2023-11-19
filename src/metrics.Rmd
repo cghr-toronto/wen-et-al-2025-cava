@@ -407,3 +407,103 @@ out <- reduce(metrics,
 )
 write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 ```
+
+### Tables
+
+```{r}
+
+# Create cols with counts
+col_overall <- paste0(
+    "Overall\n(n=",
+    nrow(df),
+    ")"
+)
+col_agree <- paste0(
+    "Agreement\n(n=",
+    nrow(df %>% filter(age == "adult" & is_agreed == TRUE)),
+    ")"
+)
+col_recon <- paste0(
+    "Reconciliation\n(n=",
+    nrow(df %>% filter(age == "adult" & is_recon == TRUE)),
+    ")"
+)
+col_adj <- paste0(
+    "Adjudication\n(n=",
+    nrow(df %>% filter(age == "adult" & is_adj == TRUE)),
+    ")"
+)
+
+# Add count to col names
+col_rename <- list()
+col_rename[[col_overall]] <- "Overall"
+col_rename[[col_agree]] <- "Agreement"
+col_rename[[col_recon]] <- "Reconciliation"
+col_rename[[col_adj]] <- "Adjudication"
+
+# Create table
+out %>%
+    select(
+        Model,
+        `PCCC Adult`,
+        `PCCC Adult Agreement`,
+        `PCCC Adult Reconciliation`,
+        `PCCC Adult Adjudication`
+    ) %>%
+    rename(
+         Overall = `PCCC Adult`,
+         Agreement = `PCCC Adult Agreement`,
+         Reconciliation = `PCCC Adult Reconciliation`,
+         Adjudication = `PCCC Adult Adjudication`
+    ) %>%
+    rename(!!!col_rename)
+```
+
+```{r}
+out %>%
+    select(
+        Model,
+        `PCCC`,
+        `PCCC Agreement`,
+        `PCCC Reconciliation`,
+        `PCCC Adjudication`
+    ) %>%
+    rename(
+         All = `PCCC`,
+         Agreement = `PCCC Agreement`,
+         Reconciliation = `PCCC Reconciliation`,
+         Adjudication = `PCCC Adjudication`
+    ) %>%
+    pivot_longer(
+        cols = -Model,
+        names_to = "Stage",
+        values_to = "PCCC"
+    ) %>%
+    mutate(
+        Stage = factor(Stage, levels = c(
+            "Adjudication",
+            "Reconciliation",
+            "Agreement",
+            "All"
+        ))
+    ) %>%
+    ggplot(aes(x = Stage, y = PCCC)) +
+    geom_boxplot(width = 0.4) +
+    stat_summary(
+        geom = "label",
+        fun.y = min,
+        aes(label = sprintf("%1.2f", ..y..)),
+        position = position_nudge(y = -0.07),
+        size = 2.5
+    ) +
+    stat_summary(
+        geom = "label",
+        fun.y = max,
+        aes(label = sprintf("%1.2f", ..y..)),
+        position = position_nudge(y = 0.06),
+        size = 2.5
+    ) +
+    ylim(0, 1) +
+    coord_flip() +
+    theme_minimal()
+```
