@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 options(readr.show_col_types = FALSE)
 ```
 
+```{r, echo=FALSE, eval=FALSE}
+install.packages("tidyverse")
+```
+
 ## Libraries
 
 ```{r}
@@ -59,31 +63,31 @@ df <- list(
     physician = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_adult_v1.csv",
-            col_select = phy_adult_cols
+            col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 1, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
             "../tmp/healsl_rd2_adult_v1.csv",
-            col_select = phy_adult_cols
+            col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 2, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
             "../tmp/healsl_rd1_child_v1.csv",
-            col_select = phy_cols
+            col_select = all_of(phy_cols)
         ) %>% mutate(round = 1, age = "child"),
         read_csv(
             "../tmp/healsl_rd2_child_v1.csv",
-            col_select = phy_cols
+            col_select = all_of(phy_cols)
         ) %>% mutate(round = 2, age = "child"),
         read_csv(
             "../tmp/healsl_rd1_neo_v1.csv",
-            col_select = phy_cols
+            col_select = all_of(phy_cols)
         ) %>% mutate(round = 1, age = "neo"),
         read_csv(
             "../tmp/healsl_rd2_neo_v1.csv",
-            col_select = phy_cols
+            col_select = all_of(phy_cols)
         ) %>% mutate(round = 2, age = "neo")
     ),
     model_chatgpt3 = bind_rows(
@@ -136,9 +140,11 @@ for (i in names(df)) {
 }
 ```
 
-## Method
+## Methods
 
-Create column for final physician ICD-10 codes based on the following rule:
+### Final ICD
+
+Create one column for final physician ICD-10 codes and one column each for physician agreed, reconciled, and adjudicated records based on the following rule:
 
 1. If an adjudicated code exists, use it as the final code
 2. If not, use physician 1's reconciled code if it exists
@@ -146,12 +152,46 @@ Create column for final physician ICD-10 codes based on the following rule:
 
 ```{r}
 df$physician <- df$physician %>%
-    mutate(physician_icd10 = coalesce(
-        adj_icd,
+    mutate(
+        physician_icd10 = coalesce(
+            adj_icd,
+            p1_recon_icd,
+            p1_icd
+        ),
+        is_agreed = if_else(
+            is.na(p1_recon_icd) & is.na(p2_recon_icd) & is.na(adj_icd),
+            TRUE,
+            FALSE
+        ),
+        is_recon = if_else(
+            !is.na(p1_recon_icd) | !is.na(p2_recon_icd),
+            TRUE,
+            FALSE
+        ),
+        is_adj = if_else(
+            !is.na(adj_icd),
+            TRUE,
+            FALSE
+        )
+    ) %>%
+    select(
+        rowid,
+        round,
+        age,
+        p1_icd,
+        p2_icd,
         p1_recon_icd,
-        p1_icd
-    ))
+        p2_recon_icd,
+        adj_icd,
+        is_agreed,
+        is_recon,
+        is_adj,
+        physician_icd10
+    )
+head(df$physician)
 ```
+
+### Combine Outputs
 
 Combine all model and physician predictions with their ages.
 
@@ -168,6 +208,8 @@ for (i in 1:length(models)) {
 }
 head(out)
 ```
+
+### Convert to CGHR-10
 
 Convert ICD-10 and WVA-2016 codes to CGHR-10 codes.
 

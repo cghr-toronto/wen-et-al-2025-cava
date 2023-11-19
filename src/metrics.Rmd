@@ -13,10 +13,29 @@ knitr::opts_chunk$set(
 options(readr.show_col_types = FALSE)
 ```
 
+```{r, echo=FALSE, eval=FALSE}
+install.packages("tidyverse")
+```
+
 ## Libraries
 
 ```{r}
 library(tidyverse)
+```
+
+## Settings
+
+```{r}
+
+# Name formatting vars
+models_format <- c(
+    "_cghr10" = "",
+    "_" = " & ",
+    "chatgpt3" = "ChatGPT-3",
+    "chatgpt4" = "ChatGPT-4",
+    "insilicova" = "InSilicoVA",
+    "interva5" = "InterVA-5"
+)
 ```
 
 ## Functions
@@ -24,6 +43,8 @@ library(tidyverse)
 Functions for PCCC and CSMF Accuracy.
 
 ```{r}
+
+# Calc PCCC
 calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     
     # Calc N num of causes if not known
@@ -39,6 +60,7 @@ calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     return(out)
 }
 
+# Calc CSMF accuracy
 calc_csmf_acc <- function(actual, pred) {
     
     # Get all unique causes
@@ -68,6 +90,46 @@ calc_csmf_acc <- function(actual, pred) {
     out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }
+
+# Bulk calc per model
+calc_per_model <- function(actual, pred, func, name = "Metric", ...) {
+    
+    # Prep data in long format grouped by model
+    out <- pred %>%
+        pivot_longer( # to long format
+            everything(),
+            names_to = "Model",
+            values_to = "prediction"
+        ) %>% group_by(Model)
+    
+    # Calc k if pccc as it is diff for model combos
+    if (identical(func, calc_pccc)) {
+        out <- out %>%
+            summarise(
+                !!name := func(
+                    actual,
+                    prediction,
+                    k = str_count(unique(Model), "_") + 1,
+                    ...
+                )
+            )
+    } else { # otherwise apply func
+        out <- out %>%
+            summarise(
+                !!name := func(
+                    actual,
+                    prediction,
+                    ...
+                )
+            )
+    }
+    
+    # Format display and return
+    out <- out %>%
+        mutate(Model = str_replace_all(Model, models_format)) %>%
+        arrange(across({{name}}, desc))
+    return(out)
+}
 ```
 
 ## Data
@@ -77,37 +139,12 @@ calc_csmf_acc <- function(actual, pred) {
 Load data from `data` folder.
 
 ```{r}
-df <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
+raw_df <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
 ```
 
 ```{r, echo=FALSE}
-
-# Display num of cases
-cat("Number of Cases: ", nrow(df), "\n")
-
-# Get actual and pred
-actual <- df$physician_cghr10
-pred <- df %>% select(ends_with("_cghr10"), -physician_cghr10)
-
-# Physician info
-cat(paste0(
-    "Physician Coded Cases (",
-    length(unique(na.omit(actual))), " CODs): ",
-    length(actual) - sum(is.na(actual) | is.null(actual)),
-    "\n"
-))
-
-# Models info
-for (mcol in colnames(pred)) {
-    cat(paste0(
-        toupper(str_remove(mcol, "_cghr10")), " Predicted Cases (", 
-        length(unique(na.omit(pred[[mcol]]))), " CODs): ",
-        length(pred[[mcol]]) - sum(is.na(pred[[mcol]]) | is.null(pred[[mcol]])),
-        "\n"
-    ))
-}
-
-print(head(df))
+cat("Cases: ", nrow(raw_df), "\n")
+print(head(raw_df))
 ```
 
 ### Physician Cases
@@ -115,12 +152,12 @@ print(head(df))
 Filter for cases that were coded by physicians.
 
 ```{r}
-df <- df %>%
+df <- raw_df %>%
     filter(!is.na(physician_cghr10) & !is.null(physician_cghr10))
 ```
 
 ```{r, echo=FALSE}
-cat("Number of Cases for Metrics: ", nrow(df))
+cat("Physician Coded Cases: ", nrow(df))
 print(head(df))
 ```
 
@@ -183,30 +220,54 @@ print(head(df %>% select(
 )))
 ```
 
-Separate physician (actual) and model (predicted) CODs.
+### Prepared Data
+
+Display case counts for raw data and prepared data after combining models and filtering for physician coded cases.
 
 ```{r}
-actual <- df$physician_cghr10
-pred <- df %>%
-    select(ends_with("_cghr10"), -physician_cghr10) %>%
-    rename_all(~toupper(str_replace(., "_cghr10", "")))
-```
 
-```{r, echo=FALSE}
+cat("\nRaw Data\n--------\n\n")
+
+# Physician info
+raw_physicians <- raw_df$physician_cghr10
 cat(paste0(
-    "Physician Coded Cases (",
-    length(unique(na.omit(actual))), " CODs): ",
-    length(actual) - sum(is.na(actual) | is.null(actual)),
+    "Cases (",
+    length(unique(na.omit(raw_physicians))), " CODs): ",
+    length(raw_physicians),
     "\n"
 ))
-```
 
-```{r, echo=FALSE}
-for (mcol in colnames(pred)) {
+# Models cases
+raw_models <- raw_df %>% select(ends_with("_cghr10"), -physician_cghr10)
+for (mcol in colnames(raw_models)) {
+    m <- raw_models[[mcol]]
     cat(paste0(
-        mcol, " Predicted Cases (", 
-        length(unique(na.omit(pred[[mcol]]))), " CODs): ",
-        length(pred[[mcol]]) - sum(is.na(pred[[mcol]]) | is.null(pred[[mcol]])),
+        str_replace_all(mcol, models_format), " Predicted Cases (", 
+        length(unique(na.omit(m))), " CODs): ",
+        length(m) - sum(is.na(m) | is.null(m)),
+        "\n"
+    ))
+}
+
+cat("\nPrepared Data\n--------------\n")
+
+# Physician cases
+physicians <- df$physician_cghr10
+cat(paste0(
+    "Physician Coded Cases (",
+    length(unique(na.omit(physicians))), " CODs): ",
+    length(physicians) - sum(is.na(physicians) | is.null(physicians)),
+    "\n"
+))
+
+# Models cases
+models <- df %>% select(ends_with("_cghr10"), -physician_cghr10)
+for (mcol in colnames(models)) {
+    m <- models[[mcol]]
+    cat(paste0(
+        str_replace_all(mcol, models_format), " Predicted Cases (", 
+        length(unique(na.omit(m))), " CODs): ",
+        length(m) - sum(is.na(m) | is.null(m)),
         "\n"
     ))
 }
@@ -214,42 +275,75 @@ for (mcol in colnames(pred)) {
 
 ## Methods
 
+Calculate metrics from model outputs compared to physician codes.
+
 ### PCCC
 
-Calculate PCCC to evaluate indivudal performance for each model.
+Calculate Partial Chance Corrected Concordance (PCCC) to evaluate indivudal performance for each model.
 
 ```{r}
-pccc <- pred %>%
-    pivot_longer(
-        everything(),
-        names_to = "Model",
-        values_to = "prediction"
-    ) %>%
-    group_by(Model) %>%
-    summarise(
-        PCCC = calc_pccc(actual, prediction, k = str_count(unique(Model), "_") + 1)
-    ) %>%
-    mutate(Model = str_replace_all(Model, "_", " & ")) %>%
+pccc <- list()
+
+# Calc overall pccc
+pccc$all <- calc_per_model(
+    actual = df %>% pull(physician_cghr10),
+    pred = df %>% select(ends_with("_cghr10"), -physician_cghr10),
+    func = calc_pccc
+) %>% rename(
+    PCCC = Metric
+)
+
+# Calc pcc for each age group
+for (age_group in c("adult", "child", "neo")) {
+    
+    # Filter data for age
+    df_age <- df %>% filter(age == age_group)
+    metric_name = paste0("PCCC ", str_to_title(age_group))
+
+    # Calc metric for age
+    pccc[[age_group]] <- calc_per_model(
+        actual = df_age %>%
+            pull(physician_cghr10),
+        pred = df_age %>%
+            select(ends_with("_cghr10"), -physician_cghr10),
+        func = calc_pccc
+    ) %>% rename(
+         {{ metric_name }} := Metric
+    )
+}
+
+# Combine all pccc metrics
+pccc <- reduce(
+    pccc,
+    function(x, y) left_join(x, y, by = "Model")
+) %>%
     arrange(desc(PCCC))
 pccc
 ```
 
 ### CSMF Accuracy
 
-Calculate CSMF Accuracy to evaluate population performance for each model.
+Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model.
 
 ```{r}
-csmf_acc <- pred %>%
-    pivot_longer(
-        everything(),
-        names_to = "Model",
-        values_to = "prediction"
-    ) %>%
-    group_by(Model) %>%
-    summarise(
-        "CSMF Accuracy" = calc_csmf_acc(actual, prediction)
-    ) %>%
-    mutate(Model = str_replace_all(Model, "_", " & ")) %>%
-    arrange(desc(`CSMF Accuracy`))
+csmf_acc <- list()
+```
+
+#### Overall CSMF Accuracy
+
+```{r}
+csmf_acc <- calc_per_model(
+    physicians,
+    models,
+    calc_csmf_acc,
+    "CSMF Accuracy"
+)
 csmf_acc
 ```
+
+#### Adult Accuracy
+
+#### Child Accuracy
+
+#### Neonate Accuracy
+
