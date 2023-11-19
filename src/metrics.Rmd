@@ -375,13 +375,17 @@ for (mcol in colnames(models)) {
 
 Calculate metrics from model outputs compared to physician codes.
 
+```{r}
+metrics <- list()
+```
+
 ### PCCC
 
 Calculate Partial Chance Corrected Concordance (PCCC) to evaluate indivudal performance for each model by age and physician coding stage.
 
 ```{r}
-pccc <- calc_by_age_stage(df, calc_pccc, "PCCC")
-pccc
+metrics$pccc <- calc_by_age_stage(df, calc_pccc, "PCCC")
+metrics$pccc
 ```
 
 ### CSMF Accuracy
@@ -389,6 +393,17 @@ pccc
 Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model by age and physician coding stage.
 
 ```{r}
-csmf_acc <- calc_by_age_stage(df, calc_csmf_acc, "CSMF Accuracy")
-csmf_acc
+metrics$csmf_acc <- calc_by_age_stage(df, calc_csmf_acc, "CSMF Accuracy")
+metrics$csmf_acc
+```
+
+## Results
+
+Save calculated metrics to `data` folder.
+
+```{r}
+out <- reduce(metrics,
+              function(x, y) left_join(x, y, by = "Model")
+)
+write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 ```
