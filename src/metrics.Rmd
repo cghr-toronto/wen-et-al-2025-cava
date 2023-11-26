@@ -408,56 +408,9 @@ out <- reduce(metrics,
 write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 ```
 
-### Tables
+### All vs Agree Performance
 
-```{r}
-
-# Create cols with counts
-col_overall <- paste0(
-    "Overall\n(n=",
-    nrow(df),
-    ")"
-)
-col_agree <- paste0(
-    "Agreement\n(n=",
-    nrow(df %>% filter(age == "adult" & is_agreed == TRUE)),
-    ")"
-)
-col_recon <- paste0(
-    "Reconciliation\n(n=",
-    nrow(df %>% filter(age == "adult" & is_recon == TRUE)),
-    ")"
-)
-col_adj <- paste0(
-    "Adjudication\n(n=",
-    nrow(df %>% filter(age == "adult" & is_adj == TRUE)),
-    ")"
-)
-
-# Add count to col names
-col_rename <- list()
-col_rename[[col_overall]] <- "Overall"
-col_rename[[col_agree]] <- "Agreement"
-col_rename[[col_recon]] <- "Reconciliation"
-col_rename[[col_adj]] <- "Adjudication"
-
-# Create table
-out %>%
-    select(
-        Model,
-        `PCCC Adult`,
-        `PCCC Adult Agreement`,
-        `PCCC Adult Reconciliation`,
-        `PCCC Adult Adjudication`
-    ) %>%
-    rename(
-         Overall = `PCCC Adult`,
-         Agreement = `PCCC Adult Agreement`,
-         Reconciliation = `PCCC Adult Reconciliation`,
-         Adjudication = `PCCC Adult Adjudication`
-    ) %>%
-    rename(!!!col_rename)
-```
+Display a plot of model performance for all records versus records where physicians agreed on the COD code.
 
 ```{r}
 
@@ -474,13 +427,11 @@ padj <- (nadj / nall) * 100
 
 # Create stage with counts
 stage_remap <- c(
-    "All" = paste0("All\n(n=", nall, ", 100%)"),
-    "Agreed" = paste0("Agreed\n(n=", nagree, ", ", round(pagree), "%)"),
+    "All" = paste0("All\nRecords\n(n=", nall, ", 100%)"),
+    "Agreed" = paste0("Physician\nAgreed Records\n(n=", nagree, ", ", round(pagree), "%)"),
     "Reconciled" = paste0("Reconciled\n(n=", nrecon, ", ", round(precon), "%)"),
     "Adjudicated" = paste0("Adjudicated\n(n=", nadj, ", ", round(padj), "%)")
 )
-
-# 
 
 # Prepare boxplot data
 pdata <- out %>%
@@ -518,9 +469,12 @@ pdata <- out %>%
     )
 
 # Plot boxplot
-pdata %>%
+pplot <- pdata %>%
     ggplot(aes(x = Stage, y = PCCC)) +
-    geom_boxplot(width = 0.25) +
+    geom_boxplot(
+        linewidth = 0.5,
+        width = 0.25
+    ) +
     geom_dotplot(
         binaxis = "y",
         binwidth = 0.03,
@@ -563,6 +517,7 @@ pdata %>%
         position = position_nudge(y = 0.025),
         size = 3
     ) +
+    geom_segment(aes(x = -Inf, y = 0, xend = Inf, yend = 0), arrow = arrow(length = unit(1, "cm"))) +
     labs(
         x = element_blank(),
         y = "PCCC (0=Low, 1=High)"
@@ -571,9 +526,22 @@ pdata %>%
     coord_flip() +
     theme_minimal() +
     theme(
-        panel.grid = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title.x = element_text(margin = margin(t = 5)),
-        axis.title.y = element_text(margin = margin(r = 5))
+        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.line.x = element_line(
+            arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
+        ),
+        axis.line.y = element_blank()
     )
+
+# Save the plot
+pplot
+ggsave("../manuscript/fig-perf-allvsagree.pdf", plot = pplot, dpi = 300)
 ```
+
+### Age Group Perfomance
+
+Display a plot of performance for agreed
