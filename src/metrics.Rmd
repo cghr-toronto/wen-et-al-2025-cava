@@ -460,50 +460,120 @@ out %>%
 ```
 
 ```{r}
-out %>%
+
+# Calc stage counts
+nall <- nrow(df)
+nagree <- nrow(df %>% filter(is_agreed == TRUE))
+nrecon <- nrow(df %>% filter(is_recon == TRUE))
+nadj <- nrow(df %>% filter(is_adj == TRUE))
+
+# Calc stage perc
+pagree <- (nagree / nall) * 100
+precon <- (nrecon / nall) * 100
+padj <- (nadj / nall) * 100
+
+# Create stage with counts
+stage_remap <- c(
+    "All" = paste0("All\n(n=", nall, ", 100%)"),
+    "Agreed" = paste0("Agreed\n(n=", nagree, ", ", round(pagree), "%)"),
+    "Reconciled" = paste0("Reconciled\n(n=", nrecon, ", ", round(precon), "%)"),
+    "Adjudicated" = paste0("Adjudicated\n(n=", nadj, ", ", round(padj), "%)")
+)
+
+# 
+
+# Prepare boxplot data
+pdata <- out %>%
     select(
         Model,
         `PCCC`,
-        `PCCC Agreement`,
-        `PCCC Reconciliation`,
-        `PCCC Adjudication`
+        `PCCC Agreement`
     ) %>%
     rename(
          All = `PCCC`,
-         Agreement = `PCCC Agreement`,
-         Reconciliation = `PCCC Reconciliation`,
-         Adjudication = `PCCC Adjudication`
+         Agreed = `PCCC Agreement`
     ) %>%
-    pivot_longer(
+    filter(!str_detect(Model, "&")) %>% # remove multi models
+    pivot_longer( # transform to long format
         cols = -Model,
         names_to = "Stage",
         values_to = "PCCC"
     ) %>%
-    mutate(
+    mutate( # re-order stage
         Stage = factor(Stage, levels = c(
-            "Adjudication",
-            "Reconciliation",
-            "Agreement",
+            "Agreed",
             "All"
         ))
     ) %>%
+    mutate( # rename stages with counts
+        Stage = recode(Stage, !!!stage_remap)
+    ) %>%
+    group_by(Stage) %>%
+    mutate( # Add min, mid, and max model names to label
+        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.03, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
+        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+    )
+
+# Plot boxplot
+pdata %>%
     ggplot(aes(x = Stage, y = PCCC)) +
-    geom_boxplot(width = 0.4) +
-    stat_summary(
-        geom = "label",
-        fun.y = min,
-        aes(label = sprintf("%1.2f", ..y..)),
-        position = position_nudge(y = -0.07),
-        size = 2.5
+    geom_boxplot(width = 0.25) +
+    geom_dotplot(
+        binaxis = "y",
+        binwidth = 0.03,
+        dotsize = 0.3,
+        fill = "white",
+        color = "darkgray",
+        stackdir = "center",
+        stackratio = 2,
+        position = position_nudge(x = -0.3)
     ) +
-    stat_summary(
-        geom = "label",
-        fun.y = max,
-        aes(label = sprintf("%1.2f", ..y..)),
-        position = position_nudge(y = 0.06),
-        size = 2.5
+    geom_text(
+        aes(label = `PCCC Min`),
+        color = "#3d3d3d",
+        size = 2,
+        position = position_nudge(y = -0.06, x = -0.3)
     ) +
-    ylim(0, 1) +
+    geom_text(
+        aes(label = `PCCC Max`),
+        color = "#3d3d3d",
+        size = 2,
+        position = position_nudge(y = 0.065, x = -0.3)
+    ) +
+    geom_text(
+        aes(label = `PCCC Mid`),
+        color = "#3d3d3d",
+        size = 2,
+        position = position_nudge(y = -0.065, x = -0.3)
+    ) +
+    stat_summary( # min pccc txt on boxplot
+        geom = "text",
+        fun = min,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = -0.025),
+        size = 3
+    ) +
+    stat_summary( # max pccc txt on boxplot
+        geom = "text",
+        fun = max,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = 0.025),
+        size = 3
+    ) +
+    labs(
+        x = element_blank(),
+        y = "PCCC (0=Low, 1=High)"
+    ) +
+    ylim(0.2, 0.8) +
     coord_flip() +
-    theme_minimal()
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.title.x = element_text(margin = margin(t = 5)),
+        axis.title.y = element_text(margin = margin(r = 5))
+    )
 ```
