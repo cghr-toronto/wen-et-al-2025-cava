@@ -31,14 +31,19 @@ Load data from `data` and `tmp` folders.
 # Physicians cols to keep and rename for consistency
 phy_cols <- c(
     "rowid",
+    "death_age_group",
     "p1_icd",
     "p2_icd",
     "p1_recon_icd",
     "p2_recon_icd",
     "adj_icd"
 )
+phy_rename <- c(
+    age_range = "death_age_group"
+)
 phy_adult_cols <- c(
     "rowid",
+    "death_age_group",
     "p1_icd_cod",
     "p2_icd_cod",
     "p1_recon_icd_cod",
@@ -46,6 +51,7 @@ phy_adult_cols <- c(
     "adj_icd_cod"
 )
 phy_adult_rename <- c(
+    age_range = "death_age_group",
     p1_icd = "p1_icd_cod",
     p2_icd = "p2_icd_cod",
     p1_recon_icd = "p1_recon_icd_cod",
@@ -76,19 +82,27 @@ df <- list(
         read_csv(
             "../tmp/healsl_rd1_child_v1.csv",
             col_select = all_of(phy_cols)
-        ) %>% mutate(round = 1, age = "child"),
+        ) %>%
+            mutate(round = 1, age = "child") %>%
+            rename(all_of(phy_rename)),
         read_csv(
             "../tmp/healsl_rd2_child_v1.csv",
             col_select = all_of(phy_cols)
-        ) %>% mutate(round = 2, age = "child"),
+        ) %>%
+            mutate(round = 2, age = "child") %>%
+            rename(all_of(phy_rename)),
         read_csv(
             "../tmp/healsl_rd1_neo_v1.csv",
             col_select = all_of(phy_cols)
-        ) %>% mutate(round = 1, age = "neo"),
+        ) %>%
+            mutate(round = 1, age = "neo") %>%
+            rename(all_of(phy_rename)),
         read_csv(
             "../tmp/healsl_rd2_neo_v1.csv",
             col_select = all_of(phy_cols)
-        ) %>% mutate(round = 2, age = "neo")
+        ) %>%
+            mutate(round = 2, age = "neo") %>%
+            rename(all_of(phy_rename))
     ),
     model_chatgpt3 = bind_rows(
         read_csv(
