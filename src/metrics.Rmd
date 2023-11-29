@@ -29,7 +29,7 @@ library(tidyverse)
 models_format <- c(
     "_cghr10" = "",
     "_" = " & ",
-    "chatgpt3" = "ChatGPT-3",
+    "chatgpt3" = "ChatGPT-3.5",
     "chatgpt4" = "ChatGPT-4",
     "insilicova" = "InSilicoVA",
     "interva5" = "InterVA-5"
@@ -461,9 +461,9 @@ alldata <- out %>%
     ) %>%
     group_by(Stage) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.03, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.05, paste0(Model, " (", round(PCCC, 2), ")"), NA),
         "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
         "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
         "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
     )
@@ -527,8 +527,7 @@ allplot <- alldata %>%
     coord_flip() +
     theme_minimal() +
     theme(
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
+        panel.grid = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title.x = element_text(margin = margin(t = 5)),
         axis.title.y = element_text(margin = margin(r = 5)),
@@ -541,6 +540,13 @@ allplot <- alldata %>%
 # Save the plot
 allplot
 ggsave("../manuscript/fig-perf-allvsagree.pdf", plot = allplot, dpi = 300)
+```
+
+### COD Performance
+
+Plot model performance for physician agreed records by cause of death category.
+
+```{r}
 ```
 
 ### Age Group Perfomance
@@ -598,7 +604,7 @@ agedata <- out %>%
     ) %>%
     group_by(`Age Group`) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.1, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.15, paste0(Model, " (", round(PCCC, 2), ")"), NA),
         "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.95, paste0(Model, " (", round(PCCC, 2), ")"), NA),
         "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
         "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
@@ -665,8 +671,7 @@ ageplot <- agedata %>%
     coord_flip() +
     theme_minimal() +
     theme(
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
+        panel.grid = element_blank(),
         axis.line = element_line(color = "black"),
         axis.title.x = element_text(margin = margin(t = 5)),
         axis.title.y = element_text(margin = margin(r = 5)),

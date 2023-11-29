@@ -192,6 +192,7 @@ df$physician <- df$physician %>%
         rowid,
         round,
         age,
+        age_range,
         p1_icd,
         p2_icd,
         p1_recon_icd,
