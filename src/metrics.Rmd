@@ -628,6 +628,7 @@ causes_col <- out %>% select(starts_with("PCCC COD Agree ")) %>% names
 
 # Create cod with counts
 cod_remap <- list()
+cod_counts <- list()
 for (cod_col in causes_col) {
     
     # Get cod without prefix
@@ -647,6 +648,9 @@ for (cod_col in causes_col) {
     
     # Add label for cod
     cod_remap[[cod]] <- paste0(cod_label, "\n(n=", ncod, ", ", pcod_label, "%)")
+    
+    # Store cod count data
+    cod_counts[[cod]] <- ncod
 }
 
 # Prepare boxplot data
@@ -865,11 +869,12 @@ ageplot <- agedata %>%
         x = paste0("Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(0.2, 0.8) +
+    ylim(0.1, 0.75) +
     coord_flip() +
     theme_minimal() +
     theme(
         panel.grid = element_blank(),
+        plot.margin = margin(t = 16, b = 12, l = 12, r = 12),
         axis.line = element_line(color = "black"),
         axis.title.x = element_text(margin = margin(t = 5)),
         axis.title.y = element_text(margin = margin(r = 5)),
