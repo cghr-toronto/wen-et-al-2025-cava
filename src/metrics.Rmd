@@ -256,8 +256,8 @@ calc_by <- function(
         for (cod in causes) {
             
             # Filter data for cod
-            df_filter <- df %>% filter(physician_cghr10 == cod)
-            metric_name = paste0(name, " COD ", cod)
+            df_filter <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE)
+            metric_name = paste0(name, " COD Agree ", cod)
             
             # Calc metric for cod
             out[[metric_name]] <- calc_per_model(
@@ -624,14 +624,14 @@ Plot model performance for physician agreed records by cause of death category.
 nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
 
 # Get unique cause columns
-causes_col <- out %>% select(starts_with("PCCC COD ")) %>% names
+causes_col <- out %>% select(starts_with("PCCC COD Agree ")) %>% names
 
 # Create cod with counts
 cod_remap <- list()
 for (cod_col in causes_col) {
     
     # Get cod without prefix
-    cod <- gsub("PCCC COD ", "", cod_col)
+    cod <- gsub("PCCC COD Agree ", "", cod_col)
     
     # Calculate num and perc cases for cod
     ncod <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE) %>% nrow
@@ -653,11 +653,11 @@ for (cod_col in causes_col) {
 coddata <- out %>%
     select(
         Model,
-        starts_with("PCCC COD ")
+        starts_with("PCCC COD Agree ")
     ) %>%
     rename_at(
          vars(-Model),
-         ~gsub("PCCC COD ", "", .)
+         ~gsub("PCCC COD Agree ", "", .)
     ) %>%
     filter(!str_detect(Model, "&")) %>% # remove multi models
     pivot_longer( # transform to long format
@@ -728,7 +728,7 @@ codplot <- coddata %>%
         x = paste0("Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(-0.3, 1.25) +
+    ylim(-0.3, 1.3) +
     coord_flip() +
     theme_minimal() +
     theme(
