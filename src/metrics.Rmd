@@ -143,6 +143,7 @@ calc_by <- function(
         by_age = TRUE,
         by_stage = TRUE,
         by_cod = TRUE,
+        by_age_range = TRUE,
         ...
     ) {
     out <- list()
@@ -214,7 +215,7 @@ calc_by <- function(
                 df_filter <- df %>% filter(
                     .[[stage]] == TRUE & age == age_group
                 )
-                metric_name = paste0(
+                metric_name <- paste0(
                     name,
                     " ",
                     str_to_title(age_group),
@@ -257,7 +258,36 @@ calc_by <- function(
             
             # Filter data for cod
             df_filter <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE)
-            metric_name = paste0(name, " COD Agree ", cod)
+            metric_name <- paste0(name, " COD Agree ", cod)
+            
+            # Calc metric for cod
+            out[[metric_name]] <- calc_per_model(
+                actual = df_filter %>%
+                    pull(physician_cghr10),
+                pred = df_filter %>%
+                    select(ends_with("_cghr10"), -physician_cghr10),
+                func = func,
+                ...
+            ) %>% rename(
+                 {{ metric_name }} := Metric
+            )
+        }
+    }
+    
+    # Calc metric by age range
+    if (by_age_range) {
+        
+        # Get unique age ranges
+        age_ranges <- df %>%
+            pull(age_range) %>%
+            unique
+        
+        # Calc metric by age range
+        for (ar in age_ranges) {
+            
+            # Filter for age range
+            df_filter <- df %>% filter(age_range == ar & is_agreed == TRUE)
+            metric_name = paste0(name, " Age Agree ", ar)
             
             # Calc metric for cod
             out[[metric_name]] <- calc_per_model(
@@ -887,4 +917,142 @@ ageplot <- agedata %>%
 # Save the plot
 ageplot
 ggsave("../manuscript/fig-perf-ages.pdf", plot = ageplot, dpi = 300)
+```
+
+### Age Range Performance
+
+Display a plot of performance for physician agreed records by age ranges.
+
+```{r, fig.height = 16, fig.width = 8}
+
+# Calc total agreed
+nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
+
+# Get unique age range columns
+arange_col <- out %>% select(starts_with("PCCC Age Agree ")) %>% names
+
+# Create age range with counts
+arange_remap <- list()
+arange_counts <- list()
+for (ar_col in arange_col) {
+    
+    # Get cod without prefix
+    ar <- gsub("PCCC Age Agree ", "", ar_col)
+    
+    # Calculate num and perc cases for age range
+    narange <- df %>% filter(age_range == ar & is_agreed == TRUE) %>% nrow
+    parange <- (narange / nagree) * 100
+    parange_label <- if (round(parange) >= 1) round(parange) else "<1"
+    
+    # Break age range into newlines if more than 3 words
+    if (str_count(ar, "\\s+") > 3) {
+        arange_label <- str_replace(ar, "(\\S+\\s+\\S+\\s+\\S+) ", "\\1\n")
+    } else {
+        arange_label <- ar
+    }
+    
+    # Add label for cod
+    arange_remap[[ar]] <- paste0(arange_label, "\n(n=", narange, ", ", parange_label, "%)")
+    
+    # Store cod count data
+    arange_counts[[ar]] <- narange
+}
+
+# Prepare boxplot data
+ardata <- out %>%
+    select(
+        Model,
+        starts_with("PCCC COD Agree ")
+    ) %>%
+    rename_at(
+         vars(-Model),
+         ~gsub("PCCC COD Agree ", "", .)
+    ) %>%
+    filter(!str_detect(Model, "&")) %>% # remove multi models
+    pivot_longer( # transform to long format
+        cols = -Model,
+        names_to = "COD",
+        values_to = "PCCC"
+    ) %>%
+    mutate( # rename cod with counts
+        "COD" = recode(`COD`, !!!cod_remap)
+    ) %>%
+    group_by(`COD`) %>%
+    mutate( # Make values less than 0 equal to 0
+        PCCC = if_else(PCCC <= 0, 0, PCCC)
+    ) %>%
+    mutate( # Add min, mid, and max model names to label
+        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.03, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
+        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
+        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
+        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+    )
+
+# Create cod order based on max pccc
+arorder <- ardata %>%
+    group_by(COD) %>%
+    summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
+    select(COD, `PCCC Max Value`) %>%
+    arrange(desc(`PCCC Max Value`)) %>%
+    pull(COD)
+coddata$COD <- factor(coddata$COD, levels = rev(codorder))
+
+# Plot boxplot
+codplot <- coddata %>%
+    ggplot(aes(x = COD, y = PCCC)) +
+    geom_boxplot(
+        linewidth = 0.5,
+        width = 0.25
+    ) +
+    geom_text(
+        aes(label = `PCCC Min`),
+        color = "#4d4d4d",
+        size = 2.5,
+        hjust = 1,
+        position = position_nudge(y = -0.12)
+    ) +
+    geom_text(
+        aes(label = `PCCC Max`),
+        color = "#4d4d4d",
+        size = 2.5,
+        hjust = 0,
+        position = position_nudge(y = 0.12)
+    ) +
+    stat_summary( # min pccc txt on boxplot
+        geom = "text",
+        fun = min,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = -0.06),
+        size = 3
+    ) +
+    stat_summary( # max pccc txt on boxplot
+        geom = "text",
+        fun = max,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = 0.06),
+        size = 3
+    ) +
+    labs(
+        x = paste0("Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
+        y = "PCCC (0=Low, 1=High)"
+    ) +
+    ylim(-0.3, 1.3) +
+    coord_flip() +
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.line = element_blank(),
+        axis.line.y = element_blank(),
+        axis.title.x = element_text(margin = margin(t = 5)),
+        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.line.x = element_line(
+            color = "black",
+            arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
+        )
+    )
+
+# Save the plot
+codplot
+ggsave("../manuscript/fig-perf-cod.pdf", plot = codplot, dpi = 300)
 ```
