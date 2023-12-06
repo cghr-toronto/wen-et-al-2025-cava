@@ -347,7 +347,10 @@ Create model combinations where if any of the models have the physician code, th
 
 ```{r}
 df <- df %>%
-    mutate(
+    mutate( # Remove additional info on age range
+        "age_range" = str_replace(na.omit(age_range), "\\s*\\(.*\\)", "")
+    ) %>%
+    mutate( # Combine models
         "chatgpt3_insilicova_cghr10" = if_else(
             chatgpt3_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10,
@@ -514,7 +517,7 @@ write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 
 Display a plot of model performance for all records versus records where physicians agreed on the COD code.
 
-```{r, fig.height = 4, fig.width = 6}
+```{r, fig.height = 3, fig.width = 6}
 
 # Calc stage counts
 nall <- nrow(df)
@@ -563,11 +566,48 @@ alldata <- out %>%
     ) %>%
     group_by(Stage) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.05, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
-        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
-        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+        "PCCC Min" = if_else(
+            PCCC <= min(PCCC) * 1.05,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            PCCC >= max(PCCC) * 0.97,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid Value" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            PCCC,
+            NA
+        ),
+        "PCCC Min" = if_else( # Combine into one row if close PCCC
+            `PCCC` == min(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Min`)) > 1,
+                paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                paste0(
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    collapse = "\n"
+                )
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            `PCCC` == max(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Max`)) > 1,
+                paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                       collapse = "\n")
+            ),
+            NA
+        )
     )
 
 # Plot boxplot
@@ -577,14 +617,13 @@ allplot <- alldata %>%
         linewidth = 0.5,
         width = 0.25
     ) +
-    geom_dotplot(
-        binaxis = "y",
-        binwidth = 0.03,
-        dotsize = 0.3,
+    geom_point(
+        aes(y = `PCCC Mid Value`),
+        shape = 1,
+        size = 1.5,
         fill = "white",
         color = "darkgray",
-        stackdir = "center",
-        stackratio = 2,
+        alpha = 0.8,
         position = position_nudge(x = -0.3)
     ) +
     geom_text(
@@ -592,13 +631,13 @@ allplot <- alldata %>%
         color = "#4d4d4d",
         size = 2,
         hjust = 1,
-        position = position_nudge(y = -0.015, x = -0.3)
+        position = position_nudge(y = -0.055)
     ) +
     geom_text(
         aes(label = `PCCC Max`),
         color = "#4d4d4d",
         size = 2,
-        position = position_nudge(y = 0.065, x = -0.3)
+        position = position_nudge(y = 0.08)
     ) +
     geom_text(
         aes(label = `PCCC Mid`),
@@ -625,14 +664,14 @@ allplot <- alldata %>%
         x = element_blank(),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(0.2, 0.8) +
+    ylim(0.2, 0.85) +
     coord_flip() +
     theme_minimal() +
     theme(
         panel.grid = element_blank(),
         axis.line = element_line(color = "black"),
-        axis.title.x = element_text(margin = margin(t = 5)),
-        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10)),
         axis.line.x = element_line(
             arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
         ),
@@ -648,7 +687,7 @@ ggsave("../manuscript/fig-perf-allvsagree.pdf", plot = allplot, dpi = 300)
 
 Plot model performance for physician agreed records by cause of death category.
 
-```{r, fig.height = 16, fig.width = 8}
+```{r, fig.height = 16.5, fig.width = 8}
 
 # Calc total agreed
 nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
@@ -791,7 +830,7 @@ codplot <- coddata %>%
         size = 3
     ) +
     labs(
-        x = paste0("Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
+        x = paste0("Physician Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
         y = "PCCC (0=Low, 1=High)"
     ) +
     ylim(-0.3, 1.3) +
@@ -801,8 +840,8 @@ codplot <- coddata %>%
         panel.grid = element_blank(),
         axis.line = element_blank(),
         axis.line.y = element_blank(),
-        axis.title.x = element_text(margin = margin(t = 5)),
-        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10)),
         axis.line.x = element_line(
             color = "black",
             arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
@@ -869,11 +908,48 @@ agedata <- out %>%
     ) %>%
     group_by(`Age Group`) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.15, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.95, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
-        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
-        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+        "PCCC Min" = if_else(
+            PCCC <= min(PCCC) * 1.15,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            PCCC >= max(PCCC) * 0.95,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid Value" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            PCCC,
+            NA
+        ),
+        "PCCC Min" = if_else( # Combine into one row if close PCCC
+            `PCCC` == min(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Min`)) > 1,
+                paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                paste0(
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    collapse = "\n"
+                )
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            `PCCC` == max(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Max`)) > 1,
+                paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                       collapse = "\n")
+            ),
+            NA
+        )
     )
 
 # Plot boxplot
@@ -883,14 +959,13 @@ ageplot <- agedata %>%
         linewidth = 0.5,
         width = 0.25
     ) +
-    geom_dotplot(
-        binaxis = "y",
-        binwidth = 0.03,
-        dotsize = 0.3,
+    geom_point(
+        aes(y = `PCCC Mid Value`),
+        shape = 1,
+        size = 1.5,
         fill = "white",
         color = "darkgray",
-        stackdir = "center",
-        stackratio = 2,
+        alpha = 0.8,
         position = position_nudge(x = -0.3)
     ) +
     geom_text(
@@ -898,13 +973,13 @@ ageplot <- agedata %>%
         color = "#4d4d4d",
         size = 2,
         hjust = 1,
-        position = position_nudge(y = -0.015, x = -0.3)
+        position = position_nudge(y = -0.055)
     ) +
     geom_text(
         aes(label = `PCCC Max`),
         color = "#4d4d4d",
         size = 2,
-        position = position_nudge(y = 0.055, x = -0.3)
+        position = position_nudge(y = 0.08)
     ) +
     geom_text(
         aes(label = `PCCC Mid`),
@@ -928,18 +1003,18 @@ ageplot <- agedata %>%
         size = 3
     ) +
     labs(
-        x = paste0("Agreed Records (n=", nagree, ", 100%)"),
+        x = paste0("Physician Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(0.2, 0.8) +
+    ylim(0.25, 0.85) +
     coord_flip() +
     theme_minimal() +
     theme(
         panel.grid = element_blank(),
         plot.margin = margin(t = 16, b = 12, l = 12, r = 12),
         axis.line = element_line(color = "black"),
-        axis.title.x = element_text(margin = margin(t = 5)),
-        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10)),
         axis.line.x = element_line(
             arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
         ),
@@ -1098,7 +1173,7 @@ arplot <- ardata %>%
         size = 3
     ) +
     labs(
-        x = paste0("Agreed Records (n=", nagree, ", 100%)"),
+        x = paste0("Physician Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
     ylim(0.1, 1) +
@@ -1108,8 +1183,8 @@ arplot <- ardata %>%
         panel.grid = element_blank(),
         axis.line = element_blank(),
         axis.line.y = element_blank(),
-        axis.title.x = element_text(margin = margin(t = 5)),
-        axis.title.y = element_text(margin = margin(r = 5)),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10)),
         axis.line.x = element_line(
             color = "black",
             arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
