@@ -23,6 +23,14 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
+```{r, echo=FALSE}
+cat("R Version\n---")
+R.version
+
+cat("\nPackage Versions\n---")
+cat(paste0("\ntidyverse ", packageVersion("tidyverse")))
+```
+
 ## Data
 
 Load data from `data` and `tmp` folders.
