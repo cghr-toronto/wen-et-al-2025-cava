@@ -916,7 +916,7 @@ ageplot <- agedata %>%
 
 # Save the plot
 ageplot
-ggsave("../manuscript/fig-perf-ages.pdf", plot = ageplot, dpi = 300)
+ggsave("../manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
 ```
 
 ### Age Range Performance
@@ -951,10 +951,10 @@ for (ar_col in arange_col) {
         arange_label <- ar
     }
     
-    # Add label for cod
+    # Add label for age ranges
     arange_remap[[ar]] <- paste0(arange_label, "\n(n=", narange, ", ", parange_label, "%)")
     
-    # Store cod count data
+    # Store age range count data
     arange_counts[[ar]] <- narange
 }
 
@@ -962,22 +962,22 @@ for (ar_col in arange_col) {
 ardata <- out %>%
     select(
         Model,
-        starts_with("PCCC COD Agree ")
+        starts_with("PCCC Age Agree ")
     ) %>%
     rename_at(
          vars(-Model),
-         ~gsub("PCCC COD Agree ", "", .)
+         ~gsub("PCCC Age Agree ", "", .)
     ) %>%
     filter(!str_detect(Model, "&")) %>% # remove multi models
     pivot_longer( # transform to long format
         cols = -Model,
-        names_to = "COD",
+        names_to = "Age Range",
         values_to = "PCCC"
     ) %>%
     mutate( # rename cod with counts
-        "COD" = recode(`COD`, !!!cod_remap)
+        "Age Range" = recode(`Age Range`, !!!arange_remap)
     ) %>%
-    group_by(`COD`) %>%
+    group_by(`Age Range`) %>%
     mutate( # Make values less than 0 equal to 0
         PCCC = if_else(PCCC <= 0, 0, PCCC)
     ) %>%
@@ -991,16 +991,16 @@ ardata <- out %>%
 
 # Create cod order based on max pccc
 arorder <- ardata %>%
-    group_by(COD) %>%
+    group_by(`Age Range`) %>%
     summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
-    select(COD, `PCCC Max Value`) %>%
+    select(`Age Range`, `PCCC Max Value`) %>%
     arrange(desc(`PCCC Max Value`)) %>%
-    pull(COD)
-coddata$COD <- factor(coddata$COD, levels = rev(codorder))
+    pull(`Age Range`)
+ardata$`Age Range` <- factor(ardata$`Age Range`, levels = rev(arorder))
 
 # Plot boxplot
-codplot <- coddata %>%
-    ggplot(aes(x = COD, y = PCCC)) +
+arplot <- ardata %>%
+    ggplot(aes(x = `Age Range`, y = PCCC)) +
     geom_boxplot(
         linewidth = 0.5,
         width = 0.25
@@ -1034,7 +1034,7 @@ codplot <- coddata %>%
         size = 3
     ) +
     labs(
-        x = paste0("Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
+        x = paste0("Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
     ylim(-0.3, 1.3) +
@@ -1053,6 +1053,6 @@ codplot <- coddata %>%
     )
 
 # Save the plot
-codplot
-ggsave("../manuscript/fig-perf-cod.pdf", plot = codplot, dpi = 300)
+arplot
+ggsave("../manuscript/fig-perf-agerange.pdf", plot = arplot, dpi = 300)
 ```
