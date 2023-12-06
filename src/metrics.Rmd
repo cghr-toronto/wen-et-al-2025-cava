@@ -514,7 +514,7 @@ write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 
 Display a plot of model performance for all records versus records where physicians agreed on the COD code.
 
-```{r}
+```{r, fig.height = 4, fig.width = 6}
 
 # Calc stage counts
 nall <- nrow(df)
@@ -786,7 +786,7 @@ ggsave("../manuscript/fig-perf-cod.pdf", plot = codplot, dpi = 300)
 
 Display a plot of performance for physician agreed records by age group.
 
-```{r}
+```{r, fig.height = 4, fig.width = 6}
 
 # Calc age counts
 nagree <- nrow(df %>% filter(is_agreed == TRUE))
