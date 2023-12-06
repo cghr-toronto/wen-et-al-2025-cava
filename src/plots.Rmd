@@ -335,6 +335,19 @@ cat("Cases: ", nrow(raw_df), "\n")
 print(head(raw_df))
 ```
 
+### Clean Labels
+
+Clean `age_range` labels to include only values and unit of measure.
+
+```{r}
+df <- df %>% mutate(
+    "age_range" = str_replace(
+        na.omit(age_range),
+        "\\s*\\(.*\\)",
+        ""
+    ))
+```
+
 ### Physician Cases
 
 Filter for cases that were coded by physicians.
@@ -355,9 +368,6 @@ Create model combinations where if any of the models have the physician code, th
 
 ```{r}
 df <- df %>%
-    mutate( # Remove additional info on age range
-        "age_range" = str_replace(na.omit(age_range), "\\s*\\(.*\\)", "")
-    ) %>%
     mutate( # Combine models
         "chatgpt3_insilicova_cghr10" = if_else(
             chatgpt3_cghr10 == physician_cghr10 | 
