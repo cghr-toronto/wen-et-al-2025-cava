@@ -707,11 +707,43 @@ coddata <- out %>%
         PCCC = if_else(PCCC <= 0, 0, PCCC)
     ) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.03, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
-        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
-        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+        "PCCC Min" = if_else(
+            PCCC <= min(PCCC) * 1.03,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            PCCC >= max(PCCC) * 0.97,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Min" = if_else( # Combine into one row if close PCCC
+            `PCCC` == min(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Min`)) > 1,
+                paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                paste0(
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    collapse = "\n"
+                )
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            `PCCC` == max(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Max`)) > 1,
+                paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                       collapse = "\n")
+            ),
+            NA
+        )
     )
 
 # Create cod order based on max pccc
@@ -899,7 +931,7 @@ ageplot <- agedata %>%
         x = paste0("Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(0.1, 0.75) +
+    ylim(0.2, 0.8) +
     coord_flip() +
     theme_minimal() +
     theme(
@@ -923,7 +955,7 @@ ggsave("../manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
 
 Display a plot of performance for physician agreed records by age ranges.
 
-```{r, fig.height = 16, fig.width = 8}
+```{r, fig.height = 11, fig.width = 8}
 
 # Calc total agreed
 nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
@@ -982,11 +1014,43 @@ ardata <- out %>%
         PCCC = if_else(PCCC <= 0, 0, PCCC)
     ) %>%
     mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(PCCC <= min(PCCC) * 1.03, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Max" = if_else(PCCC >= max(PCCC) * 0.97, paste0(Model, " (", round(PCCC, 2), ")"), NA),
-        "PCCC Mid" = if_else(is.na(`PCCC Min`) & is.na(`PCCC Max`), paste0(Model, "\n(", round(PCCC, 2), ")"), NA),
-        "PCCC Min" = if_else(`PCCC` == min(PCCC), paste(na.omit(`PCCC Min`), collapse = "\n"), NA), # Combine into one row if close PCCC
-        "PCCC Max" = if_else(`PCCC` == max(PCCC), paste(na.omit(`PCCC Max`), collapse = "\n"), NA)
+        "PCCC Min" = if_else(
+            PCCC <= min(PCCC) * 1.03,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            PCCC >= max(PCCC) * 0.97,
+            paste0(Model, " (", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Mid" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Min" = if_else( # Combine into one row if close PCCC
+            `PCCC` == min(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Min`)) > 1,
+                paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                paste0(
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    collapse = "\n"
+                )
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            `PCCC` == max(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Max`)) > 1,
+                paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                       collapse = "\n")
+            ),
+            NA
+        )
     )
 
 # Create cod order based on max pccc
@@ -1010,34 +1074,34 @@ arplot <- ardata %>%
         color = "#4d4d4d",
         size = 2.5,
         hjust = 1,
-        position = position_nudge(y = -0.12)
+        position = position_nudge(y = -0.065)
     ) +
     geom_text(
         aes(label = `PCCC Max`),
         color = "#4d4d4d",
         size = 2.5,
         hjust = 0,
-        position = position_nudge(y = 0.12)
+        position = position_nudge(y = 0.065)
     ) +
     stat_summary( # min pccc txt on boxplot
         geom = "text",
         fun = min,
         aes(label = sprintf("%1.2f", after_stat(y))),
-        position = position_nudge(y = -0.06),
+        position = position_nudge(y = -0.03),
         size = 3
     ) +
     stat_summary( # max pccc txt on boxplot
         geom = "text",
         fun = max,
         aes(label = sprintf("%1.2f", after_stat(y))),
-        position = position_nudge(y = 0.06),
+        position = position_nudge(y = 0.03),
         size = 3
     ) +
     labs(
         x = paste0("Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(-0.3, 1.3) +
+    ylim(0.1, 1) +
     coord_flip() +
     theme_minimal() +
     theme(
