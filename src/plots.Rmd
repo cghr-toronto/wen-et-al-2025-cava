@@ -475,7 +475,7 @@ for (mcol in colnames(models)) {
 }
 ```
 
-## Results
+## Metrics
 
 Calculate metrics from model outputs compared to physician codes.
 
@@ -532,7 +532,19 @@ out <- reduce(metrics,
 write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 ```
 
-### All vs Agree Performance
+### Exploration
+
+#### Cases by Sex
+
+#### Cases by Age Group
+
+#### Cases by Age Range
+
+#### Cases by COD
+
+### Performance
+
+#### All vs Agree Performance
 
 Display a plot of model performance for all records versus records where physicians agreed on the COD code.
 
@@ -562,7 +574,9 @@ alldata <- out %>%
     select(
         Model,
         `PCCC`,
-        `PCCC Agreement`
+        `PCCC Agreement`,
+        `CSMF Accuracy`,
+        `CSMF Accuracy Agreement`
     ) %>%
     rename(
          All = `PCCC`,
@@ -570,34 +584,29 @@ alldata <- out %>%
     ) %>%
     filter(!str_detect(Model, "&")) %>% # remove multi models
     pivot_longer( # transform to long format
-        cols = -Model,
+        cols = -c(
+            Model,
+            `CSMF Accuracy`,
+            `CSMF Accuracy Agreement`
+        ),
         names_to = "Stage",
         values_to = "PCCC"
-    ) %>%
-    mutate( # re-order stage
-        Stage = factor(Stage, levels = c(
-            "Agreed",
-            "All"
-        ))
-    ) %>%
-    mutate( # rename stages with counts
-        Stage = recode(Stage, !!!stage_remap)
     ) %>%
     group_by(Stage) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
             PCCC <= min(PCCC) * 1.05,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(Model, "\n(", round(PCCC, 2), ", CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
             NA
         ),
         "PCCC Max" = if_else(
             PCCC >= max(PCCC) * 0.97,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(Model, "\n(", round(PCCC, 2), ", CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
             NA
         ),
         "PCCC Mid" = if_else(
             is.na(`PCCC Min`) & is.na(`PCCC Max`),
-            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            paste0(Model, "\n(", round(PCCC, 2), ", CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
             NA
         ),
         "PCCC Mid Value" = if_else(
@@ -611,7 +620,7 @@ alldata <- out %>%
                 sum(!is.na(`PCCC Min`)) > 1,
                 paste0(na.omit(`PCCC Min`), collapse = "\n"),
                 paste0(
-                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\,\\s*", "\n("),
                     collapse = "\n"
                 )
             ),
@@ -622,11 +631,22 @@ alldata <- out %>%
             if_else(
                 sum(!is.na(`PCCC Max`)) > 1,
                 paste0(na.omit(`PCCC Max`), collapse = "\n"),
-                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
-                       collapse = "\n")
+                paste0(
+                    str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\,\\s*", "\n("),
+                    collapse = "\n"
+                )
             ),
             NA
         )
+    ) %>%
+    mutate( # re-order stage
+        Stage = factor(Stage, levels = c(
+            "Agreed",
+            "All"
+        ))
+    ) %>%
+    mutate( # rename stages with counts
+        Stage = recode(Stage, !!!stage_remap)
     )
 
 # Plot boxplot
@@ -656,7 +676,8 @@ allplot <- alldata %>%
         aes(label = `PCCC Max`),
         color = "#4d4d4d",
         size = 2,
-        position = position_nudge(y = 0.08)
+        hjust = 0,
+        position = position_nudge(y = 0.055)
     ) +
     geom_text(
         aes(label = `PCCC Mid`),
@@ -702,177 +723,7 @@ allplot
 ggsave("../manuscript/fig-perf-allvsagree.pdf", plot = allplot, dpi = 300)
 ```
 
-### COD Performance
-
-Plot model performance for physician agreed records by cause of death category.
-
-```{r, fig.height = 16.5, fig.width = 8}
-
-# Calc total agreed
-nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
-
-# Get unique cause columns
-causes_col <- out %>% select(starts_with("PCCC COD Agree ")) %>% names
-
-# Create cod with counts
-cod_remap <- list()
-cod_counts <- list()
-for (cod_col in causes_col) {
-    
-    # Get cod without prefix
-    cod <- gsub("PCCC COD Agree ", "", cod_col)
-    
-    # Calculate num and perc cases for cod
-    ncod <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE) %>% nrow
-    pcod <- (ncod / nagree) * 100
-    pcod_label <- if (round(pcod) >= 1) round(pcod) else "<1"
-    
-    # Break cod into newlines if more than 3 words
-    if (str_count(cod, "\\s+") > 3) {
-        cod_label <- str_replace(cod, "(\\S+\\s+\\S+\\s+\\S+) ", "\\1\n")
-    } else {
-        cod_label <- cod
-    }
-    
-    # Add label for cod
-    cod_remap[[cod]] <- paste0(cod_label, "\n(n=", ncod, ", ", pcod_label, "%)")
-    
-    # Store cod count data
-    cod_counts[[cod]] <- ncod
-}
-
-# Prepare boxplot data
-coddata <- out %>%
-    select(
-        Model,
-        starts_with("PCCC COD Agree ")
-    ) %>%
-    rename_at(
-         vars(-Model),
-         ~gsub("PCCC COD Agree ", "", .)
-    ) %>%
-    filter(!str_detect(Model, "&")) %>% # remove multi models
-    pivot_longer( # transform to long format
-        cols = -Model,
-        names_to = "COD",
-        values_to = "PCCC"
-    ) %>%
-    mutate( # rename cod with counts
-        "COD" = recode(`COD`, !!!cod_remap)
-    ) %>%
-    group_by(`COD`) %>%
-    mutate( # Make values less than 0 equal to 0
-        PCCC = if_else(PCCC <= 0, 0, PCCC)
-    ) %>%
-    mutate( # Add min, mid, and max model names to label
-        "PCCC Min" = if_else(
-            PCCC <= min(PCCC) * 1.03,
-            paste0(Model, " (", round(PCCC, 2), ")"),
-            NA
-        ),
-        "PCCC Max" = if_else(
-            PCCC >= max(PCCC) * 0.97,
-            paste0(Model, " (", round(PCCC, 2), ")"),
-            NA
-        ),
-        "PCCC Mid" = if_else(
-            is.na(`PCCC Min`) & is.na(`PCCC Max`),
-            paste0(Model, "\n(", round(PCCC, 2), ")"),
-            NA
-        ),
-        "PCCC Min" = if_else( # Combine into one row if close PCCC
-            `PCCC` == min(PCCC),
-            if_else(
-                sum(!is.na(`PCCC Min`)) > 1,
-                paste0(na.omit(`PCCC Min`), collapse = "\n"),
-                paste0(
-                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
-                    collapse = "\n"
-                )
-            ),
-            NA
-        ),
-        "PCCC Max" = if_else(
-            `PCCC` == max(PCCC),
-            if_else(
-                sum(!is.na(`PCCC Max`)) > 1,
-                paste0(na.omit(`PCCC Max`), collapse = "\n"),
-                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
-                       collapse = "\n")
-            ),
-            NA
-        )
-    )
-
-# Create cod order based on max pccc
-codorder <- coddata %>%
-    group_by(COD) %>%
-    summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
-    select(COD, `PCCC Max Value`) %>%
-    arrange(desc(`PCCC Max Value`)) %>%
-    pull(COD)
-coddata$COD <- factor(coddata$COD, levels = rev(codorder))
-
-# Plot boxplot
-codplot <- coddata %>%
-    ggplot(aes(x = COD, y = PCCC)) +
-    geom_boxplot(
-        linewidth = 0.5,
-        width = 0.25
-    ) +
-    geom_text(
-        aes(label = `PCCC Min`),
-        color = "#4d4d4d",
-        size = 2.5,
-        hjust = 1,
-        position = position_nudge(y = -0.12)
-    ) +
-    geom_text(
-        aes(label = `PCCC Max`),
-        color = "#4d4d4d",
-        size = 2.5,
-        hjust = 0,
-        position = position_nudge(y = 0.12)
-    ) +
-    stat_summary( # min pccc txt on boxplot
-        geom = "text",
-        fun = min,
-        aes(label = sprintf("%1.2f", after_stat(y))),
-        position = position_nudge(y = -0.06),
-        size = 3
-    ) +
-    stat_summary( # max pccc txt on boxplot
-        geom = "text",
-        fun = max,
-        aes(label = sprintf("%1.2f", after_stat(y))),
-        position = position_nudge(y = 0.06),
-        size = 3
-    ) +
-    labs(
-        x = paste0("Physician Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
-        y = "PCCC (0=Low, 1=High)"
-    ) +
-    ylim(-0.3, 1.3) +
-    coord_flip() +
-    theme_minimal() +
-    theme(
-        panel.grid = element_blank(),
-        axis.line = element_blank(),
-        axis.line.y = element_blank(),
-        axis.title.x = element_text(margin = margin(t = 10)),
-        axis.title.y = element_text(margin = margin(r = 10)),
-        axis.line.x = element_line(
-            color = "black",
-            arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
-        )
-    )
-
-# Save the plot
-codplot
-ggsave("../manuscript/fig-perf-cod.pdf", plot = codplot, dpi = 300)
-```
-
-### Age Group Perfomance
+#### Age Group Perfomance
 
 Display a plot of performance for physician agreed records by age group.
 
@@ -902,7 +753,10 @@ agedata <- out %>%
         Model,
         `PCCC Adult Agreement`,
         `PCCC Child Agreement`,
-        `PCCC Neo Agreement`
+        `PCCC Neo Agreement`,
+        `CSMF Accuracy Adult Agreement`,
+        `CSMF Accuracy Child Agreement`,
+        `CSMF Accuracy Neo Agreement`
     ) %>%
     rename(
          Adult = `PCCC Adult Agreement`,
@@ -911,35 +765,50 @@ agedata <- out %>%
     ) %>%
     filter(!str_detect(Model, "&")) %>% # remove multi models
     pivot_longer( # transform to long format
-        cols = -Model,
+        cols = -c(
+            Model,
+            `CSMF Accuracy Adult Agreement`,
+            `CSMF Accuracy Child Agreement`,
+            `CSMF Accuracy Neo Agreement`
+        ),
         names_to = "Age Group",
         values_to = "PCCC"
-    ) %>%
-    mutate( # re-order age
-        "Age Group" = factor(`Age Group`, levels = c(
-            "Neonatal",
-            "Child",
-            "Adult"
-        ))
-    ) %>%
-    mutate( # rename ages with counts
-        "Age Group" = recode(`Age Group`, !!!age_remap)
     ) %>%
     group_by(`Age Group`) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
             PCCC <= min(PCCC) * 1.15,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(
+                Model, "\n(",
+                if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
+                "CSMF=", round(case_when(
+                    `Age Group` == "Adult"  ~ `CSMF Accuracy Adult Agreement`,
+                    `Age Group` == "Child"  ~ `CSMF Accuracy Child Agreement`,
+                    `Age Group` == "Neonatal"  ~ `CSMF Accuracy Neo Agreement`
+                ),2), ")"),
             NA
         ),
         "PCCC Max" = if_else(
             PCCC >= max(PCCC) * 0.95,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(
+                Model, "\n(",
+                if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
+                ", CSMF=", round(case_when(
+                    `Age Group` == "Adult"  ~ `CSMF Accuracy Adult Agreement`,
+                    `Age Group` == "Child"  ~ `CSMF Accuracy Child Agreement`,
+                    `Age Group` == "Neonatal"  ~ `CSMF Accuracy Neo Agreement`
+                ),2), ")"),
             NA
         ),
         "PCCC Mid" = if_else(
             is.na(`PCCC Min`) & is.na(`PCCC Max`),
-            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            paste0(
+                Model, "\n(", round(PCCC, 2),
+                ", CSMF=", round(case_when(
+                    `Age Group` == "Adult"  ~ `CSMF Accuracy Adult Agreement`,
+                    `Age Group` == "Child"  ~ `CSMF Accuracy Child Agreement`,
+                    `Age Group` == "Neonatal"  ~ `CSMF Accuracy Neo Agreement`
+                ),2), ")"),
             NA
         ),
         "PCCC Mid Value" = if_else(
@@ -953,7 +822,7 @@ agedata <- out %>%
                 sum(!is.na(`PCCC Min`)) > 1,
                 paste0(na.omit(`PCCC Min`), collapse = "\n"),
                 paste0(
-                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\,\\s*", "\n("),
                     collapse = "\n"
                 )
             ),
@@ -964,11 +833,23 @@ agedata <- out %>%
             if_else(
                 sum(!is.na(`PCCC Max`)) > 1,
                 paste0(na.omit(`PCCC Max`), collapse = "\n"),
-                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
-                       collapse = "\n")
+                paste0(
+                    str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\,\\s*", "\n("),
+                    collapse = "\n"
+                )
             ),
             NA
         )
+    )%>%
+    mutate( # re-order age
+        "Age Group" = factor(`Age Group`, levels = c(
+            "Neonatal",
+            "Child",
+            "Adult"
+        ))
+    ) %>%
+    mutate( # rename ages with counts
+        "Age Group" = recode(`Age Group`, !!!age_remap)
     )
 
 # Plot boxplot
@@ -998,7 +879,8 @@ ageplot <- agedata %>%
         aes(label = `PCCC Max`),
         color = "#4d4d4d",
         size = 2,
-        position = position_nudge(y = 0.08)
+        hjust = 0,
+        position = position_nudge(y = 0.055)
     ) +
     geom_text(
         aes(label = `PCCC Mid`),
@@ -1045,7 +927,7 @@ ageplot
 ggsave("../manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
 ```
 
-### Age Range Performance
+#### Age Range Performance
 
 Display a plot of performance for physician agreed records by age ranges.
 
@@ -1110,12 +992,18 @@ ardata <- out %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
             PCCC <= min(PCCC) * 1.03,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(
+                Model,
+                if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+            ),
             NA
         ),
         "PCCC Max" = if_else(
             PCCC >= max(PCCC) * 0.97,
-            paste0(Model, " (", round(PCCC, 2), ")"),
+            paste0(
+                Model,
+                if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+            ),
             NA
         ),
         "PCCC Mid" = if_else(
@@ -1213,4 +1101,180 @@ arplot <- ardata %>%
 # Save the plot
 arplot
 ggsave("../manuscript/fig-perf-agerange.pdf", plot = arplot, dpi = 300)
+```
+
+#### COD Performance
+
+Plot model performance for physician agreed records by cause of death category.
+
+```{r, fig.height = 16.5, fig.width = 8}
+
+# Calc total agreed
+nagree <- df %>% filter(is_agreed == TRUE) %>% nrow
+
+# Get unique cause columns
+causes_col <- out %>% select(starts_with("PCCC COD Agree ")) %>% names
+
+# Create cod with counts
+cod_remap <- list()
+cod_counts <- list()
+for (cod_col in causes_col) {
+    
+    # Get cod without prefix
+    cod <- gsub("PCCC COD Agree ", "", cod_col)
+    
+    # Calculate num and perc cases for cod
+    ncod <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE) %>% nrow
+    pcod <- (ncod / nagree) * 100
+    pcod_label <- if (round(pcod) >= 1) round(pcod) else "<1"
+    
+    # Break cod into newlines if more than 3 words
+    if (str_count(cod, "\\s+") > 3) {
+        cod_label <- str_replace(cod, "(\\S+\\s+\\S+\\s+\\S+) ", "\\1\n")
+    } else {
+        cod_label <- cod
+    }
+    
+    # Add label for cod
+    cod_remap[[cod]] <- paste0(cod_label, "\n(n=", ncod, ", ", pcod_label, "%)")
+    
+    # Store cod count data
+    cod_counts[[cod]] <- ncod
+}
+
+# Prepare boxplot data
+coddata <- out %>%
+    select(
+        Model,
+        starts_with("PCCC COD Agree ")
+    ) %>%
+    rename_at(
+         vars(-Model),
+         ~gsub("PCCC COD Agree ", "", .)
+    ) %>%
+    filter(!str_detect(Model, "&")) %>% # remove multi models
+    pivot_longer( # transform to long format
+        cols = -Model,
+        names_to = "COD",
+        values_to = "PCCC"
+    ) %>%
+    mutate( # rename cod with counts
+        "COD" = recode(`COD`, !!!cod_remap)
+    ) %>%
+    group_by(`COD`) %>%
+    mutate( # Make values less than 0 equal to 0
+        PCCC = if_else(PCCC <= 0, 0, PCCC)
+    ) %>%
+    mutate( # Add min, mid, and max model names to label
+        "PCCC Min" = if_else(
+            PCCC <= min(PCCC) * 1.03,
+            paste0(
+                Model,
+                if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            PCCC >= max(PCCC) * 0.97,
+            paste0(
+                Model,
+                if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+            ),
+            NA
+        ),
+        "PCCC Mid" = if_else(
+            is.na(`PCCC Min`) & is.na(`PCCC Max`),
+            paste0(Model, "\n(", round(PCCC, 2), ")"),
+            NA
+        ),
+        "PCCC Min" = if_else( # Combine into one row if close PCCC
+            `PCCC` == min(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Min`)) > 1,
+                paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                paste0(
+                    str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                    collapse = "\n"
+                )
+            ),
+            NA
+        ),
+        "PCCC Max" = if_else(
+            `PCCC` == max(PCCC),
+            if_else(
+                sum(!is.na(`PCCC Max`)) > 1,
+                paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                       collapse = "\n")
+            ),
+            NA
+        )
+    )
+
+# Create cod order based on max pccc
+codorder <- coddata %>%
+    group_by(COD) %>%
+    summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
+    select(COD, `PCCC Max Value`) %>%
+    arrange(desc(`PCCC Max Value`)) %>%
+    pull(COD)
+coddata$COD <- factor(coddata$COD, levels = rev(codorder))
+
+# Plot boxplot
+codplot <- coddata %>%
+    ggplot(aes(x = COD, y = PCCC)) +
+    geom_boxplot(
+        linewidth = 0.5,
+        width = 0.25
+    ) +
+    geom_text(
+        aes(label = `PCCC Min`),
+        color = "#4d4d4d",
+        size = 2.5,
+        hjust = 1,
+        position = position_nudge(y = -0.12)
+    ) +
+    geom_text(
+        aes(label = `PCCC Max`),
+        color = "#4d4d4d",
+        size = 2.5,
+        hjust = 0,
+        position = position_nudge(y = 0.12)
+    ) +
+    stat_summary( # min pccc txt on boxplot
+        geom = "text",
+        fun = min,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = -0.06),
+        size = 3
+    ) +
+    stat_summary( # max pccc txt on boxplot
+        geom = "text",
+        fun = max,
+        aes(label = sprintf("%1.2f", after_stat(y))),
+        position = position_nudge(y = 0.06),
+        size = 3
+    ) +
+    labs(
+        x = paste0("Physician Agreed Records (n=", nagree, ", 100%) for ", length(causes_col), " Causes of Death"),
+        y = "PCCC (0=Low, 1=High)"
+    ) +
+    ylim(-0.3, 1.3) +
+    coord_flip() +
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.line = element_blank(),
+        axis.line.y = element_blank(),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10)),
+        axis.line.x = element_line(
+            color = "black",
+            arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
+        )
+    )
+
+# Save the plot
+codplot
+ggsave("../manuscript/fig-perf-cod.pdf", plot = codplot, dpi = 300)
 ```
