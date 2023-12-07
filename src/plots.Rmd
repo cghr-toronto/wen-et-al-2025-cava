@@ -340,9 +340,9 @@ print(head(raw_df))
 Clean `age_range` labels to include only values and unit of measure.
 
 ```{r}
-df <- df %>% mutate(
+df <- raw_df %>% mutate(
     "age_range" = str_replace(
-        na.omit(age_range),
+        age_range,
         "\\s*\\(.*\\)",
         ""
     ))
@@ -353,7 +353,7 @@ df <- df %>% mutate(
 Filter for cases that were coded by physicians.
 
 ```{r}
-df <- raw_df %>%
+df <- df %>%
     filter(!is.na(physician_cghr10) & !is.null(physician_cghr10))
 ```
 
