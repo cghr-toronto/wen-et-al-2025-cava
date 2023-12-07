@@ -40,6 +40,7 @@ Load data from `data` and `tmp` folders.
 phy_cols <- c(
     "rowid",
     "death_age_group",
+    "sex_death",
     "p1_icd",
     "p2_icd",
     "p1_recon_icd",
@@ -47,11 +48,13 @@ phy_cols <- c(
     "adj_icd"
 )
 phy_rename <- c(
+    sex = "sex_death",
     age_range = "death_age_group"
 )
 phy_adult_cols <- c(
     "rowid",
     "death_age_group",
+    "sex_death",
     "p1_icd_cod",
     "p2_icd_cod",
     "p1_recon_icd_cod",
@@ -60,6 +63,7 @@ phy_adult_cols <- c(
 )
 phy_adult_rename <- c(
     age_range = "death_age_group",
+    sex = "sex_death",
     p1_icd = "p1_icd_cod",
     p2_icd = "p2_icd_cod",
     p1_recon_icd = "p1_recon_icd_cod",
@@ -201,6 +205,7 @@ df$physician <- df$physician %>%
         round,
         age,
         age_range,
+        sex,
         p1_icd,
         p2_icd,
         p1_recon_icd,

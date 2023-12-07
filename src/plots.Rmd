@@ -346,6 +346,7 @@ df <- raw_df %>% mutate(
         "\\s*\\(.*\\)",
         ""
     ))
+df
 ```
 
 ### Physician Cases
@@ -474,7 +475,7 @@ for (mcol in colnames(models)) {
 }
 ```
 
-## Methods
+## Results
 
 Calculate metrics from model outputs compared to physician codes.
 
@@ -520,7 +521,7 @@ metrics$csmf_acc <- calc_by(
 metrics$csmf_acc
 ```
 
-## Results
+## Plots
 
 Save calculated metrics to `data` folder.
 
