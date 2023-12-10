@@ -337,15 +337,21 @@ print(head(raw_df))
 
 ### Clean Labels
 
-Clean `age_range` labels to include only values and unit of measure.
+Clean `age_range` labels to include only values and unit of measure in titlecase.
 
 ```{r}
 df <- raw_df %>% mutate(
-    "age_range" = str_replace(
+    "age_range" = str_to_title(str_replace(
         age_range,
         "\\s*\\(.*\\)",
         ""
-    ))
+    )),
+    "age_range" = if_else(
+        !str_detect(age_range, "Year|Years|Day|Days|month|Months|week|Weeks"),
+        paste0(age_range, " Years"),
+        age_range
+    )
+)
 df
 ```
 
@@ -534,9 +540,101 @@ write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 
 ### Exploration
 
-#### Cases by Sex
+```{r}
 
-#### Cases by Age Group
+# Num and perc of agreed cases
+nall <- nrow(df)
+nagree <- nrow(df %>% filter(is_agreed == TRUE))
+pagree <- (nagree / nall) * 100
+
+# Create labels to axis titles
+y_title <- paste0("Physician Agreed Records (n=", nagree, ", 100%)")
+
+```
+
+#### Cases by Age Group and Sex
+
+Display a plot of cases by age group separated by sex.
+
+```{r}
+
+# Calc age and sex counts
+nadult <- nrow(df %>% filter(age == "adult" & is_agreed == TRUE))
+nchild <- nrow(df %>% filter(age == "child" & is_agreed == TRUE))
+nneo <- nrow(df %>% filter(age == "neo" & is_agreed == TRUE))
+
+# Calc age and sex perc
+padult <- (nadult / nagree) * 100
+pchild <- (nchild / nagree) * 100
+pneo <- (nneo / nagree) * 100
+
+# Create age with counts
+age_remap <- c(
+    "Adult" = paste0("Adult, 12+ years\n(n=", nadult, ", ", round(padult), "%)"),
+    "Child" = paste0("Child, 28 days to 11 years\n(n=", nchild, ", ", round(pchild), "%)"),
+    "Neo" = paste0("Neonatal, <28 days\n(n=", nneo, ", ", round(pneo), "%)")
+)
+
+# Get counts for ages
+
+
+# Format the data for plotting
+asdata <- df %>%
+    filter(is_agreed == TRUE) %>%
+    group_by(age, sex) %>%
+    summarize(count = n()) %>%
+    mutate(
+        age = str_to_title(age),
+        sex = paste0(
+            sex, " (n=", count, ", ",
+            round(count / case_when(
+                age == "Adult" ~ nadult,
+                age == "Child" ~ nchild,
+                age == "Neo" ~ nneo
+            ) * 100), "%)"
+        )
+    ) %>%
+    mutate( # re-order age
+        age = factor(age, levels = c(
+            "Adult",
+            "Child",
+            "Neo"
+        ))
+    ) %>%
+    mutate( # rename ages with counts
+        age = recode(age, !!!age_remap)
+    )
+
+# Plot the data
+asplot <- asdata %>%
+    ggplot(aes(x = factor(age), y = count, fill = sex)) +
+    geom_bar(
+        stat = "identity",
+        fill = "white",
+        color = "black"
+    ) +
+    geom_text(
+        aes(label = sex),
+        position = position_stack(vjust = 0.5),
+        size = 2.5,
+        color = "black"
+    ) +
+    labs(
+        y = y_title,
+        x = element_blank(),
+        fill = "Sex"
+    ) +
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10))
+    )
+
+# Save the plot
+asplot
+ggsave("../manuscript/fig-data-agegroup.pdf", plot = asplot, dpi = 300)
+```
 
 #### Cases by Age Range
 
@@ -595,13 +693,19 @@ alldata <- out %>%
     group_by(Stage) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
-            PCCC <= min(PCCC) * 1.05,
-            paste0(Model, "\n(", round(PCCC, 2), ", CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
+            PCCC <= min(PCCC) + 0.05,
+            paste0(
+                Model, "\n(",
+                if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
+                "CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
             NA
         ),
         "PCCC Max" = if_else(
-            PCCC >= max(PCCC) * 0.97,
-            paste0(Model, "\n(", round(PCCC, 2), ", CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
+            PCCC >= max(PCCC) - 0.05,
+            paste0(
+                Model, "\n(",
+                if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
+                "CSMF=", round(if_else(Stage == "All", `CSMF Accuracy`, `CSMF Accuracy Agreement`), 2), ")"),
             NA
         ),
         "PCCC Mid" = if_else(
@@ -777,7 +881,7 @@ agedata <- out %>%
     group_by(`Age Group`) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
-            PCCC <= min(PCCC) * 1.15,
+            PCCC <= min(PCCC) + 0.05,
             paste0(
                 Model, "\n(",
                 if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
@@ -789,11 +893,11 @@ agedata <- out %>%
             NA
         ),
         "PCCC Max" = if_else(
-            PCCC >= max(PCCC) * 0.95,
+            PCCC >= max(PCCC) - 0.05,
             paste0(
                 Model, "\n(",
                 if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(round(PCCC, 2), ", "), ""),
-                ", CSMF=", round(case_when(
+                "CSMF=", round(case_when(
                     `Age Group` == "Adult"  ~ `CSMF Accuracy Adult Agreement`,
                     `Age Group` == "Child"  ~ `CSMF Accuracy Child Agreement`,
                     `Age Group` == "Neonatal"  ~ `CSMF Accuracy Neo Agreement`
@@ -840,7 +944,7 @@ agedata <- out %>%
             ),
             NA
         )
-    )%>%
+    ) %>%
     mutate( # re-order age
         "Age Group" = factor(`Age Group`, levels = c(
             "Neonatal",
@@ -907,7 +1011,7 @@ ageplot <- agedata %>%
         x = paste0("Physician Agreed Records (n=", nagree, ", 100%)"),
         y = "PCCC (0=Low, 1=High)"
     ) +
-    ylim(0.25, 0.85) +
+    ylim(0.25, 0.9) +
     coord_flip() +
     theme_minimal() +
     theme(
@@ -947,20 +1051,16 @@ for (ar_col in arange_col) {
     # Get cod without prefix
     ar <- gsub("PCCC Age Agree ", "", ar_col)
     
-    # Calculate num and perc cases for age range
+    # Calc num and perc cases for age range
     narange <- df %>% filter(age_range == ar & is_agreed == TRUE) %>% nrow
     parange <- (narange / nagree) * 100
     parange_label <- if (round(parange) >= 1) round(parange) else "<1"
     
-    # Break age range into newlines if more than 3 words
-    if (str_count(ar, "\\s+") > 3) {
-        arange_label <- str_replace(ar, "(\\S+\\s+\\S+\\s+\\S+) ", "\\1\n")
-    } else {
-        arange_label <- ar
-    }
-    
     # Add label for age ranges
-    arange_remap[[ar]] <- paste0(arange_label, "\n(n=", narange, ", ", parange_label, "%)")
+    arange_remap[[ar]] <- paste0(
+        ar,
+        "\n(n=", narange, ", ", parange_label, "%)"
+    )
     
     # Store age range count data
     arange_counts[[ar]] <- narange
@@ -991,7 +1091,7 @@ ardata <- out %>%
     ) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
-            PCCC <= min(PCCC) * 1.03,
+            PCCC <= min(PCCC) + 0.05,
             paste0(
                 Model,
                 if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
@@ -999,7 +1099,7 @@ ardata <- out %>%
             NA
         ),
         "PCCC Max" = if_else(
-            PCCC >= max(PCCC) * 0.97,
+            PCCC >= max(PCCC) - 0.05,
             paste0(
                 Model,
                 if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
@@ -1167,7 +1267,7 @@ coddata <- out %>%
     ) %>%
     mutate( # Add min, mid, and max model names to label
         "PCCC Min" = if_else(
-            PCCC <= min(PCCC) * 1.03,
+            PCCC <= min(PCCC) + 0.05,
             paste0(
                 Model,
                 if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
@@ -1175,7 +1275,7 @@ coddata <- out %>%
             NA
         ),
         "PCCC Max" = if_else(
-            PCCC >= max(PCCC) * 0.97,
+            PCCC >= max(PCCC) - 0.05,
             paste0(
                 Model,
                 if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
