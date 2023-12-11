@@ -705,6 +705,57 @@ ggsave("../manuscript/fig-data-agerange.pdf", plot = earplot, dpi = 300)
 
 #### Cases by COD
 
+Display a plot of cases by cause of death.
+
+```{r, fig.height = 11, fig.width = 8}
+
+# Format plot data
+ecoddata <- df %>%
+    filter(is_agreed == TRUE) %>%
+    group_by(physician_cghr10) %>%
+    summarize(count = n()) %>%
+    mutate(
+        cod_label = paste0(
+            physician_cghr10,
+            "\n(n=", count, ", ",
+            if_else(
+                ((count / nagree) * 100) < 1,
+                "<1",
+                as.character(round((count / nagree) * 100))
+            ), "%)"
+        )
+    ) %>%
+    arrange(count) %>%
+    mutate(
+        cod_label = factor(cod_label, levels = unique(cod_label))
+    )
+
+# Plot the data
+ecodplot <- ecoddata %>%
+    ggplot(aes(x = cod_label, y = count)) +
+    geom_bar(
+        stat = "identity",
+        fill = "#1d1d1d",
+        color = "white",
+        width = 0.5
+    ) +
+    labs(
+        y = y_title,
+        x = element_blank()
+    ) +
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10))
+    ) +
+    coord_flip()
+
+# Save the plot
+ecodplot
+ggsave("../manuscript/fig-data-cod.pdf", plot = ecodplot, dpi = 300)
+```
+
 ### Performance
 
 #### All vs Agree Performance
