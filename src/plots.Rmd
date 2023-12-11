@@ -575,9 +575,6 @@ age_remap <- c(
     "Neo" = paste0("Neonatal, <28 days\n(n=", nneo, ", ", round(pneo), "%)")
 )
 
-# Get counts for ages
-
-
 # Format the data for plotting
 asdata <- df %>%
     filter(is_agreed == TRUE) %>%
@@ -633,10 +630,78 @@ asplot <- asdata %>%
 
 # Save the plot
 asplot
-ggsave("../manuscript/fig-data-agegroup.pdf", plot = asplot, dpi = 300)
+ggsave("../manuscript/fig-data-agesex.pdf", plot = asplot, dpi = 300)
 ```
 
 #### Cases by Age Range
+
+Display a plot of cases by age range.
+
+```{r, fig.height = 8, fig.width = 6}
+
+# Format plot data
+eardata <- df %>%
+    filter(is_agreed == TRUE) %>%
+    group_by(age_range) %>%
+    summarize(count = n()) %>%
+    separate(
+        age_range,
+        into = c("age_range_value", "age_range_unit"),
+        sep = " "
+    ) %>%
+    separate(
+        age_range_value,
+        into = c("age_range_min", "age_range_max"),
+        sep = "-"
+    ) %>%
+    mutate(
+        age_range_min = as.integer(age_range_min),
+        age_range_max = as.integer(age_range_max),
+        age_range_unit = factor(age_range_unit, levels = c(
+            "Weeks",
+            "Days",
+            "Months",
+            "Years"
+        )),
+        age_range_label = paste0(
+            age_range_min,
+            "-",
+            age_range_max,
+            " ",
+            age_range_unit,
+            "\n(n=", count, ", ", round((count / nagree) * 100), "%)"
+        )
+    ) %>%
+    arrange(age_range_unit, age_range_min, age_range_max) %>%
+    mutate(
+        age_range_label = factor(age_range_label, levels = unique(age_range_label))
+    )
+
+# Plot the data
+earplot <- eardata %>%
+    ggplot(aes(x = age_range_label, y = count)) +
+    geom_bar(
+        stat = "identity",
+        fill = "#1d1d1d",
+        color = "white",
+        width = 0.5
+    ) +
+    labs(
+        y = y_title,
+        x = element_blank()
+    ) +
+    theme_minimal() +
+    theme(
+        panel.grid = element_blank(),
+        axis.title.x = element_text(margin = margin(t = 10)),
+        axis.title.y = element_text(margin = margin(r = 10))
+    ) +
+    coord_flip()
+
+# Save the plot
+earplot
+ggsave("../manuscript/fig-data-agerange.pdf", plot = earplot, dpi = 300)
+```
 
 #### Cases by COD
 
