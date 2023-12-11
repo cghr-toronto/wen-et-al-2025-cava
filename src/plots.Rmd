@@ -707,7 +707,7 @@ ggsave("../manuscript/fig-data-agerange.pdf", plot = earplot, dpi = 300)
 
 Display a plot of cases by cause of death.
 
-```{r, fig.height = 11, fig.width = 8}
+```{r, fig.height = 16.5, fig.width = 8}
 
 # Format plot data
 ecoddata <- df %>%
@@ -716,7 +716,11 @@ ecoddata <- df %>%
     summarize(count = n()) %>%
     mutate(
         cod_label = paste0(
-            physician_cghr10,
+            if_else(
+                str_count(physician_cghr10, "\\s+") > 3,
+                str_replace(physician_cghr10, "(\\S+\\s+\\S+\\s+\\S+) ", "\\1\n"),
+                physician_cghr10
+            ),
             "\n(n=", count, ", ",
             if_else(
                 ((count / nagree) * 100) < 1,
