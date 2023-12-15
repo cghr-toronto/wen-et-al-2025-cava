@@ -150,6 +150,7 @@ calc_by <- function(
         name = "Metric",
         by_age = TRUE,
         by_stage = TRUE,
+        by_sex = TRUE,
         by_cod = TRUE,
         by_age_range = TRUE,
         ...
@@ -242,6 +243,38 @@ calc_by <- function(
                 ) %>% rename(
                      {{ metric_name }} := Metric
                 )
+            }
+        }
+    }
+    
+    # Calc metric by sex for each age group
+    if (by_sex) {
+        
+        # Calc metric by cod
+        for (a in c("adult", "child", "neo")) {
+            for (sx in c("Male", "Female")) {
+                
+                # Filter data for cod
+                df_filter <- df %>% filter(
+                    sex == sx & is_agreed == TRUE & age == a
+                )
+                metric_name <- sprintf(
+                    "%s %s Sex Agree %s", name, str_to_title(a), sx
+                )
+                
+                # Calc metric for cod
+                if (nrow(df_filter) > 0) {
+                    out[[metric_name]] <- calc_per_model(
+                        actual = df_filter %>%
+                            pull(physician_cghr10),
+                        pred = df_filter %>%
+                            select(ends_with("_cghr10"), -physician_cghr10),
+                        func = func,
+                        ...
+                    ) %>% rename(
+                         {{ metric_name }} := Metric
+                    )
+                }
             }
         }
     }
@@ -567,7 +600,7 @@ pagree <- (nagree / nall) * 100
 y_title <- paste0("Physician Agreed Records (n=", nagree, ", 100%)")
 ```
 
-#### Cases by Age Group and Sex
+#### Cases by Sex and Age Group
 
 Display a plot of cases by age group separated by sex.
 
@@ -1191,6 +1224,212 @@ ageplot
 ggsave("../manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
 ```
 
+#### Sex Performance
+
+Display a plot for each age group of performance for physician agreed records by sex.
+
+```{r, fig.width = 6, fig.height = 2.5}
+for (a in c("adult", "child", "neo")) {
+    
+    # Create label and ref for age group
+    arows <- df %>% filter(is_agreed == TRUE & age == a) %>% nrow
+    alabel <- if (a == "neo") "Neonatal" else str_to_title(a)
+    atitle <- paste0("Physician Agreed\n", alabel, " Records\n(n=", arows, ", 100%)")
+    aref <- str_to_title(a)
+    
+    # Get unique sex columns
+    sex_col <- out %>% select(starts_with(sprintf(
+            "PCCC %s Sex Agree ",
+            aref
+        ))) %>%
+        names
+    
+    # Create sex with counts
+    sex_remap <- list()
+    sex_counts <- list()
+    for (sx_col in sex_col) {
+        
+        # Get sex without prefix
+        sx <- gsub(sprintf("PCCC %s Sex Agree ", aref), "", sx_col)
+        
+        # Calc num and perc cases for age range
+        nsex <- df %>% filter(sex == sx & is_agreed == TRUE & age == a) %>% nrow
+        psex <- (nsex / arows) * 100
+        psex_label <- if (round(psex) >= 1) round(psex) else "<1"
+        
+        # Add label for age ranges
+        sex_remap[[sx]] <- paste0(
+            sprintf("%s %s", alabel, sx),
+            "\n(n=", nsex, ", ", psex_label, "%)"
+        )
+        
+        # Store age range count data
+        sex_counts[[sx]] <- nsex
+    }
+    
+    # Prepare boxplot data
+    sxdata <- out %>%
+        select(
+            Model,
+            starts_with(sprintf("PCCC %s Sex Agree", aref))
+        ) %>%
+        rename_at(
+             vars(-Model),
+             ~gsub(sprintf("PCCC %s Sex Agree ", aref), "", .)
+        ) %>%
+        filter(!str_detect(Model, "&")) %>% # remove multi models
+        pivot_longer( # transform to long format
+            cols = -Model,
+            names_to = "Sex",
+            values_to = "PCCC"
+        ) %>%
+        mutate( # rename cod with counts
+            "Sex" = recode(Sex, !!!sex_remap)
+        ) %>%
+        group_by(Sex) %>%
+        mutate( # Make values less than 0 equal to 0
+            PCCC = if_else(PCCC <= 0, 0, PCCC)
+        ) %>%
+        mutate( # Add min, mid, and max model names to label
+            "PCCC Min" = if_else(
+                PCCC <= min(PCCC) + 0.05,
+                paste0(
+                    Model,
+                    if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+                ),
+                NA
+            ),
+            "PCCC Max" = if_else(
+                PCCC >= max(PCCC) - 0.05,
+                paste0(
+                    Model,
+                    if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+                ),
+                NA
+            ),
+            "PCCC Mid" = if_else(
+                is.na(`PCCC Min`) & is.na(`PCCC Max`),
+                paste0(Model, "\n(", round(PCCC, 2), ")"),
+                NA
+            ),
+            "PCCC Mid Value" = if_else(
+                is.na(`PCCC Min`) & is.na(`PCCC Max`),
+                PCCC,
+                NA
+            ),
+            "PCCC Min" = if_else( # Combine into one row if close PCCC
+                `PCCC` == min(PCCC),
+                if_else(
+                    sum(!is.na(`PCCC Min`)) > 1,
+                    paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                    paste0(
+                        str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                        collapse = "\n"
+                    )
+                ),
+                NA
+            ),
+            "PCCC Max" = if_else(
+                `PCCC` == max(PCCC),
+                if_else(
+                    sum(!is.na(`PCCC Max`)) > 1,
+                    paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                    paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                           collapse = "\n")
+                ),
+                NA
+            )
+        )
+    
+    # Create cod order based on max pccc
+    sxorder <- sxdata %>%
+        group_by(Sex) %>%
+        summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
+        select(Sex, `PCCC Max Value`) %>%
+        arrange(desc(`PCCC Max Value`)) %>%
+        pull(Sex)
+    sxdata$Sex <- factor(sxdata$Sex, levels = rev(sxorder))
+    
+    # Plot boxplot
+    sxplot <- sxdata %>%
+        ggplot(aes(x = Sex, y = PCCC)) +
+        geom_boxplot(
+            linewidth = 0.5,
+            width = 0.25
+        ) +
+        geom_point(
+            aes(y = `PCCC Mid Value`),
+            shape = 1,
+            size = 1.5,
+            fill = "white",
+            color = "darkgray",
+            alpha = 0.8,
+            position = position_nudge(x = -0.35)
+        ) +
+        geom_text(
+            aes(label = `PCCC Min`),
+            color = "#4d4d4d",
+            size = 2.5,
+            hjust = 1,
+            position = position_nudge(y = -0.09)
+        ) +
+        geom_text(
+            aes(label = `PCCC Mid`),
+            color = "#4d4d4d",
+            size = 2,
+            hjust = 1,
+            position = position_nudge(y = -0.025, x = -0.35)
+        ) +
+        geom_text(
+            aes(label = `PCCC Max`),
+            color = "#4d4d4d",
+            size = 2.5,
+            hjust = 0,
+            position = position_nudge(y = 0.09)
+        ) +
+        stat_summary( # min pccc txt on boxplot
+            geom = "text",
+            fun = min,
+            aes(label = sprintf("%1.2f", after_stat(y))),
+            position = position_nudge(y = -0.04),
+            size = 3
+        ) +
+        stat_summary( # max pccc txt on boxplot
+            geom = "text",
+            fun = max,
+            aes(label = sprintf("%1.2f", after_stat(y))),
+            position = position_nudge(y = 0.04),
+            size = 3
+        ) +
+        labs(
+            x = atitle,
+            y = "PCCC (0=Low, 1=High)"
+        ) +
+        ylim(0.1, 1) +
+        coord_flip() +
+        theme_minimal() +
+        theme(
+            panel.grid = element_blank(),
+            axis.line = element_blank(),
+            axis.line.y = element_blank(),
+            axis.title.x = element_text(margin = margin(t = 10)),
+            axis.title.y = element_text(margin = margin(r = 10)),
+            axis.line.x = element_line(
+                color = "black",
+                arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
+            )
+        )
+    
+    # Save the plot
+    print(sxplot)
+    ggsave(
+        sprintf("../manuscript/fig-perf-sex-%s.pdf", a),
+        plot = sxplot,
+        dpi = 300
+    )
+}
+```
+
 #### Age Range Performance
 
 Display a plot for each age group of performance for physician agreed records by age ranges.
@@ -1224,7 +1463,7 @@ for (a in c("adult", "child", "neo")) {
         ar <- gsub(sprintf("PCCC %s Age Agree ", aref), "", ar_col)
         
         # Calc num and perc cases for age range
-        narange <- df %>% filter(age_range == ar & is_agreed == TRUE) %>% nrow
+        narange <- df %>% filter(age_range == ar & is_agreed == TRUE & age == a) %>% nrow
         parange <- (narange / arows) * 100
         parange_label <- if (round(parange) >= 1) round(parange) else "<1"
         
@@ -1409,7 +1648,7 @@ for (a in c("adult", "child", "neo")) {
         cod <- gsub(sprintf("PCCC %s COD Agree ", aref), "", cod_col)
         
         # Calculate num and perc cases for cod
-        ncod <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE) %>% nrow
+        ncod <- df %>% filter(physician_cghr10 == cod & is_agreed == TRUE & age == a) %>% nrow
         pcod <- (ncod / nagree) * 100
         pcod_label <- if (round(pcod) >= 1) round(pcod) else "<1"
         
