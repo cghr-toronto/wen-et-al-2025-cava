@@ -1,0 +1,4 @@
+column_name,description,type
+title,CMEA-10 block title that represents a range of ICD-10 codes considered in agreement for assigning death codes in VAs.,text
+icd10_range,Range of ICD-10 codes in the CMEA-10 block - each code is separated by a comma.,text
+icd10_range_short,Range of ICD-10 codes in the CMEA-10 block - shortened to represent consecutive ranges with dashes for easier readability.,text

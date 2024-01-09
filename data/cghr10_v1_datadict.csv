@@ -1,0 +1,4 @@
+column_name,description,type
+age,"CGHR-10 code age group. Age groups are divided into adult (12 to 69 years old), child (1 month to 11 years old), and neo (under 1 month old).",text
+title,CGHR-10 title for the code.,text
+icd10_range,ICD-10 range for the CGHR-10 code.,text

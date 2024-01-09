@@ -175,7 +175,9 @@ Recently, Large Language Models (LLM), leveraging massive datasets and deep lear
 
 \section{Methods}\label{methods}
 
-The performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs were evaluated using 6939 deaths in 2019 to 2022 from the Health Sierra Leone (HEAL-SL) study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}. Initially, there were 11,920 deaths collected from Electronic Verbal Autopsy (EVA), where each death was randomly assigned to two different physicians that provided their diagnoses as International Classification of Diseases Revision 10 (ICD-10) codes. The codes from the two physicians were compared to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups ICD-10 codes into a set of ranges considered to be closely similar diagnoses (in agreement). If two codes for a death were not in agreement, the death enters a reconciliation phase, where the two physicians would be provided diagnoses from each other to keep their initial code, assign the other physician's code or assign a new code. If the codes still do not agree, the death enters an adjudication phase, where a third more experienced physician evaluates both physicians' diagnoses and assigns a final code. The 11,799 deaths were filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated).
+The performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs were evaluated using 6939 physician agreed records of death in 2019 to 2022 from the Health Sierra Leone (HEAL-SL) study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}. COD outputs from the four models were compared to CODs assigned by physicians. Physician agreed records are records where two physicians had similar COD assignments for each dual-coded record.
+
+Initially, 11,920 records were collected from dual-coded Electronic Verbal Autopsy (EVA), where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. The codes from the two physicians were compared in the EVA system to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups ICD-10 codes into a set of ranges considered to have similar codes (codes in agreement, see Appendix \ref{app-cmea}). When codes were not in agreement for a , the death enters a reconciliation phase, where the two physicians would be provided diagnoses from each other to keep their initial code, assign the other physician's code or assign a new code. If the codes still do not agree, the death enters an adjudication phase, where a third more experienced physician evaluates both physicians' diagnoses and assigns a final code. The 11,799 deaths were filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated).
 
 Physicians were able to assign CODs for 11,799 of the 11,920 deaths, where 121 of these deaths could not be assigned a COD due to missing or inadequate information. The ICD-10 codes from the 11,799 deaths were then transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups. Free-text open narratives were used as input for ChatGPT-3.5 and ChatGPT-4, while structured questionnaire data transformed into WHO v1.5.1 format were used as input for InterVA-5 and InSilicoVA.
 
@@ -229,9 +231,9 @@ If any of the sections are not relevant to your manuscript, please include the h
 
 \begin{appendices}
 
-\section{Section title of first appendix}\label{secA1}
+\section{Central Medical Evaluation Agreement 10 (CMEA-10) Codes}\label{app-cmea}
 
-An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
+
 
 %%=============================================%%
 %% For submissions to Nature Portfolio Journals %%
