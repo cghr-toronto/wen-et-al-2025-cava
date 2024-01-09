@@ -177,9 +177,9 @@ Recently, Large Language Models (LLM), leveraging massive datasets and deep lear
 
 The performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs were evaluated using 6939 physician agreed records of death in 2019 to 2022 from the Health Sierra Leone (HEAL-SL) study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}. COD outputs from the four models were compared to CODs assigned by physicians. Physician agreed records are records where two physicians had similar COD assignments for each dual-coded record.
 
-Initially, 11,920 records were collected from dual-coded Electronic Verbal Autopsy (EVA), where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. The codes from the two physicians were compared in the EVA system to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups ICD-10 codes into a set of ranges considered to have similar codes (codes in agreement, see Appendix \ref{app-cmea}). When codes were not in agreement for a , the death enters a reconciliation phase, where the two physicians would be provided diagnoses from each other to keep their initial code, assign the other physician's code or assign a new code. If the codes still do not agree, the death enters an adjudication phase, where a third more experienced physician evaluates both physicians' diagnoses and assigns a final code. The 11,799 deaths were filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated).
+Initially, 11,920 records were collected from dual-coded Electronic Verbal Autopsy (EVA), where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. To determine if two codes were in physician agreement, codes from two physicians per record were compared in the EVA system to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 1). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes are not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes, and assigns a final code. The 11,799 deaths were filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated).
 
-Physicians were able to assign CODs for 11,799 of the 11,920 deaths, where 121 of these deaths could not be assigned a COD due to missing or inadequate information. The ICD-10 codes from the 11,799 deaths were then transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups. Free-text open narratives were used as input for ChatGPT-3.5 and ChatGPT-4, while structured questionnaire data transformed into WHO v1.5.1 format were used as input for InterVA-5 and InSilicoVA.
+Physicians were able to assign CODs for 11,799 of the 11,920 deaths, where 121 of these deaths could not be assigned a COD due to missing or inadequate information. The ICD-10 codes from the 11,799 deaths were transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2). Free-text open narratives were used as input for ChatGPT-3.5 and ChatGPT-4, while structured questionnaire data transformed into WHO v1.5.1 format were used as input for InterVA-5 and InSilicoVA.
 
 \section{Results}\label{results}
 
@@ -199,42 +199,53 @@ In some disciplines use of Discussion or 'Conclusion' is interchangeable. It is 
 
 \bmhead{Supplementary information}
 
-If your article has accompanying supplementary file/s please state so here. 
+% If your article has accompanying supplementary file/s please state so here. 
 
-Authors reporting data from electrophoretic gels and blots should supply the full unprocessed scans for key as part of their Supplementary information. This may be requested by the editorial team/s if it is missing.
+% Authors reporting data from electrophoretic gels and blots should supply the full unprocessed scans for key as part of their Supplementary information. This may be requested by the editorial team/s if it is missing.
 
-Please refer to Journal-level guidance for any specific requirements.
+% Please refer to Journal-level guidance for any specific requirements.
+
+Additional files were used to supplement this paper:
+
+\begin{itemize}
+    \item Additional file 1: Central Medical Evaluation Agreement 10 (CMEA-10) codes. ICD-10 code ranges considered in physician agreement. (.csv)
+    \item Additional file 2: Centre for Global Health Research 10 (CGHR-10) codes. Codes grouping ICD-10 code ranges into generalized categories. (.csv)
+\end{itemize}
 
 \bmhead{Acknowledgments}
 
-Acknowledgments are not compulsory. Where included they should be brief. Grant or contribution numbers may be acknowledged.
+% Acknowledgments are not compulsory. Where included they should be brief. Grant or contribution numbers may be acknowledged.
 
-Please refer to Journal-level guidance for any specific requirements.
+% Please refer to Journal-level guidance for any specific requirements.
 
 \section*{Declarations}
 
-Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
+% Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
 
-\begin{itemize}
-\item Funding
-\item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
-\item Ethics approval 
-\item Consent to participate
-\item Consent for publication
-\item Availability of data and materials
-\item Code availability 
-\item Authors' contributions
-\end{itemize}
+% \begin{itemize}
+% \item Funding
+% \item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
+% \item Ethics approval 
+% \item Consent to participate
+% \item Consent for publication
+% \item Availability of data and materials
+% \item Code availability 
+% \item Authors' contributions
+% \end{itemize}
 
-\noindent
-If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section. 
+% \noindent
+% If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section. 
 
-\begin{appendices}
+\subsection*{Availability of data and materials}
 
-\section{Central Medical Evaluation Agreement 10 (CMEA-10) Codes}\label{app-cmea}
+The datasets supporting the conclusions of this article are included within the article (and its additional files).
 
+%\begin{appendices}
 
+%\section{Section title of first appendix}\label{secA1}
 
+%An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
+    
 %%=============================================%%
 %% For submissions to Nature Portfolio Journals %%
 %% please use the heading ``Extended Data''.   %%
@@ -249,7 +260,7 @@ If any of the sections are not relevant to your manuscript, please include the h
 %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
 %% tables and equations etc.
 
-\end{appendices}
+%\end{appendices}
 
 %%===========================================================================================%%
 %% If you are submitting to one of the Nature Portfolio journals, using the eJP submission   %%
