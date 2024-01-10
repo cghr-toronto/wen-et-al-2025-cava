@@ -72,6 +72,23 @@
   abstract = {The international standard to ascertain the cause of death is medical certification. However, in many low and middle-income countries, the majority of deaths occur outside of health facilities. In these cases, Verbal Autopsy (VA), the narrative provided by a family member or friend together with a questionnaire is designed by the World Health Organization as the main information source. Until now technology allowed us to automatically analyze the responses of the VA questionnaire with the narrative captured by the interviewer excluded. Our work addresses this gap by developing a set of models for automatic Cause of Death (CoD) ascertainment in VAs with a focus on the textual information. Empirical results show that the open response conveys valuable information towards the ascertainment of the Cause of Death, and the combination of the closed-ended questions and the open response lead to the best results. Model interpretation capabilities position the Deep Learning models as the most encouraging choice.}
 }
 
+@misc{brownLanguageModelsAre2020,
+  title = {Language {{Models}} Are {{Few-Shot Learners}}},
+  author = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and {Herbert-Voss}, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel M. and Wu, Jeffrey and Winter, Clemens and Hesse, Christopher and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
+  year = {2020},
+  month = jul,
+  number = {arXiv:2005.14165},
+  eprint = {2005.14165},
+  primaryclass = {cs},
+  publisher = {{arXiv}},
+  doi = {10.48550/arXiv.2005.14165},
+  url = {http://arxiv.org/abs/2005.14165},
+  urldate = {2024-01-10},
+  abstract = {Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this method still requires task-specific fine-tuning datasets of thousands or tens of thousands of examples. By contrast, humans can generally perform a new language task from only a few examples or from simple instructions - something which current NLP systems still largely struggle to do. Here we show that scaling up language models greatly improves task-agnostic, few-shot performance, sometimes even reaching competitiveness with prior state-of-the-art fine-tuning approaches. Specifically, we train GPT-3, an autoregressive language model with 175 billion parameters, 10x more than any previous non-sparse language model, and test its performance in the few-shot setting. For all tasks, GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model. GPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic. At the same time, we also identify some datasets where GPT-3's few-shot learning still struggles, as well as some datasets where GPT-3 faces methodological issues related to training on large web corpora. Finally, we find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans. We discuss broader societal impacts of this finding and of GPT-3 in general.},
+  archiveprefix = {arxiv},
+  keywords = {Computer Science - Computation and Language}
+}
+
 @article{byassIntegratedApproachProcessing2019,
   title = {An Integrated Approach to Processing {{WHO-2016}} Verbal Autopsy Data: The {{InterVA-5}} Model},
   shorttitle = {An Integrated Approach to Processing {{WHO-2016}} Verbal Autopsy Data},
@@ -328,6 +345,19 @@
   keywords = {Causes of death,Computer-coded verbal autopsy,InterVA,King and Lu,Physician-certified verbal autopsy,Random forest,Simplified symptom pattern,Tariff,Validity,Verbal autopsy}
 }
 
+@article{liOpenVAToolkitVerbal2023,
+  title = {The {{openVA Toolkit}} for {{Verbal Autopsies}}},
+  author = {Li, Zehang Richard and Thomas, Jason and Choi, Eungang and McCormick, Tyler H. and Clark, Samuel J.},
+  year = {2023},
+  month = feb,
+  journal = {The R Journal},
+  pages = {1},
+  issn = {2073-4859},
+  url = {https://journal.r-project.org/articles/RJ-2023-020/},
+  urldate = {2024-01-10},
+  abstract = {Verbal autopsy (VA) is a survey-based tool widely used to infer cause of death (COD) in regions without complete-coverage civil registration and vital statistics systems. In such settings, many deaths happen outside of medical facilities and are not officially documented by a medical professional. VA surveys, consisting of signs and symptoms reported by a person close to the decedent, are used to infer the COD for an individual, and to estimate and monitor the COD distribution in the population. Several classification algorithms have been developed and widely used to assign causes of death using VA data. However, the incompatibility between different idiosyncratic model implementations and required data structure makes it difficult to systematically apply and compare different methods. The openVA package provides the first standardized framework for analyzing VA data that is compatible with all openly available methods and data structure. It provides an open-source, R implementation of several most widely used VA methods. It supports different data input and output formats, and customizable information about the associations between causes and symptoms. The paper discusses the relevant algorithms, their implementations in R packages under the openVA suite, and demonstrates the pipeline of model fitting, summary, comparison, and visualization in the R environment.}
+}
+
 @article{liuExcessMortalityPersons2017,
   title = {Excess Mortality in Persons with Severe Mental Disorders: A Multilevel Intervention Framework and Priorities for Clinical Practice, Policy and Research Agendas},
   shorttitle = {Excess Mortality in Persons with Severe Mental Disorders},
@@ -414,6 +444,15 @@
   urldate = {2024-01-02}
 }
 
+@misc{nafundiODKCollectData2023,
+  title = {{{ODK}} - {{Collect}} Data Anywhere},
+  author = {{Nafundi}},
+  year = {2023},
+  url = {https://getodk.org},
+  urldate = {2024-01-10},
+  abstract = {Powerful forms to collect the data you need wherever it is. Join the researchers, field teams, and other professionals using ODK to collect data that matters.}
+}
+
 @misc{njalauniversityHealthySierraLeone2023,
   title = {Healthy {{Sierra Leone}}},
   author = {{Njala University}},
@@ -474,6 +513,16 @@
   abstract = {In software development through integrated development environments (IDEs), code completion is one of the most widely used features. Nevertheless, majority of integrated development environments only support completion of methods and APIs, or arguments. In this paper, we introduce IntelliCode Compose {\textendash} a general-purpose multilingual code completion tool which is capable of predicting sequences of code tokens of arbitrary types, generating up to entire lines of syntactically correct code. It leverages state-of-the-art generative transformer model trained on 1.2 billion lines of source code in Python, C\#, JavaScript and TypeScript programming languages. IntelliCode Compose is deployed as a cloud-based web service. It makes use of client-side tree-based caching, efficient parallel implementation of the beam search decoder, and compute graph optimizations to meet edit-time completion suggestion requirements in the Visual Studio Code IDE and Azure Notebook. Our best model yields an average edit similarity of 86.7\% and a perplexity of 1.82 for Python programming language.},
   isbn = {978-1-4503-7043-1},
   keywords = {Code completion,naturalness of software,neural networks}
+}
+
+@misc{thomasPycrossvaPrepareData,
+  title = {Pycrossva: {{Prepare}} Data from {{WHO}} and {{PHRMC}} Instruments for Verbal Autopsy Algorithms},
+  shorttitle = {Pycrossva},
+  author = {Thomas, Jason and {ekarpinskiMITRE} and {pkmitre} and {owentrigueros} and Choi, Peter and Chu, Yue},
+  url = {https://pypi.org/project/pycrossva/},
+  urldate = {2024-01-10},
+  copyright = {GNU General Public License v3},
+  keywords = {data preparation,{verbal autopsy,}}
 }
 
 @article{thomasVerbalAutopsyHealth2018,

@@ -58,6 +58,14 @@
 \usepackage{listings}%
 %%%%
 
+\lstset{
+    texcl=true,
+    basicstyle=\small\sf,
+    commentstyle=\small\rm,
+    mathescape=true,
+    escapeinside={(*}{*)}
+}
+
 %%%%%=============================================================================%%%%
 %%%%  Remarks: This template is provided to aid authors with the preparation
 %%%%  of original research articles intended for submission to journals published 
@@ -175,11 +183,25 @@ Recently, Large Language Models (LLM), leveraging massive datasets and deep lear
 
 \section{Methods}\label{methods}
 
-The performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs were evaluated using 6939 physician agreed records of death in 2019 to 2022 from the Health Sierra Leone (HEAL-SL) study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}. COD outputs from the four models were compared to CODs assigned by physicians. Physician agreed records are records where two physicians had similar COD assignments for each dual-coded record.
+The performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs were evaluated using 6939 physician agreed records in 2019 to 2022 from the Health Sierra Leone (HEAL-SL) study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}. Physician agreed records are dual-coded records where two physicians had similar COD assignments. COD outputs from the four models were compared to CODs assigned by physicians.
 
-Initially, 11,920 records were collected from dual-coded Electronic Verbal Autopsy (EVA), where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. To determine if two codes were in physician agreement, codes from two physicians per record were compared in the EVA system to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 1). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes are not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes, and assigns a final code. The 11,799 deaths were filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated).
+\subsection{Physician Agreed Records}\label{methods-phyagree}
 
-Physicians were able to assign CODs for 11,799 of the 11,920 deaths, where 121 of these deaths could not be assigned a COD due to missing or inadequate information. The ICD-10 codes from the 11,799 deaths were transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2). Free-text open narratives were used as input for ChatGPT-3.5 and ChatGPT-4, while structured questionnaire data transformed into WHO v1.5.1 format were used as input for InterVA-5 and InSilicoVA.
+Initially, 11,920 records were collected from dual-coded Electronic Verbal Autopsy (EVA), where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,799 of the 11,920 records, where 121 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement, codes from two physicians per record were compared in the EVA system to determine if they agreed using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 1). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes are not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes, and assigns a final code. The 11,799 physician coded records were further filtered for cases where both physicians agreed on the assigned codes (cases that were not reconciled or adjudicated), resulting in 6939 records.
+
+\subsection{Cause of Death Prediction Models}\label{methods-models}
+
+Four computer models were used to predict COD for each of the 6939 physician agreed records: ChatGPT-3.5 \cite{brownLanguageModelsAre2020}, ChatGPT-4 \cite{openaiGPT4TechnicalReport2023a}, InterVA-5 \cite{byassIntegratedApproachProcessing2019}, and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016}. For ChatGPT-3.5 and ChatGPT-4, prompts were generated for each record as input data with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
+
+\begin{lstlisting}
+Determine the underlying cause of death and provide a ICD-10 code 
+for the following narrative based on a verbal autopsy of a death in 
+Sierra Leone, Age <age> <unit>, <sex>: <narrative>
+\end{lstlisting}
+
+\noindent For InterVA5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were transformed into the 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. The 2016 WHO VA revision 1.5.1 ODK data was further transformed into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}.
+
+The ICD-10 codes from the 6939 physician agreed records were transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2).
 
 \section{Results}\label{results}
 
