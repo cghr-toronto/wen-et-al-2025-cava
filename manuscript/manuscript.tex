@@ -199,7 +199,7 @@ for the following narrative based on a verbal autopsy of a death in
 Sierra Leone, Age <age> <unit>, <sex>: <narrative>
 \end{lstlisting}
 
-\noindent For InterVA5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were transformed into the 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. The 2016 WHO VA revision 1.5.1 ODK data was further transformed into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}.
+For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first transformed into the 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. Then, these transformed data were further transformed into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}, and used as input for InterVA-5 and InSilicoVA.
 
 The ICD-10 codes from the 6939 physician agreed records were transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2).
 
