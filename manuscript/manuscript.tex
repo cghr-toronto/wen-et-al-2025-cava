@@ -191,7 +191,11 @@ Initially, 11,920 records were collected from dual-coded Electronic Verbal Autop
 
 \subsection{Cause of Death Prediction Models}\label{methods-models}
 
-Four computer models were used to predict COD for each of the 6939 physician agreed records: ChatGPT-3.5 \cite{brownLanguageModelsAre2020}, ChatGPT-4 \cite{openaiGPT4TechnicalReport2023a}, InterVA-5 \cite{byassIntegratedApproachProcessing2019}, and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016}. For ChatGPT-3.5 and ChatGPT-4, prompts were generated for each record as input data with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
+Four computer models were used to predict COD for each of the 6939 physician agreed records: ChatGPT-3.5 \cite{brownLanguageModelsAre2020}, ChatGPT-4 \cite{openaiGPT4TechnicalReport2023a}, InterVA-5 \cite{byassIntegratedApproachProcessing2019}, and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016}. Each model required pre-processing of the 11,799 physician agreed records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced ICD-10 codes.
+
+\subsubsection{Input Data}\label{methods-models-input}
+
+For ChatGPT-3.5 and ChatGPT-4, prompts were generated for each record as input data with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
 
 \begin{lstlisting}
 Determine the underlying cause of death and provide a ICD-10 code 
@@ -199,9 +203,15 @@ for the following narrative based on a verbal autopsy of a death in
 Sierra Leone, Age <age> <unit>, <sex>: <narrative>
 \end{lstlisting}
 
-For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first transformed into the 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. Then, these transformed data were further transformed into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}, and used as input for InterVA-5 and InSilicoVA.
+\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. The WHO revision 1.5.1 ODK data were further converted into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}, and used as input for InterVA-5 and InSilicoVA. The input data were X generated prompts for ChatGPT-3.5 and ChatGPT-4, and X OpenVA formatted records for InterVA-5 and InSilicoVA.
 
-The ICD-10 codes from the 6939 physician agreed records were transformed into Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2).
+\subsubsection{Output Data}\label{methods-models-output}
+
+ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA were able to output COD codes for X, X, X, X of the X records respectively. Thus, only X records with an output code for all four models were kept for evaluation. ChatGPT-3.5 and ChatGPT-4 output ICD-10 codes, but InterVA-5 and InSilicoVA output WHO VA 2016 codes, which were converted into ICD-10 codes. All model output ICD-10 codes were further converted to Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2). X records containing CGHR-10 codes for each of the four models were used for performance evaluation.
+
+\subsection{Performance Evaluation}\label{methods-eval}
+
+x.
 
 \section{Results}\label{results}
 
