@@ -195,7 +195,7 @@ Four computer models were used to predict COD for each of the 6942 physician agr
 
 \subsubsection{Input Data}\label{methods-models-input}
 
-For ChatGPT-3.5 and ChatGPT-4, prompts were generated for each record as input data with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
+For ChatGPT-3.5 and ChatGPT-4, text prompts were generated for each record as input data with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
 
 \begin{lstlisting}
 Determine the underlying cause of death and provide a ICD-10 code 
@@ -203,13 +203,19 @@ for the following narrative based on a verbal autopsy of a death in
 Sierra Leone, Age <age> <unit>, <sex>: <narrative>
 \end{lstlisting}
 
-\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}. The WHO revision 1.5.1 ODK data were further converted into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}, and used as input for InterVA-5 and InSilicoVA. The input data were 6939 generated prompts for ChatGPT-3.5 and ChatGPT-4, and X OpenVA formatted records for InterVA-5 and InSilicoVA.
+\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{nafundiODKCollectData2023}, followed by further conversion into OpenVA format \cite{liOpenVAToolkitVerbal2023} using the \verb|pyCrossVA| Python package \cite{thomasPycrossvaPrepareData}, and used as input for InterVA-5 and InSilicoVA. The 6942 physician agreed records were all converted into generated text prompts as ChatGPT-3.5 and ChatGPT-4 inputs. Only 6897 of the 6942 physician agreed records were converted into OpenVA formatted records as InterVA-5 and InSilicoVA inputs as 45 records caused conversion errors and were skipped.
 
 \subsubsection{Output Data}\label{methods-models-output}
 
-ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA were able to output COD codes for X, X, X, X of the X records respectively. Thus, only X records with an output code for all four models were kept for evaluation. ChatGPT-3.5 and ChatGPT-4 output ICD-10 codes, but InterVA-5 and InSilicoVA output WHO VA 2016 codes, which were converted into ICD-10 codes. All model output ICD-10 codes were further converted to Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2). X records containing CGHR-10 codes for each of the four models were used for performance evaluation.
+Of the 6942 physician agreed records, ChatGPT-3.5 and ChatGPT-4 were able to assign CODs for 6932 and 6912 records respectively, while InterVA-5 and InSilicoVA both assigned CODs for 6833 records. All 6833 records with WHO VA 2016 v1.5 codes \cite{worldhealthorganizationVerbalAutopsyStandards2016} from InterVA-5 and InSilicoVA output were converted into ICD-10 codes. After all model outputs contained ICD-10 codes, they were further converted to Centre for Global Health Research 10 (CGHR-10) codes that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups (see Additional file 2). The 6932 and 6912 records with ICD-10 codes from ChatGPT-3.5 and ChatGPT-4 output were converted into CGHR-10 codes, resulting in 6894 and 6857 records, where 38 and 55 records did not have matching CGHR-10 codes respectively. The 6833 records with ICD-10 codes from InterVA-5 and InSilicoVA output were also converted into CGHR-10 codes, resulting in and 6805 and 6729 records, where 28 and 104 records did not have matching CGHR-10 codes respectively.
 
 \subsection{Performance Evaluation}\label{methods-eval}
+
+\subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
+
+x.
+
+\subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
 
 x.
 

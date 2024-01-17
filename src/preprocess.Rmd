@@ -459,6 +459,110 @@ cat(paste0(
 ))
 ```
 
+### InterVA-5 Counts
+
+Check InterVA-5 Counts:
+
+```{r}
+
+# Get who with physician coded records
+out_who <- out %>% left_join(
+    df$who %>% mutate(rowid_who = rowid),
+    by = c("rowid" = "rowid"),
+    suffix = c("", "")
+) %>% filter(!is.na(rowid_who) & !is.na(physician_icd10))
+out_who_agree <- out_who %>% filter(is_agreed == TRUE)
+
+# Get interva5 coded records in wva2016
+out_iva5 <- out_who %>% filter(
+    !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
+)
+out_iva5_agree <- out_who_agree %>% filter(
+    !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
+)
+
+# Get interva5 wva2016 coded records converted to icd10
+out_iva5_icd10 <- out_iva5 %>% filter(
+    !is.na(interva5_icd10) & !is.null(interva5_icd10)
+)
+out_iva5_icd10_agree <- out_iva5_agree %>% filter(
+    !is.na(interva5_icd10) & !is.null(interva5_icd10)
+)
+
+# Get interva5 icd10 coded records converted to cghr10
+out_iva5_cghr10 <- out_iva5_icd10 %>% filter(
+    !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
+)
+out_iva5_cghr10_agree <- out_iva5_icd10_agree %>% filter(
+    !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
+)
+
+# Print results
+cat(paste0(
+    "InterVA-5 WVA-2016 Output\n-------------------------",
+    "\nInterVA-5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_iva5 %>% nrow,
+    "\nInterVA-5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_agree %>% nrow,
+    "\n\nAfter Conversion from WVA-2016 to ICD-10\n----------------------------------------",
+    "\nInterVA-5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_iva5_icd10 %>% nrow,
+    "\nInterVA-5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_icd10_agree %>% nrow,
+    "\n\nAfter Conversion from ICD-10 to CGHR-10\n---------------------------------------",
+    "\nInterVA-5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_iva5_cghr10 %>% nrow,
+    "\nInterVA-5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_cghr10_agree %>% nrow
+))
+```
+
+### InSilicoVA Counts
+
+Check InSilicoVA Counts:
+
+```{r}
+
+# Get who
+out_who <- out %>% left_join(
+    df$who %>% mutate(rowid_who = rowid),
+    by = c("rowid" = "rowid"),
+    suffix = c("", "")
+) %>% filter(!is.na(rowid_who) & !is.na(physician_icd10))
+out_who_agree <- out_who %>% filter(is_agreed == TRUE)
+
+# Get insilicova coded records in wva2016
+out_isva <- out_who %>% filter(
+    !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
+)
+out_isva_agree <- out_who_agree %>% filter(
+    !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
+)
+
+# Get insilicova wva2016 coded records converted to icd10
+out_isva_icd10 <- out_isva %>% filter(
+    !is.na(insilicova_icd10) & !is.null(insilicova_icd10)
+)
+out_isva_icd10_agree <- out_isva_agree %>% filter(
+    !is.na(insilicova_icd10) & !is.null(insilicova_icd10)
+)
+
+# Get insilicova icd10 coded records converted to cghr10
+out_isva_cghr10 <- out_isva_icd10 %>% filter(
+    !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
+)
+out_isva_cghr10_agree <- out_isva_icd10_agree %>% filter(
+    !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
+)
+
+# Print results
+cat(paste0(
+    "InSilicoVA WVA-2016 Output\n-------------------------",
+    "\nInSilicoVA ICD-10 Coded (Phy. ICD-10 Coded): ", out_isva %>% nrow,
+    "\nInSilicoVA ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_agree %>% nrow,
+    "\n\nAfter Conversion from WVA-2016 to ICD-10\n----------------------------------------",
+    "\nInSilicoVA ICD-10 Coded (Phy. ICD-10 Coded): ", out_isva_icd10 %>% nrow,
+    "\nInSilicoVA ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_icd10_agree %>% nrow,
+    "\n\nAfter Conversion from ICD-10 to CGHR-10\n---------------------------------------",
+    "\nInSilicoVA CGHR-10 Coded (Phy. ICD-10 Coded): ", out_isva_cghr10 %>% nrow,
+    "\nInSilicoVA CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_cghr10_agree %>% nrow
+))
+```
+
 ### Narrative Counts
 
 Check narrative counts:
