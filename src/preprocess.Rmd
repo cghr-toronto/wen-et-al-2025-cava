@@ -155,7 +155,59 @@ df <- list(
             "../tmp/healsl_rd2_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
-    ) %>% rename(interva5_wva2016 = cause1_wva)
+    ) %>% rename(interva5_wva2016 = cause1_wva),
+    narrative = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_adult_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        ),
+        read_csv(
+            "../tmp/healsl_rd1_child_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        ),
+        read_csv(
+            "../tmp/healsl_rd1_neo_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_adult_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_child_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_neo_narrative_v1.csv",
+            col_select = c("rowid", "summary")
+        )
+    ),
+    who = bind_rows(
+        read_csv(
+            "../tmp/healsl_rd1_who_adult_v1.csv",
+            col_select = c("rowid")
+        ),
+        read_csv(
+            "../tmp/healsl_rd1_who_child_v1.csv",
+            col_select = c("rowid")
+        ),
+        read_csv(
+            "../tmp/healsl_rd1_who_neo_v1.csv",
+            col_select = c("rowid")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_who_adult_v1.csv",
+            col_select = c("rowid")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_who_child_v1.csv",
+            col_select = c("rowid")
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_who_neo_v1.csv",
+            col_select = c("rowid")
+        )
+    )
 )
 ```
 
@@ -294,6 +346,199 @@ for (icol in icd_cols) {
 }
 
 head(out)
+```
+
+## Checks
+
+### Physician Coded Counts
+
+Check physician coded record counts:
+
+```{r}
+
+# Get icd10 counts
+phy_icd10 <- out %>% filter(
+    !is.na(physician_icd10) & !is.null(physician_icd10)
+) %>% nrow
+phy_icd10_agree <- out %>% filter(
+     !is.na(physician_icd10) & !is.null(physician_icd10) & is_agreed == TRUE
+) %>% nrow
+
+# Get cghr10 counts
+phy_cghr10 <- out %>% filter(
+    !is.na(physician_cghr10) & !is.null(physician_cghr10)
+) %>% nrow
+phy_cghr10_agree <- out %>% filter(
+     !is.na(physician_cghr10) & !is.null(physician_cghr10) & is_agreed == TRUE
+) %>% nrow
+
+# Print results
+cat(paste0(
+    "Physican ICD-10 Coded: ", phy_icd10,
+    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree,
+    "\nPhysican CGHR-10 Coded: ", phy_cghr10,
+    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree
+))
+```
+
+### ChatGPT-3.5 Counts
+
+Check ChatGPT-3.5 Counts:
+
+```{r}
+
+# Get phy coded records only
+out_coded <- out %>% filter(
+    !is.na(physician_icd10) & !is.null(physician_icd10)
+)
+out_coded_agree <- out_coded %>% filter(is_agreed == TRUE)
+
+# Get chatgpt3 coded records
+out_cgpt3 <- out_coded %>% filter(
+    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+)
+out_cgpt3_agree <- out_coded_agree %>% filter(
+    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+)
+
+# Get chatgpt3 coded records converted to cghr10
+out_cgpt3_cghr10 <- out_cgpt3 %>% filter(
+    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+)
+out_cgpt3_cghr10_agree <- out_cgpt3_agree %>% filter(
+    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+)
+
+# Print results
+cat(paste0(
+    "ICD-10 Output\n-------------",
+    "\nChatGPT-3.5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_cgpt3 %>% nrow,
+    "\nChatGPT-3.5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt3_agree %>% nrow,
+    "\n\nAfter Conversion to CGHR-10\n---------------------------",
+    "\nChatGPT-3.5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt3_cghr10 %>% nrow,
+    "\nChatGPT-3.5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt3_cghr10_agree %>% nrow
+))
+```
+
+### ChatGPT-4 Counts
+
+Check ChatGPT-4 Counts:
+
+```{r}
+
+# Get phy coded records only
+out_coded <- out %>% filter(
+    !is.na(physician_icd10) & !is.null(physician_icd10)
+)
+out_coded_agree <- out_coded %>% filter(is_agreed == TRUE)
+
+# Get chatgpt4 coded records
+out_cgpt4 <- out_coded %>% filter(
+    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+)
+out_cgpt4_agree <- out_coded_agree %>% filter(
+    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+)
+
+# Get chatgpt4 coded records converted to cghr10
+out_cgpt4_cghr10 <- out_cgpt4 %>% filter(
+    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+)
+out_cgpt4_cghr10_agree <- out_cgpt4_agree %>% filter(
+    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+)
+
+# Print results
+cat(paste0(
+    "ICD-10 Output\n-------------",
+    "\nChatGPT-4 ICD-10 Coded (Phy. ICD-10 Coded): ", out_cgpt4 %>% nrow,
+    "\nChatGPT-4 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt4_agree %>% nrow,
+    "\n\nAfter Conversion to CGHR-10\n---------------------------",
+    "\nChatGPT-4 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt4_cghr10 %>% nrow,
+    "\nChatGPT-4 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt4_cghr10_agree %>% nrow
+))
+```
+
+### Narrative Counts
+
+Check narrative counts:
+
+```{r}
+
+# Add narr
+out_narr <- out %>% left_join(
+    df$narrative,
+    by = c("rowid" = "rowid"),
+    suffix = c("", "")
+) %>% filter(
+    !is.na(summary)
+)
+
+# Display counts
+narr_raw <- out_narr %>% nrow
+narr_agree <- out_narr %>% filter(
+    is_agreed == TRUE
+) %>% nrow
+narr_icd10 <- out_narr %>% filter(
+    !is.na(physician_icd10)
+) %>% nrow
+narr_cghr10 <- out_narr %>% filter(
+    !is.na(physician_cghr10)
+) %>% nrow
+narr_icd10_agree <- out_narr %>% filter(
+    is_agreed == TRUE & !is.na(physician_icd10)
+) %>% nrow
+narr_cghr10_agree <- out_narr %>% filter(
+    is_agreed == TRUE & !is.na(physician_cghr10)
+) %>% nrow
+cat(paste0(
+    "Narratives: ", narr_raw,
+    "\nNarratives (Agreed): ", narr_agree,
+    "\nNarratives (Phy. ICD-10 Coded): ", narr_icd10,
+    "\nNarratives (Phy. CGHR-10 Coded): ", narr_cghr10,
+    "\nNarratives (Agreed, Phy. ICD-10 Coded): ", narr_icd10_agree,
+    "\nNarratives (Agreed, Phy. CGHR-10 Coded): ", narr_cghr10_agree
+))
+```
+
+### WHO Formatted Record Counts
+
+Check WHO VA v1.5.1 formatted counts:
+
+```{r}
+
+# Add who
+out_who <- out %>% left_join(
+    df$who %>% mutate(rowid_who = rowid),
+    by = c("rowid" = "rowid"),
+    suffix = c("", "")
+) %>% filter(!is.na(rowid_who))
+
+# Display counts
+who_raw <- out_who %>% nrow
+who_agree <- out_who %>% filter(
+    is_agreed == TRUE
+) %>% nrow
+who_icd10 <- out_who %>% filter(
+    !is.na(physician_icd10)
+) %>% nrow
+who_cghr10 <- out_who %>% filter(
+    !is.na(physician_cghr10)
+) %>% nrow
+who_icd10_agree <- out_who %>% filter(
+    is_agreed == TRUE & !is.na(physician_icd10)
+) %>% nrow
+who_cghr10_agree <- out_who %>% filter(
+    is_agreed == TRUE & !is.na(physician_cghr10)
+) %>% nrow
+cat(paste0(
+    "WHO Format Records: ", who_raw,
+    "\nWHO Format Records (Agreed): ", who_agree,
+    "\nWHO Format Records (Phy. ICD-10 Coded): ", narr_icd10,
+    "\nWHO Format Records (Phy. CGHR-10 Coded): ", narr_cghr10,
+    "\nWHO Format Records (Agreed, Phy. ICD-10 Coded): ", who_icd10_agree,
+    "\nWHO Format Records (Agreed, Phy. CGHR-10 Coded): ", who_cghr10_agree
+))
 ```
 
 ## Results

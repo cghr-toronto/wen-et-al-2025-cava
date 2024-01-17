@@ -494,6 +494,17 @@ cat(paste0(
     "\n"
 ))
 
+# Physician agreed cases
+raw_physicians_agree <- raw_df %>%
+    filter(is_agreed == TRUE) %>%
+    pull(physician_cghr10)
+cat(paste0(
+    "Agreed Cases (",
+    length(unique(na.omit(raw_physicians_agree))), " CODs): ",
+    length(raw_physicians_agree),
+    "\n"
+))
+
 # Models cases
 raw_models <- raw_df %>% select(ends_with("_cghr10"), -physician_cghr10)
 for (mcol in colnames(raw_models)) {
@@ -517,12 +528,37 @@ cat(paste0(
     "\n"
 ))
 
+# Physician agreed cases
+physicians_agree <- df %>%
+    filter(is_agreed == TRUE) %>%
+    pull(physician_cghr10)
+cat(paste0(
+    "Physician Agreed Coded Cases (",
+    length(unique(na.omit(physicians_agree))), " CODs): ",
+    length(physicians_agree) - sum(is.na(physicians_agree) | is.null(physicians_agree)),
+    "\n"
+))
+
 # Models cases
 models <- df %>% select(ends_with("_cghr10"), -physician_cghr10)
 for (mcol in colnames(models)) {
     m <- models[[mcol]]
     cat(paste0(
         str_replace_all(mcol, models_format), " Predicted Cases (", 
+        length(unique(na.omit(m))), " CODs): ",
+        length(m) - sum(is.na(m) | is.null(m)),
+        "\n"
+    ))
+}
+
+# Models agreed cases
+models_agree <- df %>%
+    filter(is_agreed == TRUE) %>%
+    select(ends_with("_cghr10"), -physician_cghr10)
+for (mcol in colnames(models_agree)) {
+    m <- models_agree[[mcol]]
+    cat(paste0(
+        str_replace_all(mcol, models_format), " Agreed Predicted Cases (", 
         length(unique(na.omit(m))), " CODs): ",
         length(m) - sum(is.na(m) | is.null(m)),
         "\n"
