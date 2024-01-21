@@ -211,15 +211,31 @@ Of the 6942 physician agreed records, ChatGPT-3.5 and ChatGPT-4 were able to ass
 
 \subsection{Performance Evaluation}\label{methods-eval}
 
-The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6942 physician agreed records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model.
+The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6942 physician agreed records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model.
 
 \subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
 
-x.
+CSMF accuracy measures the performance of models at the population level, comparing distributions of CODs between the physicians and the models \cite{murrayRobustMetricsAssessing2011}. CSMF is the number of records $N_j$ for cause $j$ divided by the total number of records $N$ (Equation \ref{eq-csmf}).
+
+\begin{equation}\label{eq-csmf}
+    CSMF_j = N_j / N
+\end{equation}
+
+\begin{equation}
+    CSMFMaximumError = 2(1 - Min(CSMF^{true}_j)
+\end{equation}
+
+\begin{equation}
+    CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
+\end{equation}
 
 \subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
 
 x.
+
+\begin{equation}
+    PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
+\end{equation}
 
 \section{Results}\label{results}
 
