@@ -115,7 +115,7 @@
 %%                 \dgr{MSc, PhD}}\email{iauthor@gmail.com}
 %%=============================================================%%
 
-\author*[1]{\fnm{Richard} \sur{Wen}}\email{richard.wen@unityhealth.to}
+\author*[1,2]{\fnm{Richard} \sur{Wen}}\email{richard.wen@unityhealth.to}
 
 \author[1,5]{\fnm{Rajeev} \sur{Kamadod}}\email{rajeevk@kentropy.com}
 
@@ -127,11 +127,15 @@
 
 \author[1]{\fnm{Leslie} \sur{Newcombe}}\email{leslie.newcombe@unityhealth.to}
 
-\author[1]{\fnm{Anteneh Tesfaye} \sur{Assalif}}\email{antenehta@gmail.com}
-
 \author[1,3]{\fnm{Areeba} \sur{Zubair}}\email{areeba.zubair@mail.utoronto.ca}
 
 \author[1]{\fnm{Thomas Kai Sze} \sur{Ng}}\email{KaiSze.Ng@unityhealth.to}
+
+\author[1]{\fnm{Andy} \sur{Lee}}\email{Andy.Lee2@unityhealth.to}
+
+\author[1,2]{\fnm{Paijani} \sur{Sheth}}\email{paijani.sheth@mail.utoronto.ca}
+
+\author[1]{\fnm{Anteneh Tesfaye} \sur{Assalif}}\email{antenehta@gmail.com}
 
 \author[1,4]{\fnm{Patrick} \sur{Brown}}\email{}
 
@@ -215,23 +219,23 @@ The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoV
 
 \subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
 
-CSMF accuracy measures the performance of models at the population level, comparing distributions of CODs between the physicians and the models \cite{murrayRobustMetricsAssessing2011}. CSMF is the number of records $N_j$ for cause $j$ divided by the total number of records $N$ (Equation \ref{eq-csmf}).
+CSMF accuracy measures the performance of models at the population level, comparing distributions of CODs between the physicians and the models \cite{murrayRobustMetricsAssessing2011}. To calculate CSMF accuracy, we first calculate $CSMF_j$ as is the fraction of physician or model records for cause $j$, given by dividing the number of records for cause $j$ with the total number of records as seen in Equation \ref{eq-csmf}. Then, the $CSMFMaximumError$, representing the worst possible model, is calculated using Equation \ref{eq-csmferr}. Finally, the CSMF accuracy is given by Equation \ref{eq-csmfa}, where $k$ is the number of causes, $j$ is a cause, $CSMF^{true}_j$ is the true physician CSMF for cause $j$, and $CSMF^{pred}_j$ is the predicted model CSMF for cause $j$. CSMF accuracy ranges from 0 to 1, where 1 means that the model completely matched the physician COD distribution and 0 means that it did not match the distribution at all.
 
 \begin{equation}\label{eq-csmf}
-    CSMF_j = N_j / N
+    CSMF_j = Records_j / Records
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eq-csmferr}
     CSMFMaximumError = 2(1 - Min(CSMF^{true}_j)
 \end{equation}
 
-\begin{equation}
-    CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
+\begin{equation}\label{eq-csmfa}
+CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
 \end{equation}
 
 \subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
 
-x.
+PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, and how much better it is than random assignment \cite{murrayRobustMetricsAssessing2011}:
 
 \begin{equation}
     PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
