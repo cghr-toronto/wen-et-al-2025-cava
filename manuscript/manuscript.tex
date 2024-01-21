@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title[Determining Causes of Death from Verbal Autopsy with ChatGPT: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022]{Determining Causes of Death from Verbal Autopsy with ChatGPT: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022}
+\title[Determining Causes of Death from Verbal Autopsy with ChatGPT-4: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022]{Determining Causes of Death from Verbal Autopsy with ChatGPT-4: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022}
 
 %%=============================================================%%
 %% Prefix	-> \pfx{Dr}
@@ -155,7 +155,16 @@
 %% sample for unstructured abstract %%
 %%==================================%%
 
-\abstract{The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. Authors are advised to check the author instructions for the journal they are submitting to for word limits and if structural elements like subheadings, citations, or equations are permitted.}
+\abstract{\textbf{Background:} Verbal Autopsies (VAs) collect data on deaths and their causes outside of traditional hospital settings to provide more representative counts and Causes of Death (CODs) for reducing premature mortality. Current computer models for COD assignment in VAs perform similar to physicians at the population level, but poorly at the individual level, due to a focus on structured questionnaire data and neglecting free text from the open narratives. Recently, a Generative Pre-trained Transformer (GPT) model called ChatGPT has demonstrated human-level performance on professional and academic exams using free text input. ChatGPT shows promise in mimicking physician behavior for assigning CODs, but to the best of our knowledge, has yet to be tested for assigning CODs in VAs.
+
+\textbf{Methods:} 6942 records collected from VA in Sierra Leone from 2019 to 2022 were used to compare four computer models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, to physicians for assigning CODs at the population and individual level. All COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for the adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at the population and individual level respectively. Comparisons in CSMF and PCCC among models were evaluated for all records and by COD, age group, and age ranges.
+
+
+\textbf{Results:} x.
+
+
+\textbf{Conclusion:} x.
+}
 
 %%================================%%
 %% Sample for structured abstract %%
@@ -169,7 +178,7 @@
 % 
 % \textbf{Conclusion:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.}
 
-\keywords{keyword1, Keyword2, Keyword3, Keyword4}
+\keywords{Cause of Death, Physician Coding, Verbal Autopsy, GPT}
 
 %%\pacs[JEL Classification]{D8, H51}
 
@@ -235,9 +244,9 @@ CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaxi
 
 \subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
 
-PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, and how much better it is than random assignment \cite{murrayRobustMetricsAssessing2011}:
+PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, correcting for COD assignments made purely by chance \cite{murrayRobustMetricsAssessing2011}. PCCC is given by Equation \ref{eq-pccc}, where $k$ is the number of top COD assignments from the model to consider, $N$ is number of causes, and $C$ is fraction of records where the physician COD assignment is in one of the top COD assignments from the model. Higher PCCC values closer to 1 indicate that model COD assignments are similar to physician COD assignments, while values closer to 0 indicate that model COD assignments are not similar to physicians.
 
-\begin{equation}
+\begin{equation}\label{eq-pccc}
     PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
 \end{equation}
 
