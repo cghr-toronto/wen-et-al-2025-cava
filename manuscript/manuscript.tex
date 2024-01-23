@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title[Determining Causes of Death from Verbal Autopsy with ChatGPT-4: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022]{Determining Causes of Death from Verbal Autopsy with ChatGPT-4: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022}
+\title[Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022]{Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022}
 
 %%=============================================================%%
 %% Prefix	-> \pfx{Dr}
@@ -159,7 +159,6 @@
 
 \textbf{Methods:} 6942 records collected from VA in Sierra Leone from 2019 to 2022 were used to compare four computer models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, to physicians for assigning CODs at the population and individual level. Open narratives were used for Chat-3.5/ChatGPT-4 input, while structured questionnaires were used for InterVA-5/InSilicoVA input. All COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for the adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at the population and individual level respectively. Comparisons in CSMF and PCCC among models were evaluated for all records and by COD, age group, and age ranges.
 
-
 \textbf{Results:} x.
 
 
@@ -192,7 +191,7 @@ In 2019, 41 million people die prematurely from noncommunicable diseases every y
 
 VA involves two major components: survey and COD assignment \cite{worldhealthorganizationVerbalAutopsyStandards2023,chandramohanEstimatingCausesDeath2021}. In the survey component, trained lay surveyors interview those familiar with the deceased (e.g. living spouse, children, family, friends) to gather information using standardized questionnaires and open narratives. In the COD assignment component, physicians evaluate information available from the questionnaires and open narratives to assign probable CODs. Although VA surveys have been an effective alternative to collect mortality data at scale (e.g. less than \$3 USD per house in India \cite{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), COD assignment has been criticized to be expensive and difficult to reproduce due to reliance on physician assignment \cite{mccormickProbabilisticCauseofDeathAssignment2016,morrisFactorsAssociatedPhysician2010}. As an alternative to physician assignment, computer models, such as InterVA \cite{byassIntegratedApproachProcessing2019} and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016}, have recently been studied to automatically assign CODs with performances close to physicians at the population level, but poor performances at the individual level \cite{jhaAutomatedPhysicianAssignment2019,leitaoComparisonPhysiciancertifiedVerbal2014,desaiPerformanceFourComputercoded2014,tungaVerbalAutopsyModels2021}. These computer models often utilized data from the structured questionnaire, but often omit the free-text open narrative, which misses latent information, such as chronology or health-seeking behaviors, that may potentially help models perform better than using the questionnaire alone \cite{jebleeAutomaticallyDeterminingCause2019,blancoExtractingCauseDeath2021,kingQualityDiagnosticValue2016}.
 
-Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023a}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare the performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for determining CODs.
+Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023a}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare the performances of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
 
 \section{Methods}\label{methods}
 
@@ -224,7 +223,7 @@ Of the 6942 physician agreed records, ChatGPT-3.5 and ChatGPT-4 were able to ass
 
 \subsection{Performance Evaluation}\label{methods-eval}
 
-The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6942 physician agreed records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model.
+The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6942 physician agreed records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model. CSMF accuracy and PCCC were calculated for each model by three age groups, and further into age ranges and cause of death for each age group.
 
 \subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
 
@@ -239,16 +238,24 @@ CSMF accuracy measures the performance of models at the population level, compar
 \end{equation}
 
 \begin{equation}\label{eq-csmfa}
-CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
+    CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
 \end{equation}
 
 \subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
 
-PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, correcting for COD assignments made purely by chance \cite{murrayRobustMetricsAssessing2011}. PCCC is given by Equation \ref{eq-pccc}, where $k$ is the number of top COD assignments from the model to consider, $N$ is number of causes, and $C$ is fraction of records where the physician COD assignment is in one of the top COD assignments from the model. Higher PCCC values closer to 1 indicate that model COD assignments are similar to physician COD assignments, while values closer to 0 indicate that model COD assignments are not similar to physicians.
+PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, correcting for COD assignments made purely by chance \cite{murrayRobustMetricsAssessing2011}. PCCC is given by Equation \ref{eq-pccc}, where $k$ is the number of top COD assignments from the model to consider, $N$ is number of causes, and $C$ is fraction of records where the physician COD assignment is one of the top COD assignments from the model. For this study, we set $k$ to 1, making $C$ equivalent to the fraction of true positives $TP$ or records where the physician COD assignment is equal to the model COD assignment as shown in Equation \ref{eq-pccc-c}. Higher PCCC values closer to 1 indicate that model COD assignments are similar to physician COD assignments, while values closer to 0 indicate that model COD assignments are not similar to physicians.
+
+\begin{equation}\label{eq-pccc-c}
+    C = \frac{TP}{Records}
+\end{equation}
 
 \begin{equation}\label{eq-pccc}
     PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
 \end{equation}
+
+\subsubsection{Metrics by Age and Cause of Death}\label{methods-eval-agecod}
+
+The CSMF accuracy and PCCC metrics were calculated for each model by age group, and further into age ranges and cause of death for each age group to examine model performance for particular ages and CODs. Metrics were calculated overall for three age groups: adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days). For each of the adult and child age groups, metrics were calculated for five-year age ranges for records with ages at death of one-year or older and five-month age ranges for 28 days or older. For the neonatal age group, the age ranges of 0-6 days and 7-27 days were used. Metrics were also calculated by CODs defined by CGHR-10 codes, which include 19, 10, and 7 CODs for adult, child, and neonatal records.
 
 \section{Results}\label{results}
 
