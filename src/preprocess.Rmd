@@ -359,25 +359,57 @@ Check physician coded record counts:
 # Get icd10 counts
 phy_icd10 <- out %>% filter(
     !is.na(physician_icd10) & !is.null(physician_icd10)
-) %>% nrow
+)
 phy_icd10_agree <- out %>% filter(
      !is.na(physician_icd10) & !is.null(physician_icd10) & is_agreed == TRUE
-) %>% nrow
+)
 
 # Get cghr10 counts
 phy_cghr10 <- out %>% filter(
     !is.na(physician_cghr10) & !is.null(physician_cghr10)
-) %>% nrow
+)
 phy_cghr10_agree <- out %>% filter(
      !is.na(physician_cghr10) & !is.null(physician_cghr10) & is_agreed == TRUE
-) %>% nrow
+)
+
+# Get age icd10 counts
+phy_icd10_adult <- phy_icd10 %>% filter(age == "adult")
+phy_icd10_child <- phy_icd10 %>% filter(age == "child")
+phy_icd10_neo <- phy_icd10 %>% filter(age == "neo")
+phy_icd10_agree_adult <- phy_icd10_agree %>% filter(age == "adult")
+phy_icd10_agree_child <- phy_icd10_agree %>% filter(age == "child")
+phy_icd10_agree_neo <- phy_icd10_agree %>% filter(age == "neo")
+
+# Get age cghr10 counts
+phy_cghr10_adult <- phy_cghr10 %>% filter(age == "adult")
+phy_cghr10_child <- phy_cghr10 %>% filter(age == "child")
+phy_cghr10_neo <- phy_cghr10 %>% filter(age == "neo")
+phy_cghr10_agree_adult <- phy_cghr10_agree %>% filter(age == "adult")
+phy_cghr10_agree_child <- phy_cghr10_agree %>% filter(age == "child")
+phy_cghr10_agree_neo <- phy_cghr10_agree %>% filter(age == "neo")
 
 # Print results
 cat(paste0(
-    "Physican ICD-10 Coded: ", phy_icd10,
-    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree,
-    "\nPhysican CGHR-10 Coded: ", phy_cghr10,
-    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree
+    "Overall\n-------",
+    "\nPhysican ICD-10 Coded: ", phy_icd10 %>% nrow,
+    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree %>% nrow,
+    "\nPhysican CGHR-10 Coded: ", phy_cghr10 %>% nrow,
+    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree %>% nrow,
+    "\n\nAdult\n-----",
+    "\nPhysican ICD-10 Coded: ", phy_icd10_adult %>% nrow,
+    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree_adult %>% nrow,
+    "\nPhysican CGHR-10 Coded: ", phy_cghr10_adult %>% nrow,
+    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree_adult %>% nrow,
+    "\n\nChild\n-----",
+    "\nPhysican ICD-10 Coded: ", phy_icd10_child %>% nrow,
+    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree_child %>% nrow,
+    "\nPhysican CGHR-10 Coded: ", phy_cghr10_child %>% nrow,
+    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree_child %>% nrow,
+    "\n\nNeonatal\n--------",
+    "\nPhysican ICD-10 Coded: ", phy_icd10_neo %>% nrow,
+    "\nPhysician ICD-10 Coded (Agree): ", phy_icd10_agree_neo %>% nrow,
+    "\nPhysican CGHR-10 Coded: ", phy_cghr10_neo %>% nrow,
+    "\nPhysician CGHR-10 Coded (Agree): ", phy_cghr10_agree_neo %>% nrow
 ))
 ```
 
