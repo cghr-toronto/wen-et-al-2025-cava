@@ -2,8 +2,8 @@ library(openVA)
 library(tidyverse)
 
 # Read transformed input from pyCrossVA
-# Replace <OUTPATH2> with the path of your transformed InSilicoVA input data
-who_input <- as.data.frame(read_csv("<OUTPATH2>"))
+# Replace "tmp/healsl_rd1to2_ova_insilicova_v1.csv" with the path of your transformed InSilicoVA input data
+who_input <- as.data.frame(read_csv("tmp/healsl_rd1to2_ova_insilicova_v1.csv"))
 
 # Run InSilicoVA model
 model <- codeVA(
@@ -13,4 +13,4 @@ model <- codeVA(
 )
 
 # Get the top COD assignment per record
-out_cod <- getTopCOD(model, n = 1, include.prob = TRUE)
+insilicova_cod <- getTopCOD(model, n = 1, include.prob = TRUE)
