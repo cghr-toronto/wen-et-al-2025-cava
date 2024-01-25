@@ -10,9 +10,10 @@ start_time <- Sys.time()
 
 # Run InSilicoVA model
 model <- codeVA(
+    data = ova_input,
     data.type = "WHO2016",
     model = "InSilicoVA",
-    Nsim = 10000
+    Nsim = 9500
 )
 
 # Track end time

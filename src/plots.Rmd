@@ -376,7 +376,7 @@ calc_by <- function(
 Load data from `data` folder.
 
 ```{r}
-raw_df <- read_csv("/data/healsl_rd1to2_cod_v1.csv")
+raw_df <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
 ```
 
 ```{r, echo=FALSE}

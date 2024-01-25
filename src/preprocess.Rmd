@@ -74,43 +74,43 @@ phy_adult_rename <- c(
 # Read data
 df <- list(
     wva2016_icd10 = read_csv(
-        "data/wva2016_icd10_v1.csv",
+        "../data/wva2016_icd10_v1.csv",
         col_types = cols(wva2016_code = col_double())
     ),
-    icd10_cghr10 = read_csv("data/icd10_cghr10_v1.csv"),
+    icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
     physician = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_adult_v1.csv",
+            "../tmp/healsl_rd1_adult_v1.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 1, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "tmp/healsl_rd2_adult_v1.csv",
+            "../tmp/healsl_rd2_adult_v1.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 2, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "tmp/healsl_rd1_child_v1.csv",
+            "../tmp/healsl_rd1_child_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "tmp/healsl_rd2_child_v1.csv",
+            "../tmp/healsl_rd2_child_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "tmp/healsl_rd1_neo_v1.csv",
+            "../tmp/healsl_rd1_neo_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "neo") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "tmp/healsl_rd2_neo_v1.csv",
+            "../tmp/healsl_rd2_neo_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "neo") %>%
@@ -118,93 +118,93 @@ df <- list(
     ),
     model_chatgpt3 = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
+            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
+            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
     ) %>% rename(chatgpt3_icd10 = api_chat_icd),
     model_chatgpt4 = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
+            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
+            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
     ) %>% rename(chatgpt4_icd10 = api_chat_icd),
     model_insilicova = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_rapid_insilicova_v1.csv",
+            "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         ),
         read_csv(
-            "tmp/healsl_rd2_rapid_insilicova_v1.csv",
+            "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
     ) %>% rename(insilicova_wva2016 = cause1_wva),
     model_interva5 = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_rapid_interva5_v1.csv",
+            "../tmp/healsl_rd1_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         ),
         read_csv(
-            "tmp/healsl_rd2_rapid_interva5_v1.csv",
+            "../tmp/healsl_rd2_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
     ) %>% rename(interva5_wva2016 = cause1_wva),
     narrative = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_adult_narrative_v1.csv",
+            "../tmp/healsl_rd1_adult_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "tmp/healsl_rd1_child_narrative_v1.csv",
+            "../tmp/healsl_rd1_child_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "tmp/healsl_rd1_neo_narrative_v1.csv",
+            "../tmp/healsl_rd1_neo_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "tmp/healsl_rd2_adult_narrative_v1.csv",
+            "../tmp/healsl_rd2_adult_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "tmp/healsl_rd2_child_narrative_v1.csv",
+            "../tmp/healsl_rd2_child_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "tmp/healsl_rd2_neo_narrative_v1.csv",
+            "../tmp/healsl_rd2_neo_narrative_v1.csv",
             col_select = c("rowid", "summary")
         )
     ),
     who = bind_rows(
         read_csv(
-            "tmp/healsl_rd1_who_adult_v1.csv",
+            "../tmp/healsl_rd1_who_adult_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "tmp/healsl_rd1_who_child_v1.csv",
+            "../tmp/healsl_rd1_who_child_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "tmp/healsl_rd1_who_neo_v1.csv",
+            "../tmp/healsl_rd1_who_neo_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "tmp/healsl_rd2_who_adult_v1.csv",
+            "../tmp/healsl_rd2_who_adult_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "tmp/healsl_rd2_who_child_v1.csv",
+            "../tmp/healsl_rd2_who_child_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "tmp/healsl_rd2_who_neo_v1.csv",
+            "../tmp/healsl_rd2_who_neo_v1.csv",
             col_select = c("rowid")
         )
     )
@@ -419,11 +419,17 @@ Check ChatGPT-3.5 Counts:
 
 ```{r}
 
-# Get phy coded records only
+# Get phy coded icd10 records only
 out_coded <- out %>% filter(
     !is.na(physician_icd10) & !is.null(physician_icd10)
 )
 out_coded_agree <- out_coded %>% filter(is_agreed == TRUE)
+
+# Get phy coded cghr10 records only
+out_coded_cghr10 <- out_coded %>% filter(
+    !is.na(physician_cghr10) & !is.null(physician_cghr10)
+)
+out_coded_cghr10_agree <- out_coded_cghr10 %>% filter(is_agreed == TRUE)
 
 # Get chatgpt3 coded records
 out_cgpt3 <- out_coded %>% filter(
@@ -432,12 +438,24 @@ out_cgpt3 <- out_coded %>% filter(
 out_cgpt3_agree <- out_coded_agree %>% filter(
     !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
 )
+out_cgpt3_cghr10 <- out_coded_cghr10 %>% filter(
+    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+)
+out_cgpt3_cghr10_agree <- out_coded_cghr10_agree %>% filter(
+    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+)
 
 # Get chatgpt3 coded records converted to cghr10
-out_cgpt3_cghr10 <- out_cgpt3 %>% filter(
+out_cgpt3_xcghr10 <- out_cgpt3 %>% filter(
     !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
 )
-out_cgpt3_cghr10_agree <- out_cgpt3_agree %>% filter(
+out_cgpt3_xcghr10_agree <- out_cgpt3_agree %>% filter(
+    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+)
+out_cgpt3_xcghr10_cghr10 <- out_cgpt3_cghr10 %>% filter(
+    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+)
+out_cgpt3_xcghr10_cghr10_agree <- out_cgpt3_cghr10_agree %>% filter(
     !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
 )
 
@@ -446,9 +464,13 @@ cat(paste0(
     "ICD-10 Output\n-------------",
     "\nChatGPT-3.5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_cgpt3 %>% nrow,
     "\nChatGPT-3.5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt3_agree %>% nrow,
+    "\nChatGPT-3.5 ICD-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt3_cghr10 %>% nrow,
+    "\nChatGPT-3.5 ICD-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt3_cghr10_agree %>% nrow,
     "\n\nAfter Conversion to CGHR-10\n---------------------------",
-    "\nChatGPT-3.5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt3_cghr10 %>% nrow,
-    "\nChatGPT-3.5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt3_cghr10_agree %>% nrow
+    "\nChatGPT-3.5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt3_xcghr10 %>% nrow,
+    "\nChatGPT-3.5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt3_xcghr10_agree %>% nrow,
+    "\nChatGPT-3.5 CGHR-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt3_xcghr10_cghr10 %>% nrow,
+    "\nChatGPT-3.5 CGHR-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt3_xcghr10_cghr10_agree %>% nrow
 ))
 ```
 
@@ -458,11 +480,17 @@ Check ChatGPT-4 Counts:
 
 ```{r}
 
-# Get phy coded records only
+# Get phy coded icd10 records only
 out_coded <- out %>% filter(
     !is.na(physician_icd10) & !is.null(physician_icd10)
 )
 out_coded_agree <- out_coded %>% filter(is_agreed == TRUE)
+
+# Get phy coded cghr10 records only
+out_coded_cghr10 <- out_coded %>% filter(
+    !is.na(physician_cghr10) & !is.null(physician_cghr10)
+)
+out_coded_cghr10_agree <- out_coded_cghr10 %>% filter(is_agreed == TRUE)
 
 # Get chatgpt4 coded records
 out_cgpt4 <- out_coded %>% filter(
@@ -471,12 +499,24 @@ out_cgpt4 <- out_coded %>% filter(
 out_cgpt4_agree <- out_coded_agree %>% filter(
     !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
 )
+out_cgpt4_cghr10 <- out_coded_cghr10 %>% filter(
+    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+)
+out_cgpt4_cghr10_agree <- out_coded_cghr10_agree %>% filter(
+    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+)
 
 # Get chatgpt4 coded records converted to cghr10
-out_cgpt4_cghr10 <- out_cgpt4 %>% filter(
+out_cgpt4_xcghr10 <- out_cgpt4 %>% filter(
     !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
 )
-out_cgpt4_cghr10_agree <- out_cgpt4_agree %>% filter(
+out_cgpt4_xcghr10_agree <- out_cgpt4_agree %>% filter(
+    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+)
+out_cgpt4_xcghr10_cghr10 <- out_cgpt4_cghr10 %>% filter(
+    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+)
+out_cgpt4_xcghr10_cghr10_agree <- out_cgpt4_cghr10_agree %>% filter(
     !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
 )
 
@@ -485,9 +525,13 @@ cat(paste0(
     "ICD-10 Output\n-------------",
     "\nChatGPT-4 ICD-10 Coded (Phy. ICD-10 Coded): ", out_cgpt4 %>% nrow,
     "\nChatGPT-4 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt4_agree %>% nrow,
+    "\nChatGPT-4 ICD-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt4_cghr10 %>% nrow,
+    "\nChatGPT-4 ICD-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt4_cghr10_agree %>% nrow,
     "\n\nAfter Conversion to CGHR-10\n---------------------------",
-    "\nChatGPT-4 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt4_cghr10 %>% nrow,
-    "\nChatGPT-4 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt4_cghr10_agree %>% nrow
+    "\nChatGPT-4 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt4_xcghr10 %>% nrow,
+    "\nChatGPT-4 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt4_xcghr10_agree %>% nrow,
+    "\nChatGPT-4 CGHR-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt4_xcghr10_cghr10 %>% nrow,
+    "\nChatGPT-4 CGHR-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt4_xcghr10_cghr10_agree %>% nrow
 ))
 ```
 
@@ -505,11 +549,21 @@ out_who <- out %>% left_join(
 ) %>% filter(!is.na(rowid_who) & !is.na(physician_icd10))
 out_who_agree <- out_who %>% filter(is_agreed == TRUE)
 
+# Get who with physician coded records converted to CGHR-10
+out_who_cghr10 <- out %>% filter(!is.na(physician_cghr10))
+out_who_cghr10_agree <- out_who_cghr10 %>% filter(is_agreed == TRUE)
+
 # Get interva5 coded records in wva2016
 out_iva5 <- out_who %>% filter(
     !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
 )
 out_iva5_agree <- out_who_agree %>% filter(
+    !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
+)
+out_iva5_cghr10 <- out_who_cghr10 %>% filter(
+    !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
+)
+out_iva5_chr10_agree <- out_who_cghr10_agree %>% filter(
     !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
 )
 
@@ -520,26 +574,45 @@ out_iva5_icd10 <- out_iva5 %>% filter(
 out_iva5_icd10_agree <- out_iva5_agree %>% filter(
     !is.na(interva5_icd10) & !is.null(interva5_icd10)
 )
+out_iva5_icd10_cghr10 <- out_iva5_cghr10 %>% filter(
+    !is.na(interva5_icd10) & !is.null(interva5_icd10)
+)
+out_iva5_icd10_cghr10_agree <- out_iva5_cghr10_agree %>% filter(
+    !is.na(interva5_icd10) & !is.null(interva5_icd10)
+)
 
 # Get interva5 icd10 coded records converted to cghr10
-out_iva5_cghr10 <- out_iva5_icd10 %>% filter(
+out_iva5_xcghr10 <- out_iva5_icd10 %>% filter(
     !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
 )
-out_iva5_cghr10_agree <- out_iva5_icd10_agree %>% filter(
+out_iva5_xcghr10_agree <- out_iva5_icd10_agree %>% filter(
     !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
 )
+out_iva5_xcghr10_cghr10 <- out_iva5_icd10_cghr10 %>% filter(
+    !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
+)
+out_iva5_xcghr10_cghr10_agree <- out_iva5_icd10_cghr10_agree %>% filter(
+    !is.na(interva5_cghr10) & !is.null(interva5_cghr10)
+)
+
 
 # Print results
 cat(paste0(
     "InterVA-5 WVA-2016 Output\n-------------------------",
-    "\nInterVA-5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_iva5 %>% nrow,
-    "\nInterVA-5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_agree %>% nrow,
+    "\nInterVA-5 WVA-2016 Coded (Phy. ICD-10 Coded): ", out_iva5 %>% nrow,
+    "\nInterVA-5 WVA-2016 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_agree %>% nrow,
+    "\nInterVA-5 WVA-2016 Coded (Phy. CGHR-10 Coded): ", out_iva5_cghr10 %>% nrow,
+    "\nInterVA-5 WVA-2016 Coded (Agree, Phy. CGHR-10 Coded): ", out_iva5_cghr10_agree %>% nrow,
     "\n\nAfter Conversion from WVA-2016 to ICD-10\n----------------------------------------",
     "\nInterVA-5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_iva5_icd10 %>% nrow,
     "\nInterVA-5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_icd10_agree %>% nrow,
+    "\nInterVA-5 ICD-10 Coded (Phy. CGHR-10 Coded): ", out_iva5_icd10_cghr10 %>% nrow,
+    "\nInterVA-5 ICD-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_iva5_icd10_cghr10_agree %>% nrow,
     "\n\nAfter Conversion from ICD-10 to CGHR-10\n---------------------------------------",
-    "\nInterVA-5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_iva5_cghr10 %>% nrow,
-    "\nInterVA-5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_cghr10_agree %>% nrow
+    "\nInterVA-5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_iva5_xcghr10 %>% nrow,
+    "\nInterVA-5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_iva5_xcghr10_agree %>% nrow,
+    "\nInterVA-5 CGHR-10 Coded (Phy. CGHR-10 Coded): ", out_iva5_xcghr10_cghr10 %>% nrow,
+    "\nInterVA-5 CGHR-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_iva5_xcghr10_cghr10_agree %>% nrow
 ))
 ```
 
@@ -549,7 +622,7 @@ Check InSilicoVA Counts:
 
 ```{r}
 
-# Get who
+# Get who with physician coded records
 out_who <- out %>% left_join(
     df$who %>% mutate(rowid_who = rowid),
     by = c("rowid" = "rowid"),
@@ -557,11 +630,21 @@ out_who <- out %>% left_join(
 ) %>% filter(!is.na(rowid_who) & !is.na(physician_icd10))
 out_who_agree <- out_who %>% filter(is_agreed == TRUE)
 
+# Get who with physician coded records converted to CGHR-10
+out_who_cghr10 <- out %>% filter(!is.na(physician_cghr10))
+out_who_cghr10_agree <- out_who_cghr10 %>% filter(is_agreed == TRUE)
+
 # Get insilicova coded records in wva2016
 out_isva <- out_who %>% filter(
     !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
 )
 out_isva_agree <- out_who_agree %>% filter(
+    !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
+)
+out_isva_cghr10 <- out_who_cghr10 %>% filter(
+    !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
+)
+out_isva_chr10_agree <- out_who_cghr10_agree %>% filter(
     !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
 )
 
@@ -572,26 +655,45 @@ out_isva_icd10 <- out_isva %>% filter(
 out_isva_icd10_agree <- out_isva_agree %>% filter(
     !is.na(insilicova_icd10) & !is.null(insilicova_icd10)
 )
+out_isva_icd10_cghr10 <- out_isva_cghr10 %>% filter(
+    !is.na(insilicova_icd10) & !is.null(insilicova_icd10)
+)
+out_isva_icd10_cghr10_agree <- out_isva_cghr10_agree %>% filter(
+    !is.na(insilicova_icd10) & !is.null(insilicova_icd10)
+)
 
 # Get insilicova icd10 coded records converted to cghr10
-out_isva_cghr10 <- out_isva_icd10 %>% filter(
+out_isva_xcghr10 <- out_isva_icd10 %>% filter(
     !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
 )
-out_isva_cghr10_agree <- out_isva_icd10_agree %>% filter(
+out_isva_xcghr10_agree <- out_isva_icd10_agree %>% filter(
     !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
 )
+out_isva_xcghr10_cghr10 <- out_isva_icd10_cghr10 %>% filter(
+    !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
+)
+out_isva_xcghr10_cghr10_agree <- out_isva_icd10_cghr10_agree %>% filter(
+    !is.na(insilicova_cghr10) & !is.null(insilicova_cghr10)
+)
+
 
 # Print results
 cat(paste0(
     "InSilicoVA WVA-2016 Output\n-------------------------",
-    "\nInSilicoVA ICD-10 Coded (Phy. ICD-10 Coded): ", out_isva %>% nrow,
-    "\nInSilicoVA ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_agree %>% nrow,
+    "\nInSilicoVA WVA-2016 Coded (Phy. ICD-10 Coded): ", out_isva %>% nrow,
+    "\nInSilicoVA WVA-2016 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_agree %>% nrow,
+    "\nInSilicoVA WVA-2016 Coded (Phy. CGHR-10 Coded): ", out_isva_cghr10 %>% nrow,
+    "\nInSilicoVA WVA-2016 Coded (Agree, Phy. CGHR-10 Coded): ", out_isva_cghr10_agree %>% nrow,
     "\n\nAfter Conversion from WVA-2016 to ICD-10\n----------------------------------------",
     "\nInSilicoVA ICD-10 Coded (Phy. ICD-10 Coded): ", out_isva_icd10 %>% nrow,
     "\nInSilicoVA ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_icd10_agree %>% nrow,
+    "\nInSilicoVA ICD-10 Coded (Phy. CGHR-10 Coded): ", out_isva_icd10_cghr10 %>% nrow,
+    "\nInSilicoVA ICD-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_isva_icd10_cghr10_agree %>% nrow,
     "\n\nAfter Conversion from ICD-10 to CGHR-10\n---------------------------------------",
-    "\nInSilicoVA CGHR-10 Coded (Phy. ICD-10 Coded): ", out_isva_cghr10 %>% nrow,
-    "\nInSilicoVA CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_cghr10_agree %>% nrow
+    "\nInSilicoVA CGHR-10 Coded (Phy. ICD-10 Coded): ", out_isva_xcghr10 %>% nrow,
+    "\nInSilicoVA CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_isva_xcghr10_agree %>% nrow,
+    "\nInSilicoVA CGHR-10 Coded (Phy. CGHR-10 Coded): ", out_isva_xcghr10_cghr10 %>% nrow,
+    "\nInSilicoVA CGHR-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_isva_xcghr10_cghr10_agree %>% nrow
 ))
 ```
 
@@ -682,5 +784,5 @@ cat(paste0(
 Save pre-processed data to `data` folder.
 
 ```{r}
-write_csv(out, "data/healsl_rd1to2_cod_v1.csv")
+write_csv(out, "../data/healsl_rd1to2_cod_v1.csv")
 ```
