@@ -74,43 +74,43 @@ phy_adult_rename <- c(
 # Read data
 df <- list(
     wva2016_icd10 = read_csv(
-        "../data/wva2016_icd10_v1.csv",
+        "data/wva2016_icd10_v1.csv",
         col_types = cols(wva2016_code = col_double())
     ),
-    icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
+    icd10_cghr10 = read_csv("data/icd10_cghr10_v1.csv"),
     physician = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_adult_v1.csv",
+            "tmp/healsl_rd1_adult_v1.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 1, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "../tmp/healsl_rd2_adult_v1.csv",
+            "tmp/healsl_rd2_adult_v1.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 2, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "../tmp/healsl_rd1_child_v1.csv",
+            "tmp/healsl_rd1_child_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd2_child_v1.csv",
+            "tmp/healsl_rd2_child_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd1_neo_v1.csv",
+            "tmp/healsl_rd1_neo_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "neo") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd2_neo_v1.csv",
+            "tmp/healsl_rd2_neo_v1.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "neo") %>%
@@ -118,93 +118,93 @@ df <- list(
     ),
     model_chatgpt3 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
+            "tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
+            "tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
     ) %>% rename(chatgpt3_icd10 = api_chat_icd),
     model_chatgpt4 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
+            "tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
+            "tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
     ) %>% rename(chatgpt4_icd10 = api_chat_icd),
     model_insilicova = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
+            "tmp/healsl_rd1_rapid_insilicova_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_insilicova_v1.csv",
+            "tmp/healsl_rd2_rapid_insilicova_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
     ) %>% rename(insilicova_wva2016 = cause1_wva),
     model_interva5 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_interva5_v1.csv",
+            "tmp/healsl_rd1_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_interva5_v1.csv",
+            "tmp/healsl_rd2_rapid_interva5_v1.csv",
             col_select = c("rowid", "round", "cause1_wva")
         )
     ) %>% rename(interva5_wva2016 = cause1_wva),
     narrative = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_adult_narrative_v1.csv",
+            "tmp/healsl_rd1_adult_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "../tmp/healsl_rd1_child_narrative_v1.csv",
+            "tmp/healsl_rd1_child_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "../tmp/healsl_rd1_neo_narrative_v1.csv",
+            "tmp/healsl_rd1_neo_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "../tmp/healsl_rd2_adult_narrative_v1.csv",
+            "tmp/healsl_rd2_adult_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "../tmp/healsl_rd2_child_narrative_v1.csv",
+            "tmp/healsl_rd2_child_narrative_v1.csv",
             col_select = c("rowid", "summary")
         ),
         read_csv(
-            "../tmp/healsl_rd2_neo_narrative_v1.csv",
+            "tmp/healsl_rd2_neo_narrative_v1.csv",
             col_select = c("rowid", "summary")
         )
     ),
     who = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_who_adult_v1.csv",
+            "tmp/healsl_rd1_who_adult_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "../tmp/healsl_rd1_who_child_v1.csv",
+            "tmp/healsl_rd1_who_child_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "../tmp/healsl_rd1_who_neo_v1.csv",
+            "tmp/healsl_rd1_who_neo_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "../tmp/healsl_rd2_who_adult_v1.csv",
+            "tmp/healsl_rd2_who_adult_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "../tmp/healsl_rd2_who_child_v1.csv",
+            "tmp/healsl_rd2_who_child_v1.csv",
             col_select = c("rowid")
         ),
         read_csv(
-            "../tmp/healsl_rd2_who_neo_v1.csv",
+            "tmp/healsl_rd2_who_neo_v1.csv",
             col_select = c("rowid")
         )
     )
@@ -682,5 +682,5 @@ cat(paste0(
 Save pre-processed data to `data` folder.
 
 ```{r}
-write_csv(out, "../data/healsl_rd1to2_cod_v1.csv")
+write_csv(out, "data/healsl_rd1to2_cod_v1.csv")
 ```
