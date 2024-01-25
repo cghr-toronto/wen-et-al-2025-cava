@@ -194,11 +194,23 @@ Recently, Large Language Models (LLM), leveraging massive datasets and deep lear
 
 \section{Methods}\label{methods}
 
-This study uses 6939 physician agreed records of 11,920 records collected in 2019 to 2022 from the Healthy Sierra Leone (HEAL-SL) study as described in Section \ref{methods-phyagree}. Section \ref{methods-models} describes the four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for COD assignment, and their inputs and outputs, while section \ref{methods-eval} details the performance evaluation of the four models relative to physicians overall, by ages, and by COD, using population and individual level metrics.
+This study uses 6939 physician agreed records of 11,920 records collected in 2019 to 2022 from the Healthy Sierra Leone (HEAL-SL) study as described in Section \ref{methods-data}. Section \ref{methods-models} describes the four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for COD assignment, and their inputs and outputs, while section \ref{methods-eval} details the performance evaluation of the four models relative to physicians overall, by ages, and by COD, using population and individual level metrics.
 
-\subsection{Verbal Autopsy Data}\label{methods-phyagree}
+\subsection{Verbal Autopsy (VA) Data}\label{methods-data}
 
 Initially, 11,920 records from the HEAL-SL study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement per record, codes were compared for similarity using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together indicating codes in agreement \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 1). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation. The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \cite{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into Centre for Global Health Research 10 (CGHR-10) codes (see Additional File 2) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) was used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+
+\subsubsection{Adult VA Records (12 Years or Older)}\label{methods-data-adult}
+
+x.
+
+\subsubsection{Child VA Records (28 Days to 11 Years)}\label{methods-data-child}
+
+x.
+
+\subsubsection{Neonatal VA Records (Under 28 Days)}\label{methods-data-neo}
+
+x.
 
 \subsection{Modelling}\label{methods-models}
 
@@ -264,7 +276,7 @@ The CSMF accuracy and PCCC metrics were calculated and compared for each model o
 
 x.
 
-\subsection{Overall Performance by Age Groups}\label{results-overall}
+\subsection{Overall Performance}\label{results-overall}
 
 x.
 
