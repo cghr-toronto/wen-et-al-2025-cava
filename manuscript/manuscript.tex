@@ -199,7 +199,7 @@ This study uses 6939 physician agreed records of 11,920 records collected in 201
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-methods.pdf}
-\caption{Case study methods. Verbal autopsy records in Sierra Leone between 2019-2022 from the HEAL-SL study were filtered for physician agreed records, and pre-processed for COD assignment by ChatGPT-3.5, ChatGPT-4, InterVA-5 and InSilicoVA models. The output models were evaluated with CSMF Accuracy and PCCC overall, by age group, and by five-year age ranges for each age group.}\label{fig-methods}
+\caption{Case study methods. VA records in Sierra Leone between 2019-2022 from the HEAL-SL study were filtered for physician agreed records, and pre-processed for COD assignment by ChatGPT-3.5, ChatGPT-4, InterVA-5 and InSilicoVA models. The output models were evaluated with CSMF Accuracy and PCCC overall, by age group, and by COD and five-year age ranges for each age group.}\label{fig-methods}
 \end{figure}
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
@@ -238,7 +238,7 @@ Of the 6939 input records, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA wer
 
 \subsection{Performance Evaluation}\label{methods-eval}
 
-The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6939 records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model. CSMF accuracy and PCCC were calculated for each model by three age groups, and further into age ranges and cause of death for each age group.
+The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6939 records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model. CSMF accuracy and PCCC were calculated for each model by three age groups, and further into age ranges and COD for each age group.
 
 \subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
 
@@ -270,7 +270,7 @@ PCCC measures the performance of models at the individual level, comparing COD a
 
 \subsubsection{Metrics Overall and by Age and Cause of Death}\label{methods-eval-agecod}
 
-The CSMF accuracy and PCCC metrics were calculated and compared for each model overall and by age group, followed by age ranges and cause of death for each age group as model performance can vary across ages and specific causes \cite{benaraEvaluationMethodsAssigning2023,murrayUsingVerbalAutopsy2014,setelValidityVerbalAutopsy2006}. Metrics were calculated overall for three age groups according to the CGHR-10 codes: adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days). For each of the adult and child age groups, metrics were calculated for five-year age ranges for records with ages at death of one-year or older and five-month age ranges for 28 days or older. For the neonatal age group, the age ranges of 0-6 days and 7-27 days were used. Metrics were also calculated by CODs defined by CGHR-10 codes, which include 19, 10, and 7 CODs for adult, child, and neonatal records respectively.
+The CSMF accuracy and PCCC metrics were calculated and compared for each model overall and by age group, followed by age ranges and COD for each age group as model performance can vary across ages and specific causes \cite{benaraEvaluationMethodsAssigning2023,murrayUsingVerbalAutopsy2014,setelValidityVerbalAutopsy2006}. Metrics were calculated overall for three age groups according to the CGHR-10 codes: adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days). For each of the adult and child age groups, metrics were calculated for five-year age ranges for records with ages at death of one-year or older and five-month age ranges for 28 days or older. For the neonatal age group, the age ranges of 0-6 days and 7-27 days were used. Metrics were also calculated by CODs defined by CGHR-10 codes, which include 19, 10, and 7 CODs for adult, child, and neonatal records respectively.
 
 \section{Results}\label{results}
 
@@ -283,6 +283,18 @@ x.
 \subsection{Performance for Adult Records (12 Years or Older)}\label{results-adult}
 
 x.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{fig-perf-agerange-adult.pdf}
+\caption{Model performance for assigning causes of death in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values close to the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{fig-perf-cod-adult.pdf}
+\caption{Model performance for assigning causes of death in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values close to the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
+\end{figure}
 
 \subsection{Performance for Child Records (28 Days to 11 Years)}\label{results-child}
 
@@ -397,67 +409,67 @@ The following figures visualize the distribution of all physician agreed records
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{fig-data-agesex.pdf}
-\caption{Number of physician agreed verbal autopsy records by adult, child, and neonatal age groups in Sierra Leone from 2019 to 2022.}\label{fig-data-agesex}
+\caption{Number of physician agreed VA records by adult, child, and neonatal age groups in Sierra Leone from 2019 to 2022.}\label{fig-data-agesex}
 \end{figure}
 
 \newpage
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-agerange.pdf}
-\caption{Number of physician agreed verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange}
+\caption{Number of physician agreed VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange}
 \end{figure}
 
 
 \newpage
 \section{Adult Physician Agreed Verbal Autopsy Records (12 Years or Older)}\label{app-data-adult}
 
-The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-adult}).
+The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-adult}).
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.95\textwidth]{fig-data-agerange-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
+\caption{Number of physician agreed adult (12 years or older) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
 \end{figure}
 
 \newpage
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
+\caption{Number of physician agreed adult (12 years or older) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
 \end{figure}
 
 \newpage
 \section{Child Physician Agreed Verbal Autopsy Records (28 Days to 11 Years)}\label{app-data-child}
 
-The following figures visualize the distribution of child physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-child}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-child}).
+The following figures visualize the distribution of child physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-child}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-child}).
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-data-agerange-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-child}
+\caption{Number of physician agreed child (28 days to 11 years) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-child}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-child}
+\caption{Number of physician agreed child (28 days to 11 years) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-child}
 \end{figure}
 
 \newpage
 \section{Neonatal Physician Agreed Verbal Autopsy Records (Under 28 Days)}\label{app-data-neo}
 
-The following figures visualize the distribution of neonatal physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-neo}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-neo}).
+The following figures visualize the distribution of neonatal physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-neo}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-neo}).
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.75\textwidth]{fig-data-agerange-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-neo}
+\caption{Number of physician agreed neonatal (less than 28 days) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-neo}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
+\caption{Number of physician agreed neonatal (less than 28 days) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
 \end{figure}
 
 \end{appendices}
