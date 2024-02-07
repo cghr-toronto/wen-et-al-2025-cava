@@ -1,37 +1,144 @@
-age_group,cghr10_code,icd10_range
-adult,Acute respiratory infections,"H65-H68, H70-H71, J00-J22, J32, J36, J85-J86, P23"
-adult,Tuberculosis,"A15-A16, B90, J65"
-adult,Diarrhoeal diseases,A00-A09
-adult,Unspecified infections,"A17-A33, A35-A99, B00-B17, B19-B49, B55-B89, B91-B99, C46, D64, D84, G00-G09, H10, H60, I30, I32-I33, K02, K04-K05, K61, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, N70-N74, P35-P39, R50, R75, ZZ21"
-adult,Malaria,B50-B54
-adult,Maternal conditions,"A34, F53, O00-O08, O10-O16, O20-O99"
-adult,Nutritional deficiencies,"D50-D53, E00-E02, E40-E46, E50-E64, X53-X54"
-adult,Chronic respiratory diseases,"J30-J31, J33-J35, J37-J64, J66-J84, J90-J99, R04-R06, R84, R91"
-adult,Cancers,"C00-C26, C30-C45, C47-C58, C60-C97, D00-D48, D91, N60, N62-N64, N87, R59"
-adult,Ischemic heart disease,"I20-I25, R55"
-adult,Stroke,"G45-G46, G81-G83, I60-I69"
-adult,Diabetes mellitus,E10-E14
-adult,Other cardiovascular diseases,"I00-I03, I05-I15, I26-I28, I31, I34-I52, I70-I99, R00-R01, R03, ZZ23"
-adult,Liver and alcohol related diseases,"B18, F10, K70-K77, R16-R18, X45, Y15, Y90-91"
-adult,Other noncommunicable diseases,"D55-D63, D65-D83, D86, D89, E03-E07, E15-E35, E65-E68, E70-E90, F00-F09, F11-F52, F54-F99, G10-G37, G40-G41, G43-G44, G50-G80, G84-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, K00-K01, K03, K06-K14, K20-K31, K35-K38, K40-K60, K62-K64, K66, K78-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N59, N75-N86, N88-N99, Q00-Q99, R10-R15, R19-R23, R26-R27, R29-R49, R56, R63, R70-R74, R76-R77, R80-R82, R85-R87, R90, ZZ25"
-adult,Road and transport injuries,"V01-V99, Y85"
-adult,Suicide,X60-X84
-adult,Other injuries,"S00-S99, T00-T99, W00-W99, X00-X44, X46-X52, X55-X59, X85-X99, Y00-Y14, Y16-Y84, Y86-Y89, Y92-Y98, ZZ27"
-adult,Ill-defined,"R02, R07-R09, R25, R51-R54, R57-R58, R60-R62, R64-R69, R78-R79, R83, R89, R92-R94, R96, R98-R99"
-child,Pneumonia,"A37, H65-H68, H70-H71, J00-J22, J32, J36, J85-J86, P23, U04"
-child,Diarrhoeal diseases,A00-A09
-child,Malaria,B50-B54
-child,Other infections,"A15-A28, A30-A36, A38-A44, A46, A48-A71, A74-A75, A77-A99, B00-B09, B15-B27, B30, B33-B49, B55-B60, B64-B83, B85-B92, B94-B97, B99, G00-G09, H10, H60, I30, I32-I33, I39-I41, J65, K02, K04-K05, K61, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, N70-N74, P35-P39, R50, R75, U00, Y95, ZZ11"
-child,Congenital anomalies,"P01, P05, P07, P21, Q00-Q99"
-child,"Epilepsy, leukaemia, and other noncommunicable diseases","C00-C97, D01-D48, D55-D89, E03-E35, E65-E90, F00-F02, F73, G10-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, I00-I28, I31, I34-I38, I42-I99, J30-J31, J33-J35, J37-J47, J60, J64, J66-J70, J80-J82, J84, J90-J99, K00-K01, K03, K06-K60, K62-K63, K70-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N51, N60, N62-N64, N75-N99, P04, P08, P27, P51, P53-P60, P70-P72, P74-P76, P78, P80-P83, P92-P94, R00-R01, R03-R06, R11-R23, R26-R27, R29-R49, R55-R56, R59, R63, R70-R74, R76-R77, R80-R82, R84-R87, R90-R91, ZZ12-ZZ13, ZZ15"
-child,Injuries,"S00-S99, T00-T98, V01-V99, W00-W99, X00-X52, X57-X99, Y00-Y91, Y97-Y98"
-child,Nutritional deficiencies,"D50-D53, E00-E02, E40-E46, E50-E56, E59-E61, E63-E64, X53-X54"
-child,Other,"D00, F03-F72, F74-F99, P00, P02-P03, P10-P15, P20, P22, P24-P26, P28-P29, P50, P52, P61, P77, P90-P91"
-child,Ill-defined,"P96, R02, R07, R09-R10, R25, R51-R54, R57-R58, R60-R62, R64, R68-R69, R78-R79, R83, R89, R92-R99"
-neo,Prematurity and low birthweight,"D64, O60, P01, P05, P07, P22, P25-P28, P52, P61, P77, P80, P92, R04"
-neo,Neonatal infections,"A00-A09, A20-A28, A32-A35, A37-A44, A46, A48-A49, A68-A70, A74-A75, A77-A79, A81-A90, B54, B95-B96, G00-G09, H10, H60, H65-H68, H70-H71, I30, I32-I33, I39-I41, J00-J22, J32, J36, J85-J86, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, O85, P23, P35-P39, P58-P59, P63, U04"
-neo,Birth asphyxia and birth trauma,"G40, P00, P02-P03, P10-P15, P20-P21, P24, P29, P50-P51, P90-P91, R06, W79, Z37"
-neo,Stillbirth,P95
-neo,Congenital anomalies,"C76, Q00-Q99"
-neo,Other,"A15-A19, A30-A31, A36, A50-A67, A71, A80, A91-A99, B00-B09, B15-B27, B30, B33-B53, B55-B60, B64-B83, B85-B92, B94, B97, B99, C00-C75, C77-C97, D00-D48, D50-D53, D55-D63, D65-D89, E00-E35, E40-E46, E50-E56, E59-E61, E63-E90, F00-F99, G10-G39, G41-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, I00-I28, I31, I34-I38, I42-I99, J30, J31, J33-J35, J37-J47, J60, J64-J70, J80-J82, J84, J90-J99, K00-K63, K70-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N51, N60, N62-N64, N70-N99, P04, P08, P53-P57, P60,P70-P72, P74-P76, P78, P81-P83, P93-P94, R00-R01, R03-R05, R11-R23, R26-R27, R29-R36, R39-R50, R55-R56, R59, R63, R70-R77, R80-R82, R84-R87, R90-R91, S00-S99, T00-T98, U00, V01-V99, W00-W78, W80-W99, X00-X54, X57-X99, Y00-Y91, Y95, Y97-Y98"
-neo,Ill-defined,"P96, R02, R07, R09-R10, R25, R51-R54, R57-R58, R60-R62, R64, R68-R69, R78-R79, R83, R89, R92-R99"
+cmea10_code,icd10_range
+Tuberculosis,"A15-19,B90,J65"
+Syphilis,A51-53
+Other sexually transmitted infections (excl. HIV/AIDS),"A54-64,N70-74"
+HIV/AIDS,"B20-24,C46,D84,R75"
+Diarrhoeal diseases,A00-09
+Tetanus,"A33,A35"
+Measles,"B01,B05"
+Other vaccine preventable diseases (1),"A36-37,B26"
+Poliomyelitis,"A80,B91"
+Other vaccine preventable diseases (2),"B03,B06"
+Meningitis/Encephalitis,"A39,A81,A83-89,G00-09"
+Hepatitis,B15-19
+Malaria,B50-54
+Protozoal diseases,"B55-58,B60,B64"
+Leprosy,"A30,B92"
+Arthropod-borne viral fevers,"A90-96,A98-99"
+Helminthiases,B65-83
+Acute respiratory infections - Upper (1),"H65-68,H70-71"
+Acute respiratory infections - Upper (2),"J00-06,J32,J36"
+Acute respiratory infections - Lower,"J09-18,J20-22,J85-86,U04"
+Severe systemic infections,"A20-28,A31,U80-81,U88-89"
+Other infectious diseases (1),"A50,A65-67,A69"
+Other infectious diseases (2),"B00,B02,B04,B07-09,B25,B27,B30,B33-49"
+Other infectious diseases (3),B85-89
+Other infectious diseases (4),"P35,P37"
+Obstetric haemorrhage,"O20,O43-46,O67,O71-72"
+Maternal sepsis,"A34,O23,O41,O85-86,O91"
+Hypertensive disorders of pregnancy,O11-16
+Other maternal conditions (1),O64-66
+Abortion or miscarrage,O00-08
+Other maternal conditions (2),"F53,O21-22,O24-26,O28-36,O40,O42-43,O47-48,O60-63,O68-70,O73-75,O80-84,O87-90,O92,O94-99"
+Low birth weight/preterm,"P01,P05,P07,P22,P25-29,P52,P61,P77"
+Birth asphyxia and birth trauma,"P02-03,P10-15,P20-21,P24,P50"
+Other perinatal conditions - (1),"P00,P04"
+Other perinatal conditions - (2),"P51,P53-60"
+Other perinatal conditions - (3),"P70-72,P74,P80-81,P83,P92-94,P96"
+Other perinatal conditions - (4),"P75-76,P78"
+Protein-energy malnutrition,"E40-46,X53-54"
+"Iron, vitamin deficiencies, and nutritional anaemias","D50-53,E00-02,E50-56,E58-61,E63-64"
+Upper aerodigestive cancer,"C00-15,C30-32,D10-11"
+"Colon, rectum, and small intestine cancer","C17-21,D12"
+Other digestive cancer,"C23-26,C48,D00-01,D13,D37"
+Lung & airway cancer,"C33-34,C39,D02,D14"
+Breast cancer,"C50,D05,D24,N60,N62-64"
+Cervix & Uterus cancer,"C53-55,D06,N87"
+Other female genital cancer,"C51-52,C56-58,D25-28,D39"
+Male genital cancer,"C60-63,D29,D40"
+Urinary cancer,"C64-68,D30,D41"
+Brain and eye cancer,"C69-72,D31-33,D42-43"
+"Leukemias, lymphomas, and other haematopoetic malignancies","C81-85,C88,C90-96,D45-47"
+Other neoplasms (1),C37-38
+Other neoplasms (2),C40-41
+Other neoplasms (3),C43-44
+Other neoplasms (4),C45-49
+Other neoplasms (5),C73-75
+Other neoplasms (6),"C76-80,C97"
+Other neoplasms (7),"D03-04,D07,D09,D15-23,D34-36,D38,D44,D48"
+Diabetes mellitus,E10-14
+Endocrine and immune disorders (1),D55-77
+Endocrine and immune disorders (2),"D80-84,D86,D89"
+Endocrine and immune disorders (3),E03-07
+Endocrine and immune disorders (4),"E15-16,E20-32,E34-35,E65-68,E70-80,E83-90"
+Endocrine and immune disorders (5),R70-77
+Endocrine and immune disorders (6),R80-82
+Epilepsy,"G40-41,R56"
+Other neuropsychiatric disorders - Organic,"F00-07,F09"
+Other neuropsychiatric disorders - Substance Use,F11-19
+Other neuropsychiatric disorders - Schizophrenia,"F20-25,F28-29"
+Other neuropsychiatric disorders - Mood,"F30-34,F38-39"
+Other neuropsychiatric disorders - Neurotic,"F40-45,F48"
+Other neuropsychiatric disorders - Behavioural,"F50-52,F54-55,F59"
+Other neuropsychiatric disorders - Personality,"F60-66,F68-69"
+Other neuropsychiatric disorders - Retardation,"F70-73,F78-79"
+Other neuropsychiatric disorders - Psychological,"F80-84,F88-89"
+Other neuropsychiatric disorders - Childhood and adolescence,F90-98
+Other neuropsychiatric disorders - nervous system,"G10-13,G20-26,G30-32,G35-37,G43-47,G50-64,G70-73,G90-99"
+Other neuropsychiatric disorders - Cerebral Palsy,G80-83
+Other neuropsychiatric disorders - ill-defined,"R26-27,R29,R40-49"
+Skin diseases - Bullous & Papulosquamous,"L10-14,L40-45"
+Skin diseases - Dermatitis,L20-30
+Skin diseases - Urticaria,L50-54
+Skin diseases - Skin and subcutaneous tissue,"L55-60,L62,L64,L66,L68,L70,L72,L74-75,L80-95,L97-99"
+Skin diseases - Skin and subcutaneous tissue (ill-defined),R20-23
+Musculoskeletal disorders,"M00-03,M05-25,M30-36,M40-43,M45-51,M53-54,M60-63,M65-68,M70-73,M75-77,M79-85,M87-96,M99"
+Oral conditions,"K00-01,K03,K06-14"
+Rheumatic heart diseases,"I00-02,I05-09,I38"
+Hypertensive heart diseases,I10-15
+Ischemic heart diseases,"I11,I20-25,I44,I46,I70,R55,R96"
+Cerebrovascular diseases,"G45-46,G81-83,I60-69"
+Other cardiovascular diseases,"I26-28,I31,I34-37,I42-43,I45,I47-49,I51-52,I70-74,I77-89,I95-99"
+Circulatory and respiratory systems - Ill-defined,"R00-07,R09"
+Asthma and Chronic obstructive pulmonary disease,"J40-47,J63,J93"
+Lung dieseases due to external agents,"J60-62,J64,J66-70"
+Other chronic respiratory diseases',"J30-31,J33-35,J37-39,J80-82,J84,J90-92,J94-96,J98-99"
+Gastro-esophageal,"K20-23,K25-31"
+Digestive system - Ill-defined,R11-19
+Lliver and alcohol related diseases,"F10,K70-77,X45,Y15,Y90-91"
+Other digestive diseases - Appnedix,K35-38
+Other digestive diseases - Hernia,K40-46
+Other digestive diseases - Intestine,"K50-52,K55-63"
+Other digestive diseases,"K66,K80,K82-83,K85-87,K90-93"
+Nephritis and nephrosis,"N00-08,N11-19"
+Urolithiasis,N20-23
+Other genitourinary system - Kidney & Ureter,"N25-29,N31-33,N35-37,N39,N99"
+Other genitourinary system - Male genital organs,"N40,N42-48,N50-51"
+Other genitourinary system - Female pelvic organs,"N75-77,N80-86,N88-98"
+Other genitourinary system diseases - Ill-defined,"R30-36,R39"
+Congenital anomalies,"Q00-07,Q10-18,Q20-28,Q30-45,Q50-56,Q60-93,Q95-99"
+Road trafic accidents - (1),V01-09
+Road trafic accidents - (2),V10-19
+Road trafic accidents - (3),V20-29
+Road trafic accidents - (4),V30-39
+Road trafic accidents - (5),V40-49
+Road trafic accidents - (6),V50-59
+Road trafic accidents - (7),V60-69
+Road trafic accidents - (8),V70-79
+Road trafic accidents - (9),V80-89
+Road trafic accidents - (10),V90-94
+Road trafic accidents - (11),V95-97
+Road trafic accidents - (12),V98-99
+Poisonings,"X40-44,X46-49"
+Falls,W00-19
+Fires,"X00-06,X08-09"
+Drownings,"W65-70,W73-74"
+"Venomous snakes, animals, and plants","W57,W60,X20-29"
+Other unintestional injuries - Inanimate,"W20-46,W49"
+Other unintestional injuries - Animate,"W50-56,W58-59,W64"
+Other unintestional injuries - Threats to breathing,"W75-81,W83-84"
+Other unintestional injuries - Electric current,"W85-94,W99"
+Other unintestional injuries - Heat,X10-19
+Other unintestional injuries - Forces of nature,X30-39
+Other unintestional injuries - Overexertion,"X50-52,X57"
+Other unintestional injuries - Accidental exposure,X58-59
+Other unintestional injuries - Drugs,Y40-59
+Other unintestional injuries - Surgical and Medical care,"Y60-66,Y69"
+Other unintestional injuries - Diagnostic and therapeutic use,Y70-82
+Other unintestional injuries - Abnormal reaction,Y83-84
+Other unintestional injuries - Sequelae of external causes,Y85-89
+Self-inflicted injuries (suicide),X60-84
+Interpersonal violence and other intentional injuries - Assault,"X85-99,Y00-09"
+Interpersonal violence and other intentional injuries - War,Y35-36
+Undetermined intent,"Y10-14,Y16-34,Y96-98"
+Other ill-defined and abnormal findings,"R00-07,R09,R51-53,R57-69,R78-79,R90-96,R98"
