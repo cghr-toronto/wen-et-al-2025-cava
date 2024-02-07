@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title[Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022]{Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6942 Deaths in Sierra Leone from 2019-2022}
+\title[Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022]{Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022}
 
 %%=============================================================%%
 %% Prefix	-> \pfx{Dr}
@@ -198,11 +198,13 @@ This study uses 6939 physician agreed records of 11,920 records collected in 201
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
 
-Initially, 11,920 records from the HEAL-SL study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement per record, codes were compared for similarity using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together indicating codes in agreement \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation. The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \cite{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) was used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+Initially, 11,920 records from the HEAL-SL study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement per record, codes were compared for similarity using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together indicating codes in agreement \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation. The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \cite{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+
+The 6939 physician agreed records were relatively evenly distributed (approximately 40-57\% male and female) for each age group in terms of sex (Figure \ref{fig-data-agesex}) with the most records in the 1-5 year (n=1633, 24\%) age range, and the least records in the 10-14 year (n=135, 2\%) and 7-27 day (n=82, 1\%) age ranges (Figure \ref{fig-data-agerange}). Other 5-year age ranges within 0 days to 69 years were relatively evenly distributed with approximately 4-6\% of the 6939 records each. The 3826 adult records had most records in the 65-69 year (n=575, 15\%), and the least in the 10-14 year (n=135, 4\%) age ranges, while other age ranges were relatively evenly distributed at 7-9\% of all records (Figure \ref{fig-data-agerange-adult}). For adult CODs, Malaria (n=799, 21\%) had the highest number of adult records, and cancers (n=49, 1\%), diabetes mellitus (n=27, \textless 1\%), and suicide (n=3, \textless 1\%) had the lowest number adult of adult records, while other CODs had between 2-11\% of all adult records (Figure \ref{fig-data-cod-adult}). The 2636 child records had most records in the 1-5 year (n=1633, 62\%) age range while all other age ranges were relatively evenly distributed at 12-14\% of all records (Figure \ref{fig-data-agerange-child}). For child CODs, Malaria (n=1382, 52\%) and other infections (n=667, 25\%) had the highest number of child records, while nutritional deficiencies (n=11, \textless 1\%) and congenital anomalies (n=1, \textless 1\%) had the lowest number of records with all other CODs between 3-7\% of all child records. The 477 neonatal records only had two age ranges with most records in the 0-6 day (n=395, 83\%) age range and the rest in the 7-27 day (n=82, 17\%) age range (Figure \ref{fig-data-agerange-neo}). For neonatal CODs, stillbirth (n=172, 36\%) had the highest number of neonatal records, and ill-defined (n=23, 5\%), other (n=5, 1\%), and congenital anomalies (n=2, \textless 1\%) had very low number of records with the rest of the CODs between 15-22\% of all neonatal records (Figure \ref{fig-data-cod-neo}). See Appendices \ref{app-data} to \ref{app-data-neo} for a list of all figures presenting distribution of the 6939 physician agreed records.
 
 \subsection{Modelling}\label{methods-models}
 
-Four computer models were used to assign COD for each of the 6942 physician agreed records: ChatGPT-3.5, ChatGPT-4, InterVA-5 , and InSilicoVA. Each model required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from ChatGPT-3.5 and ChatGPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. All model outputs were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians.
+Four computer models were used to assign COD for each of the 6939 physician agreed records: ChatGPT-3.5, ChatGPT-4, InterVA-5 , and InSilicoVA. Each model required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from ChatGPT-3.5 and ChatGPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. All model outputs were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians.
 
 \subsubsection{Overview of ChatGPT-3.5/4, InterVA-5, and InSilicoVA}\label{methods-models-overview}
 
@@ -384,72 +386,72 @@ The datasets supporting the conclusions of this article are included within the 
 
 \section{Physician Agreed Verbal Autopsy Records}\label{app-data}
 
-The following figures visualize the distribution of all physician agreed records by age groups (Figure \ref{fig-data-agesex}) and 5-year age ranges (Figure \ref{fig-data-agerange}).
+The following figures visualize the distribution of all physician agreed records by age groups (Figure \ref{fig-data-agesex}) and 5-year age ranges (Figure \ref{fig-data-agerange}) in Sierra Leone from 2019 to 2022.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{fig-data-agesex.pdf}
-\caption{Number of physician agreed VA records by adult, child, and neonatal age groups.}\label{fig-data-agesex}
+\caption{Number of physician agreed verbal autopsy records by adult, child, and neonatal age groups in Sierra Leone from 2019 to 2022.}\label{fig-data-agesex}
 \end{figure}
 
 \newpage
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\textwidth]{fig-data-agerange.pdf}
-\caption{Number of physician agreed VA records by 5-year age ranges.}\label{fig-data-agerange}
+\includegraphics[width=0.85\textwidth]{fig-data-agerange.pdf}
+\caption{Number of physician agreed verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange}
 \end{figure}
 
 
 \newpage
 \section{Adult Physician Agreed Verbal Autopsy Records (12 Years or Older)}\label{app-data-adult}
 
-The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 cause of death code (Figure \ref{fig-data-cod-adult}).
+The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-adult}).
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\textwidth]{fig-data-agerange-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) VA records by 5-year age ranges.}\label{fig-data-agerange-adult}
+\includegraphics[width=0.95\textwidth]{fig-data-agerange-adult.pdf}
+\caption{Number of physician agreed adult (12 years or older) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
 \end{figure}
 
 \newpage
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{fig-data-cod-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) VA records by CGHR-10 cause of death code.}\label{fig-data-cod-adult}
+\includegraphics[width=0.85\textwidth]{fig-data-cod-adult.pdf}
+\caption{Number of physician agreed adult (12 years or older) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
 \end{figure}
 
 \newpage
 \section{Child Physician Agreed Verbal Autopsy Records (28 Days to 11 Years)}\label{app-data-child}
 
-The following figures visualize the distribution of child physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-child}) and CGHR-10 cause of death code (Figure \ref{fig-data-cod-child}).
+The following figures visualize the distribution of child physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-child}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-child}).
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.75\textwidth]{fig-data-agerange-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) VA records by 5-year age ranges.}\label{fig-data-agerange-child}
+\includegraphics[width=0.7\textwidth]{fig-data-agerange-child.pdf}
+\caption{Number of physician agreed child (28 days to 11 years) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-child}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\textwidth]{fig-data-cod-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) VA records by CGHR-10 cause of death code.}\label{fig-data-cod-child}
+\includegraphics[width=0.85\textwidth]{fig-data-cod-child.pdf}
+\caption{Number of physician agreed child (28 days to 11 years) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-child}
 \end{figure}
 
 \newpage
 \section{Neonatal Physician Agreed Verbal Autopsy Records (Under 28 Days)}\label{app-data-neo}
 
-The following figures visualize the distribution of neonatal physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-neo}) and CGHR-10 cause of death code (Figure \ref{fig-data-cod-neo}).
+The following figures visualize the distribution of neonatal physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-neo}) and CGHR-10 cause of death code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-neo}).
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\textwidth]{fig-data-agerange-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) VA records by 5-year age ranges.}\label{fig-data-agerange-neo}
+\includegraphics[width=0.75\textwidth]{fig-data-agerange-neo.pdf}
+\caption{Number of physician agreed neonatal (less than 28 days) verbal autopsy records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-neo}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.9\textwidth]{fig-data-cod-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) VA records by CGHR-10 cause of death code.}\label{fig-data-cod-neo}
+\includegraphics[width=0.85\textwidth]{fig-data-cod-neo.pdf}
+\caption{Number of physician agreed neonatal (less than 28 days) verbal autopsy records by CGHR-10 cause of death code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
 \end{figure}
 
 \end{appendices}
