@@ -1,0 +1,61 @@
+// OpenAI Code
+// January 11, 2024
+// Rajeev Kamadod <rajeevk@kentropy.com>
+public static void getChat(JSONObject jo,String prompt)
+{
+	List<String> icds= new ArrayList<String>();
+	List<ChatMessage > msgs= new ArrayList<ChatMessage> ();
+	String txt="";
+	for (int i = 0; i < attempts; i++) {
+		if(i==1)
+		prompt="Can you give me more options?";
+		
+	
+	//ChatMessage cmS=new ChatMessage("system", "You are a physician with experise in ICD 10");
+	ChatMessage cm= new ChatMessage("user", prompt);
+
+	System.out.println(prompt);
+	//msgs.add(cmS);
+	msgs.add(cm);
+	String api="gpt-4-0613";//gpt-3.5-turbo";//"gpt-3.5-turbo";"gpt-4-0613"
+	ChatCompletionRequest catReq= ChatCompletionRequest.builder().user("rajeevk@kentropy.com").model(api).messages(msgs).build();
+	System.out.println(catReq.getTopP()+ " "+catReq.getMaxTokens());
+	catReq.setTopP(top_p);
+
+	//catReq.setTemperature(0.3);
+	//catReq.setMaxTokens(10000);
+	
+	List<ChatCompletionChoice>  tt=	service.createChatCompletion(catReq).getChoices();
+//	System.out.println(""+tt.size());
+
+
+	int count=0;
+	for(ChatCompletionChoice cc: tt)
+	{
+		System.out.println(count);
+		count++;
+		ChatMessage cmt=cc.getMessage();
+		String tmp=cmt.getContent();
+		msgs.add(cmt);
+		parse(tmp,icds);
+		txt+=" "+tmp;
+	}
+	}
+	System.out.println("---------------------");
+	System.out.println(txt);
+	System.out.println(icds);
+	
+	if(icds.size()>0)
+	jo.put("api_chat_icd", icds.get(0));
+	else
+		jo.put("api_chat_icd", "-");
+	String str1="";
+	for (int i = 0; i < icds.size(); i++) {
+		str1+=" "+icds.get(i);
+	}
+	jo.put("api_chat_icds", str1);
+	jo.put("api_chat_txt", txt);
+	jo.put("top_p", top_p);
+	jo.put("attempts", attempts);
+		System.out.println("---------------------");
+}

@@ -1,0 +1,51 @@
+// OpenAI Code
+// January 12, 2024
+// Rajeev Kamadod <rajeevk@kentropy.com>
+
+public class OpenAIProcessor{
+
+JSONObject fetchDeathDetailsWithNarrative(String deathId)
+{
+/// code to fetch
+return death;
+}
+
+	public void process(String deathId)
+	{
+		 
+		/*1) fetch the age unit , age value , sex and narrative for the selected death*/
+		JSONObject death=  fetchDeathDetailsWithNarrative(deathId);
+		/*2) Generate the chat  prompt using the template and substituting the values from above*/
+       
+	
+		
+	
+         String prompt=generatePrompt(death);
+	/*	3) Initialise openai api using key etc */
+		initializeOpenAi("<key>");
+	/*	4)Create a chat messge with the prompt using the gpt4 model, top_p value */
+		String api="gpt-4-0613";//gpt-3.5-turbo";//"gpt-3.5-turbo";"gpt-4-0613"
+	        double top_p=.3;	
+		ChatCompletionRequest catReq= ChatCompletionRequest.builder().user("<username>").model(api).messages(msgs).build();
+		catReq.setTopP(top_p);
+
+	/*	5) submit the message  to the api and Wait and receive the ,messages returned from openai api*/
+		List<ChatCompletionChoice>  msgs=	service.createChatCompletion(catReq).getChoices();
+	/*	6) if successful, convert the messages to text */
+		String resultText=concatenateMessages(msg);
+	/*6) Parse all the icd codwa ( 3 digits) from the text (using regexp) into a list of icds(api_chat_icds)*/
+
+		List icdCodes=parseResulText(resultText)	;
+	/*7) use the first icd code as the output icd code(api_chat_icd)*/
+		String finalIcd=icdCodes.get(0);
+	/*8) store the death id, prompt, chat response , top_p used ,icds (api_chat_icds) and chosen icd(api_chat_icd)*/
+		
+		saveResult(deathId, prompt , finalIcd,icdCodes,top_p)
+		
+				
+		
+		
+		
+	}
+
+}

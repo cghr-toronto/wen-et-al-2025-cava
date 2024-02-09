@@ -1,0 +1,19 @@
+# OpenAI General Algorithm
+# January 12, 2024
+# Rajeev Kamadod <rajeevk@kentropy.com>
+
+1) fetch the age unit , age value , sex and narrative for the selected death
+
+2) Generate the chat  prompt using the template and substituting the values from above
+
+3) Initialise openai api using key etc
+4)Create a chat messge with the prompt using the gpt4 model, top_p value
+4) submit the message  to the api
+5) Wait and receive the ,messages returned from openai api
+6) if successful, convert the messages to text
+6) Parse all the icd codwa ( 3 digits) from the text (using regexp) into a list of icds(api_chat_icds)
+6) use the first icd code as the output icd code(api_chat_icd)
+7) store the death id, prompt, chat response , top_p used ,icds (api_chat_icds) and chosen icd(api_chat_icd)
+
+  
+
