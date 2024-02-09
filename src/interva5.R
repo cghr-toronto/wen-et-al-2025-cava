@@ -1,3 +1,6 @@
+# R v4.3.1
+# openVA v1.1.1
+# InterVA5 v1.1.3
 library(openVA)
 library(tidyverse)
 

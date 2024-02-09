@@ -1,3 +1,6 @@
+# R v4.3.1
+# openVA v1.1.1
+# InSilicoVA v1.4.0
 library(openVA)
 library(tidyverse)
 

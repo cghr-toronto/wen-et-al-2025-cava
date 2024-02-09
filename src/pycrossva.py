@@ -1,3 +1,5 @@
+# Python v3.11.4
+# pycrossva v0.97
 import pandas as pd
 from pycrossva.transform import transform
 
