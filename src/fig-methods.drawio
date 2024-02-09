@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-09T06:29:13.806Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="O3lgjMWZyiNLCsgQHPrC" version="23.0.2" type="device">
+<mxfile host="Electron" modified="2024-02-09T20:17:05.555Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="XkSBT9B-sQwAsFqaLniq" version="23.0.2" type="device">
   <diagram name="Page-1" id="XRnti_sZ5cLWmPsRjecl">
-    <mxGraphModel dx="683" dy="378" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="420" pageHeight="760" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="420" pageHeight="760" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -87,10 +87,10 @@
         <mxCell id="LQ5JA_-nskLE2zFmyaHa-49" value="Models and Parameters" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=8;verticalAlign=top;fillColor=default;fontColor=#000000;strokeColor=default;strokeWidth=0.5;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="10" y="300" width="400" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="LQ5JA_-nskLE2zFmyaHa-51" value="ChatGPT-3.5&lt;br&gt;OpenAI API using Java&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-3.5-turbo, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
+        <mxCell id="LQ5JA_-nskLE2zFmyaHa-51" value="ChatGPT-3.5&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-3.5-turbo, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="20" y="339" width="90" height="43" as="geometry" />
         </mxCell>
-        <mxCell id="LQ5JA_-nskLE2zFmyaHa-52" value="ChatGPT-4&lt;br&gt;OpenAI API using Java&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-4-0613, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
+        <mxCell id="LQ5JA_-nskLE2zFmyaHa-52" value="ChatGPT-4&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-4-0613, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="119" y="339" width="90" height="43" as="geometry" />
         </mxCell>
         <mxCell id="LQ5JA_-nskLE2zFmyaHa-53" value="InterVA-5&lt;br&gt;openVA R Package&lt;br style=&quot;font-size: 7px;&quot;&gt;(Malaria=h, HIV=h)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
@@ -253,34 +253,34 @@
             <mxPoint x="356" y="695" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openva.net/img/smaller_thumbnail.png;imageBackground=default;imageBorder=#FFFFFF;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openva.net/img/smaller_thumbnail.png;imageBackground=default;imageBorder=#FFFFFF;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="343.5" y="317.79999999999995" width="25.5" height="29.54" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openva.net/img/smaller_thumbnail.png;imageBackground=default;imageBorder=#FFFFFF;strokeWidth=2;" vertex="1" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openva.net/img/smaller_thumbnail.png;imageBackground=default;imageBorder=#FFFFFF;strokeWidth=2;" parent="1" vertex="1">
           <mxGeometry x="247.25" y="317.79999999999995" width="25.5" height="29.54" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png;imageBackground=default;imageBorder=none;" vertex="1" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png;imageBackground=default;imageBorder=none;" parent="1" vertex="1">
           <mxGeometry x="150" y="319.9" width="25" height="25.34" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-5" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png;imageBackground=default;imageBorder=none;" vertex="1" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-5" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png;imageBackground=default;imageBorder=none;" parent="1" vertex="1">
           <mxGeometry x="52.5" y="319.9" width="25" height="25.34" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-6" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.882;exitY=-0.003;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;strokeColor=#4D4D4D;exitPerimeter=0;" edge="1" parent="1" source="LQ5JA_-nskLE2zFmyaHa-16" target="LQ5JA_-nskLE2zFmyaHa-20">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-6" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.882;exitY=-0.003;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;strokeColor=#4D4D4D;exitPerimeter=0;" parent="1" source="LQ5JA_-nskLE2zFmyaHa-16" target="LQ5JA_-nskLE2zFmyaHa-20" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="231" y="70" as="sourcePoint" />
             <mxPoint x="320" y="60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-9" value="" style="group" vertex="1" connectable="0" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-9" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="63" y="28" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-8" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=none;" vertex="1" parent="0ymB1sbrpppLZvCsnGzk-9">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-8" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;strokeColor=none;" parent="0ymB1sbrpppLZvCsnGzk-9" vertex="1">
           <mxGeometry width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-7" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://healsl.org/img/favicon.png;imageBackground=none;" vertex="1" parent="0ymB1sbrpppLZvCsnGzk-9">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-7" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://healsl.org/img/favicon.png;imageBackground=none;" parent="0ymB1sbrpppLZvCsnGzk-9" vertex="1">
           <mxGeometry width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="0ymB1sbrpppLZvCsnGzk-10" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openmortality.org/static/media/openmortality-logo.b0c3a3eb5877c266c035d6e09eaafc9a.svg;" vertex="1" parent="1">
+        <mxCell id="0ymB1sbrpppLZvCsnGzk-10" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://openmortality.org/static/media/openmortality-logo.b0c3a3eb5877c266c035d6e09eaafc9a.svg;" parent="1" vertex="1">
           <mxGeometry x="15.000000000000004" y="27.94" width="46.25" height="30.06" as="geometry" />
         </mxCell>
       </root>
