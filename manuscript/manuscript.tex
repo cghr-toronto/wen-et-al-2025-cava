@@ -280,7 +280,22 @@ x.
 
 \subsection{Overall Performance}\label{results-overall}
 
-Of the 6939 records, ChatGPT-4 had the highest PCCC overall and for the adult, child, and neonatal age groups. ChatGPT-3.5 performed better than InterVA-5 and InSilicoVA overall and for the adult and child age groups, but worse than InSilicoVA for the neonatal age group. Figure \ref{fig-perf-agegroup} shows the overall PCCC performance by age group with reference to the CSMF Accuracy.
+Of the 6939 records, ChatGPT-4 had the best performance overall followed by ChatGPT-3.5, InSilicoVA, and InterVA-5 at 0.71, 0.64, 0.44, and 0.43 PCCC respectively. CSMF Accuracies followed the same pattern except for InterVA-5 and InSilicoVA, where InterVA-5 had a higher CSMF Accuracy at 0.78 compared to InSilicoVA at 0.74. Figure \ref{fig-perf-agegroup} shows the PCCC performance across age groups with reference to the CSMF Accuracy. ChatGPT-4 also had the best performance across all three age groups, while ChatGPT-3.5 and InSilicoVA had similar performance (within 0.05 PCCC) for child and neonatal records respectively. ChatGPT-3.5 did worse than InSilicoVA for neonatal records at 0.51 PCCC whereas it had performances close to ChatGPT-4 for the adult and child age groups.
+
+\begin{table}[h]
+\caption{Overall model performance for physician agreed records (n=6939)}\label{tab-perf-overall}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model & PCCC (0=Low, 1=High)  & CSMF Accuracy (0=Low, 1=High)\\
+\midrule
+ChatGPT-4 & 0.71 & 0.89\\
+ChatGPT-3.5 & 0.64 & 0.86\\
+InSilicoVA & 0.44 & 0.74\\
+InterVA-5 & 0.43 & 0.78\\
+\botrule
+\end{tabular}
+\footnotetext{Note: Models sorted from highest to lowest PCCC.}
+\end{table}
 
 \begin{figure}[h!]
 \centering
