@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title[Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022]{Comparing ChatGPT-4 to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022}
+\title[Comparing Generative Pre-trained Transformer Models to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022]{Comparing Generative Pre-trained Transformer Models to Physicians for Assigning Causes of Death from Verbal Autopsy: A Case Study of 6939 Deaths in Sierra Leone from 2019-2022}
 
 %%=============================================================%%
 %% Prefix	-> \pfx{Dr}
@@ -157,7 +157,7 @@
 
 \abstract{\textbf{Background:} Verbal Autopsies (VAs) collect data on deaths and their causes outside of traditional hospital settings to provide more representative counts and Causes of Death (CODs) for reducing premature mortality. Current computer models for COD assignment in VAs perform similar to physicians at the population level, but poorly at the individual level, due to a focus on structured questionnaire data and neglecting free text from the open narratives. Recently, a Generative Pre-trained Transformer (GPT) model called ChatGPT-4 has demonstrated human-level performance on professional and academic exams using free text input. ChatGPT-4 shows promise in mimicking physician behavior for assigning CODs, but to the best of our knowledge, has yet to be tested for assigning CODs using open narratives from VAs.
 
-\textbf{Methods:} 6939 records collected from VA in Sierra Leone from 2019 to 2022 were used to compare four computer models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, to physicians for assigning CODs at the population and individual level. Open narratives were used for Chat-3.5/ChatGPT-4 input, while structured questionnaires were used for InterVA-5/InSilicoVA input. All COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for the adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at the population and individual level respectively. Comparisons in CSMF and PCCC to physicians among models were evaluated for all records and by COD, age group, and age ranges.
+\textbf{Methods:} 6939 records collected from VA in Sierra Leone from 2019 to 2022 were used to compare four computer models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for assigning CODs at the population and individual level. Open narratives were used for Chat-3.5/GPT-4 input, while structured questionnaires were used for InterVA-5/InSilicoVA input. All COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for the adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at the population and individual level respectively. Comparisons in CSMF and PCCC to physicians among models were evaluated for all records and by COD, age group, and age ranges.
 
 \textbf{Results:} x.
 
@@ -190,16 +190,16 @@ In 2019, 41 million people die prematurely from noncommunicable diseases every y
 
 VA involves two major components: survey and COD assignment \cite{worldhealthorganizationVerbalAutopsyStandards2023,chandramohanEstimatingCausesDeath2021,worldhealthorganizationVerbalAutopsyStandards2007}. In the survey component, trained lay surveyors interview those familiar with the deceased (e.g. living spouse, children, family, friends) to gather information using standardized questionnaires and open narratives. In the COD assignment component, physicians evaluate information available from the questionnaires and open narratives to assign probable CODs. Although VA surveys have been an effective alternative to collect mortality data at scale (e.g. less than \$3 USD per house in India \cite{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), COD assignment has been criticized to be expensive and difficult to reproduce due to reliance on physician assignment \cite{mccormickProbabilisticCauseofDeathAssignment2016b,morrisFactorsAssociatedPhysician2010,solemanVerbalAutopsyCurrent2006}. As an alternative to physician assignment, computer models, such as InterVA \cite{byassIntegratedApproachProcessing2019} and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016b}, have recently been studied to automatically assign CODs with performances close to physicians at the population level, but poor performances at the individual level \cite{jhaAutomatedPhysicianAssignment2019,leitaoComparisonPhysiciancertifiedVerbal2014,desaiPerformanceFourComputercoded2014,tungaVerbalAutopsyModels2021,otiVerbalAutopsyInterpretation2010}. These computer models often utilized data from the structured questionnaire, but often omit the free-text open narrative, which misses latent information, such as chronology or health-seeking behaviors, that may potentially help models perform better than using the questionnaire alone \cite{jebleeAutomaticallyDeterminingCause2019,blancoExtractingCauseDeath2021,kingQualityDiagnosticValue2016}.
 
-Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023a}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
+Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023a}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
 
 \section{Methods}\label{methods}
 
-This study uses 6939 physician agreed records of 11,920 records collected in 2019 to 2022 from the Healthy Sierra Leone (HEAL-SL) study as described in Section \ref{methods-data}. Section \ref{methods-models} describes the four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, for COD assignment, and their inputs and outputs, while section \ref{methods-eval} details the performance evaluation of the four models relative to physicians overall, by ages, and by COD, using population and individual level metrics. Figure \ref{fig-methods} details the methods used in this study.
+This study uses 6939 physician agreed records of 11,920 records collected in 2019 to 2022 from the Healthy Sierra Leone (HEAL-SL) study as described in Section \ref{methods-data}. Section \ref{methods-models} describes the four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, for COD assignment, and their inputs and outputs, while section \ref{methods-eval} details the performance evaluation of the four models relative to physicians overall, by ages, and by COD, using population and individual level metrics. Figure \ref{fig-methods} details the methods used in this study.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-methods.pdf}
-\caption{Case study methods. VA records in Sierra Leone between 2019-2022 from the HEAL-SL study were filtered for physician agreed records, and pre-processed for COD assignment by ChatGPT-3.5, ChatGPT-4, InterVA-5 and InSilicoVA models. The output models were evaluated with CSMF Accuracy and PCCC overall, by age group, and by COD and five-year age ranges for each age group.}\label{fig-methods}
+\caption{Case study methods. VA records in Sierra Leone between 2019-2022 from the HEAL-SL study were filtered for physician agreed records, and pre-processed for COD assignment by GPT-3.5, GPT-4, InterVA-5 and InSilicoVA models. The output models were evaluated with CSMF Accuracy and PCCC overall, by age group, and by COD and five-year age ranges for each age group.}\label{fig-methods}
 \end{figure}
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
@@ -210,37 +210,37 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
 
 \subsection{Modelling}\label{methods-models}
 
-Four computer models were used to assign COD for each of the 6939 physician agreed records: ChatGPT-3.5, ChatGPT-4, InterVA-5 , and InSilicoVA. Each model required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from ChatGPT-3.5 and ChatGPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. All model outputs were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians.
+Four computer models were used to assign COD for each of the 6939 physician agreed records: GPT-3.5, GPT-4, InterVA-5 , and InSilicoVA. Each model required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from GPT-3.5 and GPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. All model outputs were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians.
 
-\subsubsection{Overview of ChatGPT-3.5/4, InterVA-5, and InSilicoVA}\label{methods-models-overview}
+\subsubsection{Overview of GPT-3.5/4, InterVA-5, and InSilicoVA}\label{methods-models-overview}
 
-ChatGPT-3.5 \cite{brownLanguageModelsAre2020} and ChatGPT-4 \cite{openaiGPT4TechnicalReport2023a} are LLMs that utilize deep neural networks with transformer architectures \cite{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \cite{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in ChatGPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \cite{wuBriefOverviewChatGPT2023}. ChatGPT-3.5 and ChatGPT-4 were instructed with text prompts to assign CODs based on the open narrative. InterVA-5 and InSilicoVA are widely used and studied \cite{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} standard statistical models for COD assignment in VAs under the openVA framework \cite{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \cite{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \cite{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \cite{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \cite{mccormickProbabilisticCauseofDeathAssignment2016b}. For assigning CODs, ChatGPT-3.5 and ChatGPT-4 require prompts containing conversation-like textual instructions as input, while InterVA-5 and InSilicoVA require structured symptom and associated sociodemographic data as input. 
+GPT-3.5 \cite{brownLanguageModelsAre2020} and GPT-4 \cite{openaiGPT4TechnicalReport2023a} are LLMs that utilize deep neural networks with transformer architectures \cite{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \cite{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in GPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \cite{wuBriefOverviewChatGPT2023}. GPT-3.5 and GPT-4 were instructed with text prompts to assign CODs based on the open narrative. InterVA-5 and InSilicoVA are widely used and studied \cite{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} standard statistical models for COD assignment in VAs under the openVA framework \cite{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \cite{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \cite{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \cite{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \cite{mccormickProbabilisticCauseofDeathAssignment2016b}. For assigning CODs, GPT-3.5 and GPT-4 require prompts containing conversation-like textual instructions as input, while InterVA-5 and InSilicoVA require structured symptom and associated sociodemographic data as input. 
 
 \subsubsection{Input Data and Preprocessing}\label{methods-models-input}
 
-For ChatGPT-3.5 and ChatGPT-4, 6939 text prompts were generated for each physician agreed record as input to instruct the models to assign CODs based on the open narratives. Prompts were generated with a template involving \verb|<narrative>| from the free-text open narratives, and associated \verb|<age>|, (age) \verb|<unit>|, \verb|<sex>| from the standardized questionnaire:
+For GPT-3.5 and GPT-4, 6939 text prompts were generated for each physician agreed record as input to instruct the models to assign CODs based on the open narratives. Prompts were generated with a template involving replacing the placeholder \verb|<narrative>| using the free-text open narratives:
 
 \begin{lstlisting}
 Determine the underlying cause of death and provide a ICD-10 code 
 for the following narrative based on a verbal autopsy of a death in 
-Sierra Leone, Age <age> <unit>, <sex>: <narrative>
+Sierra Leone <narrative>
 \end{lstlisting}
 
 \noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \cite{worldhealthorganizationODKVerbalAutopsy2022,nafundiODKCollectData2023} consisting of 526 variables \cite{dipasqualeReleaseODK20162016}, followed by further conversion into OpenVA format \cite{liOpenVAToolkitVerbal2023} consisting of 353 variables \cite{byassInterVA5UserGuide2020} using the \verb|pyCrossVA| version 0.97 Python package \cite{thomasPycrossvaPrepareData}. The 6939 records were all converted into OpenVA formatted records for InterVA-5 and InSilicoVA.
 
 \subsubsection{Models and Parameters}\label{methods-models-params}
 
-The ChatGPT-3.5 and ChatGPT-4 Application Programming Interface (API) was accessed using Python version 3.11.4 and used to assign CODs for each record. ChatGPT-3.5 used the \verb|gpt-3.5-turbo| model, while ChatGPT-4 used the \verb|gpt-4-0613| mode. The parameter \verb|top_p| for ChatGPT-3.5 and ChatGPT-4, representing the sampling temperature, was set to 0.3 to consider only the top 30\% probability mass from the token results \cite{openaiOpenAIPlatformAPI2024}. Higher values closer to 1 may make the results more random, while lower values closer to 0 make the results more focused.
+The GPT-3.5 and GPT-4 Application Programming Interface (API) was accessed using Python version 3.11.4 and used to assign CODs for each record. GPT-3.5 used the \verb|gpt-3.5-turbo| model, while GPT-4 used the \verb|gpt-4-0613| mode. The parameter \verb|top_p| for GPT-3.5 and GPT-4, representing the sampling temperature, was set to 0.3 to consider only the top 30\% probability mass from the token results \cite{openaiOpenAIPlatformAPI2024}. Higher values closer to 1 may make the results more random, while lower values closer to 0 make the results more focused.
 
 The \verb|openVA| R package was used to run InterVA-5 and InSilicoVA models to assign CODs for each record in R version 4.3.1. The \verb|openVA| package version 1.1.1 used dependent packages \verb|InterVA5| version 1.1.3 and \verb|InSilicoVA| version 1.4.0. The \verb|Nsim| (number of iterations to run) parameter \cite{liInSilicoVAProbabilisticVerbal2022} for InSilicoVA was set to 9500\footnote{The default value of Nsim=10000 for InSilicoVA ran until 9500 iterations before it stopped due to errors, thus Nsim=9500 was used and ran successfully for all iterations.}, while the \verb|HIV| (level of prevalence of human immunodeficiency virus) and \verb|Malaria| (level of prevalence of Malaria) parameters \cite{thomasInterVA5ReplicateAnalyse2021} for InterVA-5 were both set to \verb|'h'| (high) reflecting HIV and Malaria disease assumptions in Sierra Leone \cite{yendewaHIVAIDSSierra2018,walkerMalariaMorbidityMortality2015}.
 
 \subsubsection{Output Data and Code Conversions}\label{methods-models-output}
 
-Of the 6939 input records, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA were able to assign CODs for 6929, 6909, 6805, 6729 records respectively. All 6805 InterVA-5 and 6729 InSilicoVA records with WHO VA 2016 v1.5 output codes \cite{worldhealthorganizationVerbalAutopsyStandards2016} were converted into ICD-10 codes. After all model outputs used ICD-10 codes, they were further converted to CGHR-10 codes. The 6929 ChatGPT-3.5 and 6909 ChatGPT-4 output records with ICD-10 codes were converted into 6892 and 6856 records with CGHR-10 codes, where 37 and 53 records did not have matching CGHR-10 codes respectively. All 6805 InterVA-5 and 6729 InSilicoVA records with ICD-10 codes were converted into records with CGHR-10 codes.
+Of the 6939 input records, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA were able to assign CODs for 6929, 6909, 6805, 6729 records respectively. All 6805 InterVA-5 and 6729 InSilicoVA records with WHO VA 2016 v1.5 output codes \cite{worldhealthorganizationVerbalAutopsyStandards2016} were converted into ICD-10 codes. After all model outputs used ICD-10 codes, they were further converted to CGHR-10 codes. The 6929 GPT-3.5 and 6909 GPT-4 output records with ICD-10 codes were converted into 6892 and 6856 records with CGHR-10 codes, where 37 and 53 records did not have matching CGHR-10 codes respectively. All 6805 InterVA-5 and 6729 InSilicoVA records with ICD-10 codes were converted into records with CGHR-10 codes.
 
 \subsection{Performance Evaluation}\label{methods-eval}
 
-The performance of four models, ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6939 records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model. CSMF accuracy and PCCC were calculated for each model by three age groups, and further into age ranges and COD for each age group.
+The performance of four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, were evaluated with metrics on the population and individual level by comparing their CGHR-10 COD outputs to 6939 records. Cause Specific Mortality Fraction (CSMF) accuracy was used to evaluate models on the population level, while Partial Chance Corrected Concordance (PCCC) was used to evaluate models on the individual level \cite{murrayRobustMetricsAssessing2011}. Records that were assigned a COD by physicians, but not by a model were considered to be an incorrect COD assignment by the model. CSMF accuracy and PCCC were calculated for each model by three age groups, and further into age ranges and COD for each age group.
 
 \subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
 
@@ -280,27 +280,29 @@ x.
 
 \subsection{Overall Performance}\label{results-overall}
 
-Of the 6939 records, ChatGPT-4 had the best performance overall followed by ChatGPT-3.5, InSilicoVA, and InterVA-5 at 0.71, 0.64, 0.44, and 0.43 PCCC respectively. CSMF Accuracies followed the same pattern except for InterVA-5 and InSilicoVA, where InterVA-5 had a higher CSMF Accuracy at 0.78 compared to InSilicoVA at 0.74. Figure \ref{fig-perf-agegroup} shows the PCCC performance across age groups with reference to the CSMF Accuracy. ChatGPT-4 also had the best performance across all three age groups, while ChatGPT-3.5 and InSilicoVA had similar performance (within 0.05 PCCC) for child and neonatal records respectively. ChatGPT-3.5 did worse than InSilicoVA for neonatal records at 0.51 PCCC whereas it had performances close to ChatGPT-4 for the adult and child age groups.
+Of the 6939 records, GPT-4 had the best performance overall followed by GPT-3.5, InSilicoVA, and InterVA-5 at 0.71, 0.64, 0.44, and 0.43 PCCC respectively. CSMF Accuracies followed the same pattern except for InterVA-5 and InSilicoVA, where InterVA-5 had a higher CSMF Accuracy at 0.78 compared to InSilicoVA at 0.74. Figure \ref{fig-perf-agegroup} shows the PCCC performance across age groups with reference to the CSMF Accuracy. GPT-4 also had the best performance across all three age groups, while GPT-3.5 and InSilicoVA had similar performance (within 0.05 PCCC) for child and neonatal records respectively. GPT-3.5 did worse than InSilicoVA for neonatal records at 0.51 PCCC whereas it had performances close to GPT-4 for the adult and child age groups.
 
 \begin{table}[h]
 \caption{Overall model performance for physician agreed records (n=6939)}\label{tab-perf-overall}%
 \begin{tabular}{@{}llll@{}}
 \toprule
-Model & PCCC (0=Low, 1=High)  & CSMF Accuracy (0=Low, 1=High)\\
+Model & PCCC\footnotemark[1]  & CSMF Accuracy\footnotemark[2] & PCCC Improvement from Model Below\\
 \midrule
-ChatGPT-4 & 0.71 & 0.89\\
-ChatGPT-3.5 & 0.64 & 0.86\\
-InSilicoVA & 0.44 & 0.74\\
-InterVA-5 & 0.43 & 0.78\\
+GPT-4 & 0.71 & 0.89 & +0.07\\
+GPT-3.5 & 0.64 & 0.86 & +0.20\\
+InSilicoVA & 0.44 & 0.74 & +0.01\\
+InterVA-5 & 0.43 & 0.78 & -\\
 \botrule
 \end{tabular}
 \footnotetext{Note: Models sorted from highest to lowest PCCC.}
+\footnotetext[1]{Partial Chance Corrected Concordance (PCCC). Values of 0 (low) to 1 (high).}
+\footnotetext[2]{Cause Specific Mortality Fraction (CSMF) Accuracy. Values of 0 (low) to 1 (high).}
 \end{table}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agegroup.pdf}
-\caption{Model performance by age group. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult (12 to 69 Years), child (28 days to 11 years), and neonatal (under 28 days) age groups. CSMF indicates CSMF accuracy.}\label{fig-perf-agegroup}
+\caption{Model performance by age group. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult (12 to 69 Years), child (28 days to 11 years), and neonatal (under 28 days) age groups. CSMF indicates CSMF accuracy.}\label{fig-perf-agegroup}
 \end{figure}
 
 \subsection{Performance for Adult Records (12 Years or Older)}\label{results-adult}
@@ -310,13 +312,13 @@ x.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-adult.pdf}
-\caption{Model performance for adult records by age range. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
+\caption{Model performance for adult records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-adult.pdf}
-\caption{Model performance for adult records by COD. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-adult}
+\caption{Model performance for adult records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-adult}
 \end{figure}
 
 \subsection{Performance for Child Records (28 Days to 11 Years)}\label{results-child}
@@ -326,13 +328,13 @@ x.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-child.pdf}
-\caption{Model performance for child records by age range. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-child}
+\caption{Model performance for child records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-child}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-child.pdf}
-\caption{Model performance for child records by COD. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-child}
+\caption{Model performance for child records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-child}
 \end{figure}
 
 \subsection{Performance for Neonatal Records (Under 28 Days)}\label{results-neo}
@@ -342,13 +344,13 @@ x.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-neo.pdf}
-\caption{Model performance for neonatal records by age range. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 days) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-neo}
+\caption{Model performance for neonatal records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 days) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-neo}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-neo.pdf}
-\caption{Model performance for neonatal records by COD. ChatGPT-3.5, ChatGPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-neo}
+\caption{Model performance for neonatal records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-neo}
 \end{figure}
 
 \section{Discussion}\label{discuss}

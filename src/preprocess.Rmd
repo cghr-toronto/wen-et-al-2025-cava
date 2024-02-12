@@ -116,26 +116,26 @@ df <- list(
             mutate(round = 2, age = "neo") %>%
             rename(all_of(phy_rename))
     ),
-    model_chatgpt3 = bind_rows(
+    model_gpt3 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt3_v1.csv",
+            "../tmp/healsl_rd1_rapid_gpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt3_v1.csv",
+            "../tmp/healsl_rd2_rapid_gpt3_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
-    ) %>% rename(chatgpt3_icd10 = api_chat_icd),
-    model_chatgpt4 = bind_rows(
+    ) %>% rename(gpt3_icd10 = api_chat_icd),
+    model_gpt4 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_chatgpt4_v1.csv",
+            "../tmp/healsl_rd1_rapid_gpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_chatgpt4_v1.csv",
+            "../tmp/healsl_rd2_rapid_gpt4_v1.csv",
             col_select = c("rowid", "round", "api_chat_icd")
         )
-    ) %>% rename(chatgpt4_icd10 = api_chat_icd),
+    ) %>% rename(gpt4_icd10 = api_chat_icd),
     model_insilicova = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
@@ -431,32 +431,32 @@ out_coded_cghr10 <- out_coded %>% filter(
 )
 out_coded_cghr10_agree <- out_coded_cghr10 %>% filter(is_agreed == TRUE)
 
-# Get chatgpt3 coded records
+# Get gpt3 coded records
 out_cgpt3 <- out_coded %>% filter(
-    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+    !is.na(gpt3_icd10) & !is.null(gpt3_icd10)
 )
 out_cgpt3_agree <- out_coded_agree %>% filter(
-    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+    !is.na(gpt3_icd10) & !is.null(gpt3_icd10)
 )
 out_cgpt3_cghr10 <- out_coded_cghr10 %>% filter(
-    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+    !is.na(gpt3_icd10) & !is.null(gpt3_icd10)
 )
 out_cgpt3_cghr10_agree <- out_coded_cghr10_agree %>% filter(
-    !is.na(chatgpt3_icd10) & !is.null(chatgpt3_icd10)
+    !is.na(gpt3_icd10) & !is.null(gpt3_icd10)
 )
 
-# Get chatgpt3 coded records converted to cghr10
+# Get gpt3 coded records converted to cghr10
 out_cgpt3_xcghr10 <- out_cgpt3 %>% filter(
-    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+    !is.na(gpt3_cghr10) & !is.null(gpt3_cghr10)
 )
 out_cgpt3_xcghr10_agree <- out_cgpt3_agree %>% filter(
-    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+    !is.na(gpt3_cghr10) & !is.null(gpt3_cghr10)
 )
 out_cgpt3_xcghr10_cghr10 <- out_cgpt3_cghr10 %>% filter(
-    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+    !is.na(gpt3_cghr10) & !is.null(gpt3_cghr10)
 )
 out_cgpt3_xcghr10_cghr10_agree <- out_cgpt3_cghr10_agree %>% filter(
-    !is.na(chatgpt3_cghr10) & !is.null(chatgpt3_cghr10)
+    !is.na(gpt3_cghr10) & !is.null(gpt3_cghr10)
 )
 
 # Print results
@@ -492,32 +492,32 @@ out_coded_cghr10 <- out_coded %>% filter(
 )
 out_coded_cghr10_agree <- out_coded_cghr10 %>% filter(is_agreed == TRUE)
 
-# Get chatgpt4 coded records
+# Get gpt4 coded records
 out_cgpt4 <- out_coded %>% filter(
-    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+    !is.na(gpt4_icd10) & !is.null(gpt4_icd10)
 )
 out_cgpt4_agree <- out_coded_agree %>% filter(
-    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+    !is.na(gpt4_icd10) & !is.null(gpt4_icd10)
 )
 out_cgpt4_cghr10 <- out_coded_cghr10 %>% filter(
-    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+    !is.na(gpt4_icd10) & !is.null(gpt4_icd10)
 )
 out_cgpt4_cghr10_agree <- out_coded_cghr10_agree %>% filter(
-    !is.na(chatgpt4_icd10) & !is.null(chatgpt4_icd10)
+    !is.na(gpt4_icd10) & !is.null(gpt4_icd10)
 )
 
-# Get chatgpt4 coded records converted to cghr10
+# Get gpt4 coded records converted to cghr10
 out_cgpt4_xcghr10 <- out_cgpt4 %>% filter(
-    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+    !is.na(gpt4_cghr10) & !is.null(gpt4_cghr10)
 )
 out_cgpt4_xcghr10_agree <- out_cgpt4_agree %>% filter(
-    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+    !is.na(gpt4_cghr10) & !is.null(gpt4_cghr10)
 )
 out_cgpt4_xcghr10_cghr10 <- out_cgpt4_cghr10 %>% filter(
-    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+    !is.na(gpt4_cghr10) & !is.null(gpt4_cghr10)
 )
 out_cgpt4_xcghr10_cghr10_agree <- out_cgpt4_cghr10_agree %>% filter(
-    !is.na(chatgpt4_cghr10) & !is.null(chatgpt4_cghr10)
+    !is.na(gpt4_cghr10) & !is.null(gpt4_cghr10)
 )
 
 # Print results
@@ -563,7 +563,7 @@ out_iva5_agree <- out_who_agree %>% filter(
 out_iva5_cghr10 <- out_who_cghr10 %>% filter(
     !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
 )
-out_iva5_chr10_agree <- out_who_cghr10_agree %>% filter(
+out_iva5_cghr10_agree <- out_who_cghr10_agree %>% filter(
     !is.na(interva5_wva2016) & !is.null(interva5_wva2016)
 )
 
@@ -644,7 +644,7 @@ out_isva_agree <- out_who_agree %>% filter(
 out_isva_cghr10 <- out_who_cghr10 %>% filter(
     !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
 )
-out_isva_chr10_agree <- out_who_cghr10_agree %>% filter(
+out_isva_cghr10_agree <- out_who_cghr10_agree %>% filter(
     !is.na(insilicova_wva2016) & !is.null(insilicova_wva2016)
 )
 

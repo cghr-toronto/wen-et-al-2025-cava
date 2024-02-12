@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-12T20:09:05.209Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="bvRhFjAf0ijjDigI1NOC" version="23.0.2" type="device">
+<mxfile host="Electron" modified="2024-02-09T20:17:05.555Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="XkSBT9B-sQwAsFqaLniq" version="23.0.2" type="device">
   <diagram name="Page-1" id="XRnti_sZ5cLWmPsRjecl">
-    <mxGraphModel dx="333" dy="185" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="420" pageHeight="760" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="420" pageHeight="760" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -87,10 +87,10 @@
         <mxCell id="LQ5JA_-nskLE2zFmyaHa-49" value="Models and Parameters" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=8;verticalAlign=top;fillColor=default;fontColor=#000000;strokeColor=default;strokeWidth=0.5;shadow=1;" parent="1" vertex="1">
           <mxGeometry x="10" y="300" width="400" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="LQ5JA_-nskLE2zFmyaHa-51" value="GPT-3.5&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-3.5-turbo, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
+        <mxCell id="LQ5JA_-nskLE2zFmyaHa-51" value="ChatGPT-3.5&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-3.5-turbo, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="20" y="339" width="90" height="43" as="geometry" />
         </mxCell>
-        <mxCell id="LQ5JA_-nskLE2zFmyaHa-52" value="GPT-4&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-4-0613, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
+        <mxCell id="LQ5JA_-nskLE2zFmyaHa-52" value="ChatGPT-4&lt;br&gt;OpenAI API using Python&lt;br style=&quot;font-size: 7px;&quot;&gt;(gpt-4-0613, top_p=0.3)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="119" y="339" width="90" height="43" as="geometry" />
         </mxCell>
         <mxCell id="LQ5JA_-nskLE2zFmyaHa-53" value="InterVA-5&lt;br&gt;openVA R Package&lt;br style=&quot;font-size: 7px;&quot;&gt;(Malaria=h, HIV=h)" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Arial;fontSize=7;fillColor=default;" parent="1" vertex="1">

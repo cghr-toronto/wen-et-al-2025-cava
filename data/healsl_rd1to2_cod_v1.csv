@@ -1,4 +1,4 @@
-rowid,round,age,age_range,sex,p1_icd,p2_icd,p1_recon_icd,p2_recon_icd,adj_icd,is_agreed,is_recon,is_adj,physician_icd10,chatgpt3_icd10,chatgpt4_icd10,insilicova_wva2016,interva5_wva2016,insilicova_icd10,interva5_icd10,physician_cghr10,chatgpt3_cghr10,chatgpt4_cghr10,insilicova_cghr10,interva5_cghr10
+rowid,round,age,age_range,sex,p1_icd,p2_icd,p1_recon_icd,p2_recon_icd,adj_icd,is_agreed,is_recon,is_adj,physician_icd10,gpt3_icd10,gpt4_icd10,insilicova_wva2016,interva5_wva2016,insilicova_icd10,interva5_icd10,physician_cghr10,gpt3_cghr10,gpt4_cghr10,insilicova_cghr10,interva5_cghr10
 14002421,1,adult,50-54,Female,Y84,B50,Y84,Y84,NA,FALSE,TRUE,FALSE,Y84,R99,A41,1.03,1.03,B24,B24,Other injuries,Ill-defined,Unspecified infections,Unspecified infections,Unspecified infections
 14005966,1,adult,25-29,Male,V22,V22,NA,NA,NA,TRUE,FALSE,FALSE,V22,V01,S36,12.01,12.01,V89,V89,Road and transport injuries,Road and transport injuries,Other injuries,Road and transport injuries,Road and transport injuries
 14001514,1,adult,25-29,Female,B50,B54,NA,NA,NA,TRUE,FALSE,FALSE,B50,B50,B50,9.06,9.02,O75,O06,Malaria,Malaria,Malaria,Maternal conditions,Maternal conditions

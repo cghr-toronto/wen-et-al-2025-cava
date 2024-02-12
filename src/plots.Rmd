@@ -37,8 +37,8 @@ cat(paste0("\ntidyverse ", packageVersion("tidyverse")))
 models_format <- c(
     "_cghr10" = "",
     "_" = " & ",
-    "chatgpt3" = "ChatGPT-3.5",
-    "chatgpt4" = "ChatGPT-4",
+    "gpt3" = "GPT-3.5",
+    "gpt4" = "GPT-4",
     "insilicova" = "InSilicoVA",
     "interva5" = "InterVA-5"
 )
@@ -425,55 +425,55 @@ Create model combinations where if any of the models have the physician code, th
 ```{r}
 df <- df %>%
     mutate( # Combine models
-        "chatgpt3_insilicova_cghr10" = if_else(
-            chatgpt3_cghr10 == physician_cghr10 | 
+        "gpt3_insilicova_cghr10" = if_else(
+            gpt3_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt3_cghr10
+            gpt3_cghr10
         ),
-        "chatgpt4_insilicova_cghr10" = if_else(
-            chatgpt4_cghr10 == physician_cghr10 | 
+        "gpt4_insilicova_cghr10" = if_else(
+            gpt4_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt4_cghr10
+            gpt4_cghr10
         ),
-        "chatgpt3_interva5_cghr10" = if_else(
-            chatgpt3_cghr10 == physician_cghr10 | 
+        "gpt3_interva5_cghr10" = if_else(
+            gpt3_cghr10 == physician_cghr10 | 
                 interva5_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt3_cghr10
+            gpt3_cghr10
         ),
-        "chatgpt4_interva5_cghr10" = if_else(
-            chatgpt4_cghr10 == physician_cghr10 | 
+        "gpt4_interva5_cghr10" = if_else(
+            gpt4_cghr10 == physician_cghr10 | 
                 interva5_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt4_cghr10
+            gpt4_cghr10
         ),
-        "chatgpt3_insilicova_interva5_cghr10" = if_else(
-            chatgpt3_cghr10 == physician_cghr10 | 
+        "gpt3_insilicova_interva5_cghr10" = if_else(
+            gpt3_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10 |
                 interva5_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt3_cghr10
+            gpt3_cghr10
         ),
-        "chatgpt4_insilicova_interva5_cghr10" = if_else(
-            chatgpt4_cghr10 == physician_cghr10 | 
+        "gpt4_insilicova_interva5_cghr10" = if_else(
+            gpt4_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10 |
                 interva5_cghr10 == physician_cghr10,
             physician_cghr10,
-            chatgpt4_cghr10
+            gpt4_cghr10
         )
     )
 ```
 
 ```{r, echo=FALSE}
 print(head(df %>% select(
-    chatgpt3_insilicova_cghr10,
-    chatgpt4_insilicova_cghr10,
-    chatgpt3_interva5_cghr10,
-    chatgpt4_interva5_cghr10,
-    chatgpt3_insilicova_interva5_cghr10,
-    chatgpt4_insilicova_interva5_cghr10
+    gpt3_insilicova_cghr10,
+    gpt4_insilicova_cghr10,
+    gpt3_interva5_cghr10,
+    gpt4_interva5_cghr10,
+    gpt3_insilicova_interva5_cghr10,
+    gpt4_insilicova_interva5_cghr10
 )))
 ```
 
@@ -620,7 +620,7 @@ Save calculated metrics to `data` folder.
 out <- reduce(metrics,
               function(x, y) left_join(x, y, by = "Model")
 )
-write_csv(out, "/data/healsl_rd1to2_metrics_v1.csv")
+write_csv(out, "../data/healsl_rd1to2_metrics_v1.csv")
 ```
 
 ### Exploration
@@ -714,7 +714,7 @@ asplot <- asdata %>%
 
 # Save the plot
 asplot
-ggsave("/manuscript/fig-data-agesex.pdf", plot = asplot, dpi = 300)
+ggsave("../manuscript/fig-data-agesex.pdf", plot = asplot, dpi = 300)
 ```
 
 #### Cases by Age Range
@@ -791,7 +791,7 @@ for (a in c("adult", "child", "neo")) {
     # Save the plot
     print(earplot)
     ggsave(
-        sprintf("/manuscript/fig-data-agerange-%s.pdf", a),
+        sprintf("../manuscript/fig-data-agerange-%s.pdf", a),
         plot = earplot,
         dpi = 300
     )
@@ -860,7 +860,7 @@ for (a in c("adult", "child", "neo")) {
     # Save the plot
     print(ecodplot)
     ggsave(
-        sprintf("/manuscript/fig-data-cod-%s.pdf", a),
+        sprintf("../manuscript/fig-data-cod-%s.pdf", a),
         plot = ecodplot,
         dpi = 300,
         width = if (a == "adult") 6 else NA,
@@ -1053,7 +1053,7 @@ allplot <- alldata %>%
 
 # Save the plot
 allplot
-ggsave("/manuscript/fig-perf-allvsagree.pdf", plot = allplot, dpi = 300)
+ggsave("../manuscript/fig-perf-allvsagree.pdf", plot = allplot, dpi = 300)
 ```
 
 #### Age Group Perfomance
@@ -1257,7 +1257,7 @@ ageplot <- agedata %>%
 
 # Save the plot
 ageplot
-ggsave("/manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
+ggsave("../manuscript/fig-perf-agegroup.pdf", plot = ageplot, dpi = 300)
 ```
 
 #### Sex Performance
@@ -1459,7 +1459,7 @@ for (a in c("adult", "child", "neo")) {
     # Save the plot
     print(sxplot)
     ggsave(
-        sprintf("/manuscript/fig-perf-sex-%s.pdf", a),
+        sprintf("../manuscript/fig-perf-sex-%s.pdf", a),
         plot = sxplot,
         dpi = 300
     )
@@ -1648,7 +1648,7 @@ for (a in c("adult", "child", "neo")) {
     # Save the plot
     print(arplot)
     ggsave(
-        sprintf("/manuscript/fig-perf-agerange-%s.pdf", a),
+        sprintf("../manuscript/fig-perf-agerange-%s.pdf", a),
         plot = arplot,
         dpi = 300,
         width = if (a == "adult") 6 else if (a == "neo") 6 else NA,
@@ -1837,7 +1837,7 @@ for (a in c("adult", "child", "neo")) {
     # Save the plot
     print(codplot)
     ggsave(
-        sprintf("/manuscript/fig-perf-cod-%s.pdf", a),
+        sprintf("../manuscript/fig-perf-cod-%s.pdf", a),
         plot = codplot,
         dpi = 300,
         width = if (a == "adult") 8 else NA,
