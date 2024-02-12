@@ -280,23 +280,21 @@ x.
 
 \subsection{Overall Performance}\label{results-overall}
 
-Of the 6939 records, GPT-4 had the best performance overall followed by GPT-3.5, InSilicoVA, and InterVA-5 at 0.71, 0.64, 0.44, and 0.43 PCCC respectively. CSMF Accuracies followed the same pattern except for InterVA-5 and InSilicoVA, where InterVA-5 had a higher CSMF Accuracy at 0.78 compared to InSilicoVA at 0.74. Figure \ref{fig-perf-agegroup} shows the PCCC performance across age groups with reference to the CSMF Accuracy. GPT-4 also had the best performance across all three age groups, while GPT-3.5 and InSilicoVA had similar performance (within 0.05 PCCC) for child and neonatal records respectively. GPT-3.5 did worse than InSilicoVA for neonatal records at 0.51 PCCC whereas it had performances close to GPT-4 for the adult and child age groups.
+Of the 6939 records, GPT-4 had the highest PCCC followed by GPT-3.5, InSilicoVA, and InterVA-5 at 0.71, 0.64, 0.44, and 0.43 PCCC respectively (Table \ref{tab-perf-overall}). GPT-3.5 and GPT-4 had improvements ranging from 0.20-0.28 PCCC over InSilicoVA and InterVA-5, while GPT-4 slightly improved over GPT-3.5 by 0.07 PCCC. CSMF accuracies were above 0.7 for all models at 0.89, 0.86, 0.74, and 0.78 for GPT-4, GPT-3.5, InSilicoVA, and InterVA-5 respectively. Figure \ref{fig-perf-agegroup} shows the PCCC performance across age groups with reference to the CSMF Accuracy. GPT-4 had the highest PCCC across all three age groups at 0.71, 0.73, and 0.61 for adult, child, and neonatal age groups. GPT-3.5 had the next highest PCCC for the adult and child age groups at 0.62 and 0.69 PCCC respectively, performing slightly worse than GPT-4 by 0.09 and 0.04 PCCC. InSilicoVA had the second highest PCCC for the neonatal age group at 0.56, which was 0.05 PCCC worse than GPT-4. Both InterVA-5 and InSilicoVA had the lowest PCCC for the adult and child age groups at 0.41 and 0.45 PCCC respectively, while InterVA-5 and GPT-3.5 had the lowest PCCC for the neonatal age group at 0.49 and 0.51 respectively. The PCCC for models had larger differences between the minimum and maximum PCCC for the adult and child age groups at 0.3 and 0.28 respectively than the neonatal age group at 0.12.
 
 \begin{table}[h]
 \caption{Overall model performance for physician agreed records (n=6939)}\label{tab-perf-overall}%
 \begin{tabular}{@{}llll@{}}
 \toprule
-Model & PCCC\footnotemark[1]  & CSMF Accuracy\footnotemark[2] & PCCC Improvement from Model Below\\
+Model & PCCC  & CSMF Accuracy & PCCC Improvement from Model Below\\
 \midrule
-GPT-4 & 0.71 & 0.89 & +0.07\\
-GPT-3.5 & 0.64 & 0.86 & +0.20\\
-InSilicoVA & 0.44 & 0.74 & +0.01\\
+GPT-4 & 0.71 & 0.89 & $\uparrow$ 0.07\\
+GPT-3.5 & 0.64 & 0.86 & $\uparrow$ 0.20\\
+InSilicoVA & 0.44 & 0.74 & $\uparrow$ 0.01\\
 InterVA-5 & 0.43 & 0.78 & -\\
 \botrule
 \end{tabular}
 \footnotetext{Note: Models sorted from highest to lowest PCCC.}
-\footnotetext[1]{Partial Chance Corrected Concordance (PCCC). Values of 0 (low) to 1 (high).}
-\footnotetext[2]{Cause Specific Mortality Fraction (CSMF) Accuracy. Values of 0 (low) to 1 (high).}
 \end{table}
 
 \begin{figure}[h!]
@@ -307,7 +305,7 @@ InterVA-5 & 0.43 & 0.78 & -\\
 
 \subsection{Performance for Adult Records (12 Years or Older)}\label{results-adult}
 
-x.
+Across the adult age ranges, GPT-4 had the highest PCCC values at or above 0.65, followed by GPT-3.5, while InterVA-5 and InSilicoVA had the lowest PCCC values at or below 0.47. GPT-4 PCCC was at or above 0.7 for young to middle age ranges between 10 to 49 years, and below 0.7 for older age ranges between 50 to 69 years (Figure \ref{fig-perf-agerange-adult}). Each age range had between 135 (4\%) to 575 (15\%) records. Figure \ref{fig-perf-cod-adult} shows the highest and lowest performing models across adult CODs. The highest PCCC values were GPT-4 between 0.53 to 1 for 15 of 18 CODs (GPT-3.5 within 0.05 for 7 of the 15 CODs), InSilicoVA for road and transport injuries at 0.84 (InterVA-5 close at 0.81), GPT-3.5 for ill-defined at 0.57,and InterVA-5 for ischemic heart disease at 0.61 (GPT-4 close at 0.57). The lowest PCCC values were InterVA-5 between 0 to 0.79 for 11 of 18 CODs (InSilicoVA within 0.05 for 3 of the 11 CODs), InSilicoVA between 0.01 to 0.41 for 6 of 18 CODs.
 
 \begin{figure}[h!]
 \centering
@@ -375,6 +373,8 @@ x.
 
 Did not explore effects of model parameters outside the default (e.g. ChatGPT temperature, etc).
 
+Did not explore rerun and response consistency.
+
 \subsection{Research Opportunities}\label{discuss-opp}
 
 x.
@@ -430,7 +430,7 @@ Additional files were used to supplement this paper:
 
 The datasets supporting the conclusions of this article are included within the article (and its additional files).
 
-\newpage
+\clearpage
 \begin{appendices}
 
 %\section{Section title of first appendix}\label{secA1}
@@ -455,67 +455,66 @@ The datasets supporting the conclusions of this article are included within the 
 
 The following figures visualize the distribution of all physician agreed records by age groups (Figure \ref{fig-data-agesex}) and 5-year age ranges (Figure \ref{fig-data-agerange}) in Sierra Leone from 2019 to 2022.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=1\textwidth]{fig-data-agesex.pdf}
 \caption{Number of physician agreed VA records by adult, child, and neonatal age groups in Sierra Leone from 2019 to 2022.}\label{fig-data-agesex}
 \end{figure}
 
 \newpage
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-agerange.pdf}
 \caption{Number of physician agreed VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange}
 \end{figure}
 
 
-\newpage
+\clearpage
 \section{Adult Physician Agreed Verbal Autopsy Records (12 Years or Older)}\label{app-data-adult}
 
 The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-adult}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\textwidth]{fig-data-agerange-adult.pdf}
 \caption{Number of physician agreed adult (12 years or older) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
 \end{figure}
 
-\newpage
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-adult.pdf}
 \caption{Number of physician agreed adult (12 years or older) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
 \end{figure}
 
-\newpage
+\clearpage
 \section{Child Physician Agreed Verbal Autopsy Records (28 Days to 11 Years)}\label{app-data-child}
 
 The following figures visualize the distribution of child physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-child}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-child}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-data-agerange-child.pdf}
 \caption{Number of physician agreed child (28 days to 11 years) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-child}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-child.pdf}
 \caption{Number of physician agreed child (28 days to 11 years) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-child}
 \end{figure}
 
-\newpage
+\clearpage
 \section{Neonatal Physician Agreed Verbal Autopsy Records (Under 28 Days)}\label{app-data-neo}
 
 The following figures visualize the distribution of neonatal physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-neo}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-neo}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.75\textwidth]{fig-data-agerange-neo.pdf}
 \caption{Number of physician agreed neonatal (less than 28 days) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-neo}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-neo.pdf}
 \caption{Number of physician agreed neonatal (less than 28 days) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
@@ -530,7 +529,7 @@ The following figures visualize the distribution of neonatal physician agreed re
 %% file, and delete the associated \verb+\bibliography+ commands.                            %%
 %%===========================================================================================%%
 
-\newpage
+\clearpage
 \bibliography{bibliography}% common bib file
 %% if required, the content of .bbl file can be included here once bbl is generated
 %%\input sn-article.bbl
