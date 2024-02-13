@@ -2,7 +2,6 @@
 title: "Preprocess"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: "Richard Wen <richard.wen@unityhealth.to>"
-output: html_notebook
 ---
 
 ```{r, echo=FALSE}

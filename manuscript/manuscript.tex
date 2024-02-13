@@ -204,7 +204,7 @@ This study uses 6939 physician agreed records of 11,920 records collected in 201
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
 
-Initially, 11,920 records\footnote{Available at openmortality.org/dataset/heal-sl} from the HEAL-SL study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement per record, codes were compared for similarity using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together indicating codes in agreement \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation. The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \cite{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+Initially, 11,920 records\footnote{Available at openmortality.org/dataset/heal-sl} from the HEAL-SL study \cite{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \cite{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). To determine if two codes were in physician agreement per record, codes were compared for similarity using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which groups a range of similar ICD-10 codes together indicating codes in agreement \cite{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation. The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \cite{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
 
 The 6939 physician agreed records were relatively evenly distributed (approximately 40-57\% male and female) for the adult, child, and neonatal age groups in terms of sex (Figure \ref{fig-data-agesex}) with the most records in the 1-5 year (n=1633, 24\%) age range, and the least records in the 10-14 year (n=135, 2\%) and 7-27 day (n=82, 1\%) age ranges (Figure \ref{fig-data-agerange}). The other 15 five-year age ranges within 0 days to 69 years were relatively evenly distributed with approximately 4-6\% of the 6939 records each. The 3826 adult records had most records in the 65-69 year (n=575, 15\%), and the least in the 10-14 year (n=135, 4\%) age ranges, while the other 10 age ranges were relatively evenly distributed at 7-9\% of all records (Figure \ref{fig-data-agerange-adult}). For adult CODs, Malaria (n=799, 21\%) had the highest number of adult records, and cancers (n=49, 1\%), diabetes mellitus (n=27, \textless 1\%), and suicide (n=3, \textless 1\%) had the lowest number adult of adult records, while the other 15 CODs had between 2-11\% of all adult records (Figure \ref{fig-data-cod-adult}). The 2636 child records had most records in the 1-5 year (n=1633, 62\%) age range while the three other age ranges were relatively evenly distributed at 12-14\% of all records (Figure \ref{fig-data-agerange-child}). For child CODs, Malaria (n=1382, 52\%) and other infections (n=667, 25\%) had the highest number of child records, while nutritional deficiencies (n=11, \textless 1\%) and congenital anomalies (n=1, \textless 1\%) had the lowest number of records with the five other CODs between 3-7\% of all child records. The 477 neonatal records had two age ranges with most records in the 0-6 day (n=395, 83\%) age range and the rest in the 7-27 day (n=82, 17\%) age range (Figure \ref{fig-data-agerange-neo}). For neonatal CODs, stillbirth (n=172, 36\%) had the highest number of neonatal records, and ill-defined (n=23, 5\%), other (n=5, 1\%), and congenital anomalies (n=2, \textless 1\%) had the least number of records with the rest of the other three CODs between 15-22\% of all neonatal records (Figure \ref{fig-data-cod-neo}). See Appendices \ref{app-data} to \ref{app-data-neo} for a list of figures \ref{fig-data-agesex} to \ref{fig-data-cod-neo} showing distributions of the 6939 physician agreed records.
 
@@ -272,11 +272,11 @@ PCCC measures the performance of models at the individual level, comparing COD a
 
 \subsubsection{Metrics Overall and by Age and Cause of Death}\label{methods-eval-agecod}
 
-The CSMF accuracy and PCCC metrics were calculated and compared for each model overall and by age group, followed by age ranges and COD for each age group as model performance can vary across ages and specific causes \cite{benaraEvaluationMethodsAssigning2023,murrayUsingVerbalAutopsy2014,setelValidityVerbalAutopsy2006}. Metrics were calculated overall for three age groups according to the CGHR-10 codes: adult (12 years or older), child (28 days to 11 years), and neonatal (under 28 days). For each of the adult and child age groups, metrics were calculated for five-year age ranges for records with ages at death of one-year or older and five-month age ranges for 28 days or older. For the neonatal age group, the age ranges of 0-6 days and 7-27 days were used. Metrics were also calculated by CODs defined by CGHR-10 codes, which include 19, 10, and 7 CODs for adult, child, and neonatal records respectively.
+The CSMF accuracy and PCCC metrics were calculated and compared for each model overall and by age group, followed by age ranges and COD for each age group as model performance can vary across ages and specific causes \cite{benaraEvaluationMethodsAssigning2023,murrayUsingVerbalAutopsy2014,setelValidityVerbalAutopsy2006}. Metrics were calculated overall for three age groups according to the CGHR-10 codes: adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days). For each of the adult and child age groups, metrics were calculated for five-year age ranges for records with ages at death of one-year or older and five-month age ranges for 28 days or older. For the neonatal age group, the age ranges of 0-6 days and 7-27 days were used. Metrics were also calculated by CODs defined by CGHR-10 codes, which include 19, 10, and 7 CODs for adult, child, and neonatal records respectively. For reference, all records were also coded by GPT-3.5, GPT-4, InterVA-5, and InSilicoVA for comparison to physician agreed records. For physician agreed records, models had 0.05 to 0.1 higher PCCC values and 0.01 to 0.05 higher CSMF accuracy values (see Figure \ref{fig-perf-allvsagree} in Appendix \ref{app-perf-misc}).
 
 \section{Results}\label{results}
 
-x.
+This section details the performance results of GPT-3.5, GPT-4, InterVA-5, and InSilicoVA models for assigning CGHR-10 CODs after applying the methods in Section \ref{methods}. GPT-4 performed the best overall at 0.71 PCCC followed by GPT-3.5 at 0.64 PCCC. GPT-4 also had the highest PCCC for most age ranges and CODs across the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups with GPT-3.5, InterVA-5, and InSilicoVA having higher PCCC values for some age ranges and CODs. Overall performance results are seen in Section \ref{results-overall}, and performance by adult, child, and neonatal records are seen in Sections \ref{results-adult}, \ref{results-child}, and \ref{results-neo} respectively.
 
 \subsection{Overall Performance}\label{results-overall}
 
@@ -300,90 +300,104 @@ InterVA-5 & 0.43 & 0.78 & -\\
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agegroup.pdf}
-\caption{Model performance by age group. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult (12 to 69 Years), child (28 days to 11 years), and neonatal (under 28 days) age groups. CSMF indicates CSMF accuracy.}\label{fig-perf-agegroup}
+\caption{Model performance by age group. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the adult (12 to 69 Years), child (28 days to 11 years), and neonatal (under 28 days) age groups. CSMF indicates CSMF accuracy.}\label{fig-perf-agegroup}
 \end{figure}
 
-\subsection{Performance for Adult Records (12 Years or Older)}\label{results-adult}
+\clearpage
+\subsection{Performance for 3826 Adult Records (12 to 69 years)}\label{results-adult}
 
-Across the adult age ranges, GPT-4 had the highest PCCC values at or above 0.65, followed by GPT-3.5, while InterVA-5 and InSilicoVA had the lowest PCCC values at or below 0.47. GPT-4 PCCC was at or above 0.7 for young to middle age ranges between 10 to 49 years, and below 0.7 for older age ranges between 50 to 69 years (Figure \ref{fig-perf-agerange-adult}). Each age range had between 135 (4\%) to 575 (15\%) records. Figure \ref{fig-perf-cod-adult} shows the highest and lowest performing models across adult CODs. The highest PCCC values were GPT-4 between 0.53 to 1 for 15 of 18 CODs (GPT-3.5 within 0.05 for 7 of the 15 CODs), InSilicoVA for road and transport injuries at 0.84 (InterVA-5 close at 0.81), GPT-3.5 for ill-defined at 0.57,and InterVA-5 for ischemic heart disease at 0.61 (GPT-4 close at 0.57). The lowest PCCC values were InterVA-5 between 0 to 0.79 for 11 of 18 CODs (InSilicoVA within 0.05 for 3 of the 11 CODs), InSilicoVA between 0.01 to 0.41 for 6 of 18 CODs.
+Across the adult age ranges, GPT-4 had the highest PCCC values at or above 0.65, followed by GPT-3.5, while InterVA-5 and InSilicoVA had the lowest PCCC values at or below 0.47. GPT-4 PCCC was at or above 0.7 for young to middle age ranges between 10 to 49 years, and below 0.7 for older age ranges between 50 to 69 years (Figure \ref{fig-perf-agerange-adult}). Each age range had between 135 (4\%) to 575 (15\%) records with the 65-69 year age range having the most records (n=575, 15\%), while other age ranges ranged from 4-9\% of all records. Figure \ref{fig-perf-cod-adult} shows the highest and lowest performing models by PCCC across 18 adult CODs. The highest PCCC values were GPT-4 between 0.53 to 1 for 15 of 18 CODs (GPT-3.5 within 0.05 for 7 of the 15 CODs), InSilicoVA for road and transport injuries at 0.84 (InterVA-5 close at 0.81), GPT-3.5 for ill-defined at 0.57,and InterVA-5 for ischemic heart disease at 0.61 (GPT-4 close at 0.57). The lowest PCCC values were InterVA-5 between 0 to 0.79 for 11 of 18 CODs (InSilicoVA within 0.05 for 3 of the 11 CODs), InSilicoVA between 0.01 to 0.41 for 6 of 18 CODs (InterVA-5 within 0.05 for other cardiovascular diseases and diarrhoeal diseases), and GPT-3.5 for ischemic heart disease at 0.49 (InSilicoVA within 0.05) and road and transport injuries at 0.59. Suicide and chronic respiratory diseases had the largest differences between minimum and maximum PCCC at 1 and 0.81 respectively. Maternal conditions, road and transport injuries, and tuberculosis had higher PCCC values above or at 0.67 (with the exception of GPT-3.5 for road and transportation injuries as an outlier), where there were small differences between minimum and maximum PCCC ranging from 0.12 to 0.19. Ischemic heart disease and unspecified infections had lower PCCC values below or at 0.6, where there were small differences between minimum and maximum PCCC ranging at 0.02 and 0.17 respectively. Each adult COD had between 3 (\textless 1\%) to 799 records (21\%) with malaria (n=799, 21\%), other noncommunicable diseases (n=414, 11\%), and unspecified infections (n=389, 10\%) making 42\% of all records, suicide having less than 1\% of records, and other CODs between 1-9\% of all records. GPT-4 had the highest PCCC for both male and female records at 0.72 and 0.7 respectively, while all other models had PCCC at or below 0.63 (see Figure \ref{fig-perf-sex-adult} in Appendix \ref{app-perf-misc}).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-adult.pdf}
-\caption{Model performance for adult records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
+\caption{Model performance for adult records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the adult age group (12 to 69 Years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-adult}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-adult.pdf}
-\caption{Model performance for adult records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the adult age group (12 to 69 Years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-adult}
+\caption{Model performance for adult records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the adult age group (12 to 69 Years) by COD. PCCC values are sorted by the highest to lowest PCCC for each COD. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-adult}
 \end{figure}
 
-\subsection{Performance for Child Records (28 Days to 11 Years)}\label{results-child}
+\clearpage
+\subsection{Performance for 2636 Child Records (28 Days to 11 Years)}\label{results-child}
 
-x.
+Across the child age ranges, GPT had the highest PCCC at 0.69 to 0.75 for all age ranges (GPT-3.5 within 0.05 for 1-11 years), while the lowest PCCC values were for InSilicoVA for 1-11 years (InterVA-5 within 0.05 for 1-5 years), and InterVA-5 for 1-11 months (Figure \ref{fig-perf-agerange-child}). Each child age range had between 308 (12\%) to 1633 (62\%) records with most records in the 1-5 years range at 1633 records (62\%) and the other age ranges consisting of 12-14\% of all records. Figure \ref{fig-perf-cod-child} shows the highest and lowest performing models by PCCC across 9 child CODs. GPT-4 had the highest PCCC for 7 of 9 child CODs, where GPT-3.5 had 5, InterVA-5 had two (congenital anomalies and diarrhoeal diseases), and InSilicoVA had one (pneumonia) of the 7 CODs within 0.05 PCCC of GPT-4. InterVA-5 had the highest PCCC for diarrhoeal disease at 0.82 (GPT-4 at 0.81), and GPT-3.5 had the highest PCCC for ill-defined at 0.84. InSilicoVA had the lowest PCCC for 4 of 9 child CODs (InterVA-5 within 0.05 for 3 of the 4 CODs), InterVA-5 had the lowest PCC for the other 4 of 9 child CODs (InSilicoVA within 0.05 for injuries), and GPT-3.5 had the lowest PCCC for diarrhoeal diseases at 0.69. Congenital anomalies had one record only in which GPT-4, GPT-3.5, and InterVA-5 assigned a CGHR-10 code matching the physicians. Ill-defined had the largest difference between minimum and maximum PCCC at 0.84, while injuries, diarrhoeal disease, and pneumonia (with the exception of InterVA-5 as an outlier at 0.41) had higher PCCC values at or above 0.69 with small differences between minimum and maximum PCCC ranging from 0.01 to 0.14. Other infections had lower PCCC values at or below 0.54 with a small difference between minimum and maximum PCCC at 0.2. Each child COD had between 1 (\textless 1\%) to 1382 (52\%) records with malaria (n=1382, 52\%), other infections (n=667, 25\%), and diarrhoeal diseases (n=175, 7\%) making 84\% of all records. Congenital anomalies and nutritional deficiencies had less than 1\% of all records, while other CODs had between 1-3\% of all records. GPT-4 had the highest PCCC for both male and female records at 0.73 and 0.72 (GPT-3.5 at 0.69) respectively, while all other models had PCCC at or below 0.68 (see Figure \ref{fig-perf-sex-child} in Appendix \ref{app-perf-misc}).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-child.pdf}
-\caption{Model performance for child records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-child}
+\caption{Model performance for child records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the child age group (28 days to 11 years) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-child}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-child.pdf}
-\caption{Model performance for child records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the child age group (28 days to 11 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-child}
+\caption{Model performance for child records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the child age group (28 days to 11 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each COD. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-child}
 \end{figure}
 
-\subsection{Performance for Neonatal Records (Under 28 Days)}\label{results-neo}
+\clearpage
+\subsection{Performance for 477 Neonatal Records (Under 28 Days)}\label{results-neo}
 
-x.
+GPT-4 and InSilicoVA had the highest PCCC for 0-6 day and 7-27 day neonatal age ranges at 0.62 and 0.67 respectively, while InterVA-5 had the lowest PCCC across all neonatal age ranges (GPT-3.5 within 0.05) as seen in Figure \ref{fig-perf-agerange-neo}. There were small differences between minimum and maximum PCCC across all age ranges at 0.14 and 0.12 for 0-6 days and 7-27 days respectively. Most records were in the 0-6 day age range at 395 (83\%) records, while the rest were in the 7-27 day age range at 82 (17\%) records. Figure \ref{fig-perf-cod-neo} shows the performance of models by PCCC across 7 neonatal CODs. GPT-4 had the highest PCCC for 4 of the 7 CODs (GPT-3.5 identical to GPT-4 for congenital anomalies at 1 PCCC). InSilicoVA, GPT-3.5, and InterVA-5 had the highest PCCC for neonatal infections at 0.87, ill-defined at 0.59 (GPT-4 at 0.55), and birth asphyxia and birth trauma at 0.59 respectively. Congenital anomalies and other had less or equal to 5 records with large difference of 1 between minimum and maximum PCCC. Neonatal infections and stillbirth had smaller differences between minimum and maximum PCCC at 0.38 and 0.24 respectively with larger PCCC values at or above 0.49. Birth asphyxia and birth trauma also had smaller differences between minimum and maximum PCCC at 0.24 but had PCCC values at or below 0.59. Prematurity and low birthweight and ill-defined had large differences between minimum and maximum PCCC at 0.62 and 0.58 respectively. Each neonatal COD had between 2 (\textless 1\%) to 172 (38\%) records, with stillbirth (n=172, 36\%), birth asphyxia and birth trauma (n=103, 22\%), and neonatal infections (n=99, 21\%), and prematurity and low birthweight (n=73, 15\%) making 94\% of all records, while the rest are in congenital anomalies, other, and ill-defined CODs. GPT-4 had the highest PCCC for both female and male records at 0.65 and 0.58 (InSilicoVA at 0.56) respectively, while all other models had PCCC at or below 0.56 (see Figure \ref{fig-perf-sex-neo} in Appendix \ref{app-perf-misc}).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-agerange-neo.pdf}
-\caption{Model performance for neonatal records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 days) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-neo}
+\caption{Model performance for neonatal records by age range. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the neonatal age group (under 28 days) by five-year age ranges. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-agerange-neo}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{fig-perf-cod-neo.pdf}
-\caption{Model performance for neonatal records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CODs in the neonatal age group (under 28 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each age range. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-neo}
+\caption{Model performance for neonatal records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the neonatal age group (under 28 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each COD. Only models with PCCC values within .05 of the highest and lowest PCCC are shown.}\label{fig-perf-cod-neo}
 \end{figure}
 
+\clearpage
 \section{Discussion}\label{discuss}
 
-x.
+TO DO.
 
 \subsection{Advantages}\label{discuss-adv}
 
 x.
 
+Captured causes of death with very low number of records.
+
 \subsection{Disadvantages}\label{discuss-disadv}
 
 x.
 
-Dimensions and cost of LLM versus physician.
+Dimensions, reliabiity, and cost of LLM versus physician.
 
-Reliance on third-party hosting.
+Reliance on third-party non-open source models.
 
 \subsection{Limitations}\label{discuss-limits}
 
 x.
 
+Limited records for some causes of death. Did not explore adjudicated and reconciliated records.
+
 Did not explore effects of model parameters outside the default (e.g. ChatGPT temperature, etc).
 
-Did not explore rerun and response consistency.
+Did not explore response consistency with reruns.
 
-\subsection{Research Opportunities}\label{discuss-opp}
+\subsection{Opportunities}\label{discuss-opp}
 
 x.
 
+Prompt engineering: adjust and optimize prompts, add in correctional instructions, adjudication, reconciliation, ICD-10/physician coding guide standards, and system prompt.
+
+Sensitivity analysis: Test consistency of GPT responses with multiple reruns and parameter settings.
+
 \section{Conclusion}\label{conclude}
 
-Conclusions may be used to restate your hypothesis or research question, restate your major findings, explain the relevance and the added value of your work, highlight any limitations of your study, describe future directions for research and recommendations. 
+TO DO.
 
-In some disciplines use of Discussion or 'Conclusion' is interchangeable. It is not mandatory to use both. Please refer to Journal-level guidance for any specific requirements. 
+% Conclusions may be used to restate your hypothesis or research question, restate your major findings, explain the relevance and the added value of your work, highlight any limitations of your study, describe future directions for research and recommendations. 
+
+% In some disciplines use of Discussion or 'Conclusion' is interchangeable. It is not mandatory to use both. Please refer to Journal-level guidance for any specific requirements. 
 
 \backmatter
 
@@ -470,20 +484,20 @@ The following figures visualize the distribution of all physician agreed records
 
 
 \clearpage
-\section{Adult Physician Agreed Verbal Autopsy Records (12 Years or Older)}\label{app-data-adult}
+\section{Adult Physician Agreed Verbal Autopsy Records (12 to 69 Years)}\label{app-data-adult}
 
 The following figures visualize the distribution of adult physician agreed records by 5-year age ranges (Figure \ref{fig-data-agerange-adult}) and CGHR-10 COD code in Sierra Leone from 2019 to 2022 (Figure \ref{fig-data-cod-adult}).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.95\textwidth]{fig-data-agerange-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
+\caption{Number of physician agreed adult (12 to 69 years) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-adult.pdf}
-\caption{Number of physician agreed adult (12 years or older) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
+\caption{Number of physician agreed adult (12 to 69 years) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
 \end{figure}
 
 \clearpage
@@ -518,6 +532,35 @@ The following figures visualize the distribution of neonatal physician agreed re
 \centering
 \includegraphics[width=0.85\textwidth]{fig-data-cod-neo.pdf}
 \caption{Number of physician agreed neonatal (less than 28 days) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
+\end{figure}
+
+\clearpage
+\section{Miscellaneous Performance}\label{app-perf-misc}
+
+The following figures show the model performance by PCCC for all records and physician agreed records (Figure \ref{fig-perf-allvsagree}), and the performance of models by PCCC across sex for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups in Figures \ref{fig-perf-sex-adult}, \ref{fig-perf-sex-child}, and \ref{fig-perf-sex-neo} respectively.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{fig-perf-allvsagree.pdf}
+\caption{Model performance for all records versus physician agreed records. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs for all records and physician agreed records. PCCC values are sorted by the highest to lowest PCCC.}\label{fig-perf-allvsagree}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{fig-perf-sex-adult.pdf}
+\caption{Model performance for adult records by sex. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the adult age group (12 to 69 years) by sex. PCCC values are sorted by the highest to lowest PCCC.}\label{fig-perf-sex-adult}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{fig-perf-sex-child.pdf}
+\caption{Model performance for child records by sex. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the child age group (28 days to 11 years) by sex. PCCC values are sorted by the highest to lowest PCCC.}\label{fig-perf-sex-child}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.85\textwidth]{fig-perf-sex-neo.pdf}
+\caption{Model performance for neonatal records by sex. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the neonatal age group (under 28 days) by sex. PCCC values are sorted by the highest to lowest PCCC.}\label{fig-perf-sex-neo}
 \end{figure}
 
 \end{appendices}
