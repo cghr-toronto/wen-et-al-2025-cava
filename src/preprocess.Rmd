@@ -117,14 +117,14 @@ df <- list(
     ),
     model_gpt3 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_gpt3_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        ),
+            "../tmp/healsl_rd1_rapid_gpt3_v2.csv",
+            col_select = c("rowid", "cause1_icd10")
+        ) %>% mutate(round = 1),
         read_csv(
-            "../tmp/healsl_rd2_rapid_gpt3_v1.csv",
-            col_select = c("rowid", "round", "api_chat_icd")
-        )
-    ) %>% rename(gpt3_icd10 = api_chat_icd),
+            "../tmp/healsl_rd2_rapid_gpt3_v2.csv",
+            col_select = c("rowid", "cause1_icd10")
+        ) %>% mutate(round = 2)
+    ) %>% rename(gpt3_icd10 = cause1_icd10),
     model_gpt4 = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_gpt4_v1.csv",
