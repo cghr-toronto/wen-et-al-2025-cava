@@ -117,14 +117,14 @@ df <- list(
     ),
     model_gpt3 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_gpt3_v2b_sorted.csv",
+            "../tmp/healsl_rd1_rapid_gpt3_v2b_first.csv",
             col_select = c("rowid", "cause1_icd10")
         ) %>% mutate(
             cause1_icd10 = str_sub(cause1_icd10, 1, 3),
             round = 1
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_gpt3_v2b_sorted.csv",
+            "../tmp/healsl_rd2_rapid_gpt3_v2b_first.csv",
             col_select = c("rowid", "cause1_icd10")
         ) %>% mutate(
             cause1_icd10 = str_sub(cause1_icd10, 1, 3),
@@ -133,14 +133,14 @@ df <- list(
     ) %>% rename(gpt3_icd10 = cause1_icd10),
     model_gpt4 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_rapid_gpt4_v2b_sorted.csv",
+            "../tmp/healsl_rd1_rapid_gpt4_v2b_first.csv",
             col_select = c("rowid", "cause1_icd10")
         ) %>% mutate(
             cause1_icd10 = str_sub(cause1_icd10, 1, 3),
             round = 1
         ),
         read_csv(
-            "../tmp/healsl_rd2_rapid_gpt4_v2b_sorted.csv",
+            "../tmp/healsl_rd2_rapid_gpt4_v2b_first.csv",
             col_select = c("rowid", "cause1_icd10")
         ) %>% mutate(
             cause1_icd10 = str_sub(cause1_icd10, 1, 3),

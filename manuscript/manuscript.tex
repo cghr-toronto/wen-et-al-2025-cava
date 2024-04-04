@@ -119,11 +119,11 @@
 
 \author[1,2]{\fnm{Anteneh Tesfaye} \sur{Assalif}}\email{antenehta@gmail.com}
 
+\author[1]{\fnm{Andy Sze-Heng} \sur{Lee}}\email{andylee@cs.toronto.edu}
+
 \author[1]{\fnm{Rajeev} \sur{Kamadod}}\email{rajeevk@kentropy.com}
 
 \author[1]{\fnm{Cheryl} \sur{Chin}}\email{cheryl.chin@unityhealth.to}
-
-\author[1]{\fnm{Andy Sze-Heng} \sur{Lee}}\email{andylee@cs.toronto.edu}
 
 %\equalcont{These authors contributed equally to this work.}
 
@@ -288,15 +288,15 @@ Of the 6939 records, GPT-4 had the highest PCCC followed by GPT-3.5, InSilicoVA,
 \caption{Overall model performance for physician agreed records (n=6939)}\label{tab-perf-overall}%
 \begin{tabular}{@{}llll@{}}
 \toprule
-Model & PCCC  & CSMF Accuracy & PCCC Improvement from Model Below\\
+Model & PCCC  & CSMF Accuracy & PCCC Improvement\\
 \midrule
-GPT-4 & 0.71 & 0.89 & $\uparrow$ 0.07\\
-GPT-3.5 & 0.64 & 0.86 & $\uparrow$ 0.20\\
+GPT-4 & 0.61 & 0.79 & $\uparrow$ 0.03\\
+GPT-3.5 & 0.58 & 0.74 & $\uparrow$ 0.14\\
 InSilicoVA & 0.44 & 0.74 & $\uparrow$ 0.01\\
 InterVA-5 & 0.43 & 0.78 & -\\
 \botrule
 \end{tabular}
-\footnotetext{Note: Models sorted from highest to lowest PCCC.}
+\footnotetext{Note: Models sorted from highest to lowest PCCC. Improvements are from model below.}
 \end{table}
 
 \begin{figure}[h!]
