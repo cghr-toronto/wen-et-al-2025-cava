@@ -57,7 +57,7 @@ models = {
     "gpt4": "gpt-4-0613",
     "gpt3": "gpt-3.5-turbo-0125"
 }
-SELECTED_MODEL = "gpt3"
+SELECTED_MODEL = "gpt4"
 MODEL_NAME = models[SELECTED_MODEL]
 TEMPERATURE = 0
 LOGPROBS = True
@@ -106,6 +106,7 @@ s4a_out_filename_template = "healsl_ROUND_rapid_MODELNAME_VERSION.csv"
 # #############################################################################################
 # STAGE 4b Parameters
 # #############################################################################################
+
 
 s4b_in_smpl_csv_filepath = s3_out_smpl_csv
 # smpl_analysis_in_csv_path = os.path.join(script_dir, OUTPUT_DIR, PROCESS_FILE)
