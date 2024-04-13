@@ -1148,6 +1148,16 @@ agedata <- out %>%
             PCCC,
             NA
         ),
+        "PCCC Mid Left" = if_else(
+          `PCCC Mid Value` <= 0.5,
+          `PCCC Mid`,
+          NA
+        ),
+        "PCCC Mid Right" = if_else(
+          `PCCC Mid Value` > 0.5,
+          `PCCC Mid`,
+          NA
+        ),
         "PCCC Min" = if_else( # Combine into one row if close PCCC
             `PCCC` == min(PCCC),
             if_else(
@@ -1215,11 +1225,18 @@ ageplot <- agedata %>%
         position = position_nudge(y = 0.055)
     ) +
     geom_text(
-        aes(label = `PCCC Mid`),
+        aes(label = `PCCC Mid Left`),
         color = "#4d4d4d",
         size = 2,
         hjust = 1,
         position = position_nudge(y = -0.015, x = -0.3)
+    ) +
+    geom_text(
+        aes(label = `PCCC Mid Right`),
+        color = "#4d4d4d",
+        size = 2,
+        hjust = 0,
+        position = position_nudge(y = 0.015, x = -0.3)
     ) +
     stat_summary( # min pccc txt on boxplot
         geom = "text",
@@ -1352,6 +1369,16 @@ for (a in c("adult", "child", "neo")) {
                 PCCC,
                 NA
             ),
+            "PCCC Mid Left" = if_else(
+                `PCCC Mid Value` <= 0.5,
+                `PCCC Mid`,
+                NA
+            ),
+            "PCCC Mid Right" = if_else(
+                `PCCC Mid Value` > 0.5,
+                `PCCC Mid`,
+                NA
+            ),
             "PCCC Min" = if_else( # Combine into one row if close PCCC
                 `PCCC` == min(PCCC),
                 if_else(
@@ -1409,11 +1436,18 @@ for (a in c("adult", "child", "neo")) {
             position = position_nudge(y = -0.09)
         ) +
         geom_text(
-            aes(label = `PCCC Mid`),
+            aes(label = `PCCC Mid Left`),
             color = "#4d4d4d",
             size = 2,
             hjust = 1,
             position = position_nudge(y = -0.025, x = -0.35)
+        ) +
+        geom_text(
+            aes(label = `PCCC Mid Right`),
+            color = "#4d4d4d",
+            size = 2,
+            hjust = 0,
+            position = position_nudge(y = 0.025, x = -0.35)
         ) +
         geom_text(
             aes(label = `PCCC Max`),
