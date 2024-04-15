@@ -1748,11 +1748,7 @@ for (a in c("adult", "neo")) {
     # Create label and ref for age group
     arows <- df %>% filter(is_agreed == TRUE & age == a) %>% nrow
     alabel <- if (a == "neo") "Neonatal" else str_to_title(a)
-    atitle <- if (a == "neo") {
-        paste0("Physician Agreed\n", alabel, " Records\n(n=", arows, ", 100%)")
-    } else {
-        paste0("Physician Agreed ", alabel, " Records (n=", arows, ", 100%)")
-    }
+    atitle <- paste0("Physician Agreed\n", alabel, " Records\n(n=", arows, ", 100%)")
     aref <- str_to_title(a)
     
     # Get unique age range columns
@@ -1924,7 +1920,7 @@ for (a in c("adult", "neo")) {
         plot = ar2plot,
         dpi = 300,
         width = if (a == "adult") 6 else if (a == "neo") 6 else NA,
-        height = if (a == "adult") 8 else if (a == "neo") 2.5 else NA
+        height = if (a == "adult") 3 else if (a == "neo") 2.5 else NA
     )
 }
 ```
