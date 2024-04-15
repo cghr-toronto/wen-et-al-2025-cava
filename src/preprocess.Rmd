@@ -70,6 +70,13 @@ phy_adult_rename <- c(
     adj_icd = "adj_icd_cod"
 )
 
+# Physician age cols
+phy_cols_age <- c(
+    "rowid",
+    "age_value_cod",
+    "age_unit_cod"
+)
+
 # Read data
 df <- list(
     wva2016_icd10 = read_csv(
@@ -79,41 +86,72 @@ df <- list(
     icd10_cghr10 = read_csv("../data/icd10_cghr10_v1.csv"),
     physician = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1_adult_v1.csv",
+            "../tmp/healsl_rd1_adult_v2.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 1, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "../tmp/healsl_rd2_adult_v1.csv",
+            "../tmp/healsl_rd2_adult_v2.csv",
             col_select = all_of(phy_adult_cols)
         ) %>%
             mutate(round = 2, age = "adult") %>%
             rename(all_of(phy_adult_rename)),
         read_csv(
-            "../tmp/healsl_rd1_child_v1.csv",
+            "../tmp/healsl_rd1_child_v2.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd2_child_v1.csv",
+            "../tmp/healsl_rd2_child_v2.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "child") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd1_neo_v1.csv",
+            "../tmp/healsl_rd1_neo_v2.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 1, age = "neo") %>%
             rename(all_of(phy_rename)),
         read_csv(
-            "../tmp/healsl_rd2_neo_v1.csv",
+            "../tmp/healsl_rd2_neo_v2.csv",
             col_select = all_of(phy_cols)
         ) %>%
             mutate(round = 2, age = "neo") %>%
             rename(all_of(phy_rename))
+    ) %>% left_join(
+        bind_rows(
+            read_csv(
+                "../tmp/healsl_rd1_adult_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            ),
+            read_csv(
+                "../tmp/healsl_rd1_child_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            ),
+            read_csv(
+                "../tmp/healsl_rd1_neo_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            ),
+            read_csv(
+                "../tmp/healsl_rd2_adult_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            ),
+            read_csv(
+                "../tmp/healsl_rd2_child_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            ),
+            read_csv(
+                "../tmp/healsl_rd2_neo_age_v2.csv",
+                col_select = all_of(phy_cols_age)
+            )
+        ) %>% rename(
+            age_value = age_value_cod,
+            age_unit = age_unit_cod
+        ),
+        by = "rowid"
     ),
     model_gpt3 = bind_rows(
         read_csv(
@@ -268,6 +306,8 @@ df$physician <- df$physician %>%
         round,
         age,
         age_range,
+        age_value,
+        age_unit,
         sex,
         p1_icd,
         p2_icd,
@@ -355,6 +395,53 @@ for (icol in icd_cols) {
         multiple = "first"
     )
 }
+
+head(out)
+```
+
+### Generalize Age Range
+
+Manually generalize age ranges for each age group:
+
+```{r}
+out <- out %>% mutate(
+    age_range2 = case_when(
+        age_unit == "Days" &
+        age_value >= 0 &
+        age_value <= 1 ~
+            "0-1 Days",
+        age_unit == "Days" &
+        age_value >= 2 &
+        age_value <= 6 ~
+            "2-6 Days",
+        age_unit == "Days" &
+        age_value >= 7 &
+        age_value <= 24 ~
+            "7-24 Days",
+        age_unit == "Years" &
+        age_value >= 12 &
+        age_value <= 24 ~
+            "12-24",
+        age_unit == "Years" &
+        age_value >= 25 &
+        age_value <= 39 ~
+            "25-39",
+        age_unit == "Years" &
+        age_value >= 40 &
+        age_value <= 54 ~
+            "40-54",
+        age_unit == "Years" &
+        age_value >= 55 &
+        age_value <= 69 ~
+            "55-69",
+        .default = NA
+    ),
+    .after = age_range
+) %>%
+    select(
+        -age_value,
+        -age_unit
+    )
 
 head(out)
 ```

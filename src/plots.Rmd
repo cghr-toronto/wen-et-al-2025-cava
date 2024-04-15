@@ -152,6 +152,7 @@ calc_by <- function(
         by_sex = TRUE,
         by_cod = TRUE,
         by_age_range = TRUE,
+        by_age_range2 = TRUE,
         ...
     ) {
     out <- list()
@@ -322,7 +323,7 @@ calc_by <- function(
         }
     }
     
-    # Calc metric by age range
+    # Calc metric by detailed age range
     if (by_age_range) {
         
         # Get unique age ranges
@@ -340,6 +341,43 @@ calc_by <- function(
                 )
                 metric_name <- sprintf(
                     "%s %s Age Agree %s", name, str_to_title(a), ar
+                )
+                
+                # Calc metric for cod
+                if (nrow(df_filter) > 0) {
+                    out[[metric_name]] <- calc_per_model(
+                        actual = df_filter %>%
+                            pull(physician_cghr10),
+                        pred = df_filter %>%
+                            select(ends_with("_cghr10"), -physician_cghr10),
+                        func = func,
+                        ...
+                    ) %>% rename(
+                         {{ metric_name }} := Metric
+                    )
+                }
+            }
+        }
+    }
+    
+    # Calc metric by general age range
+    if (by_age_range2) {
+        
+        # Get unique age ranges
+        age_ranges <- df %>%
+            pull(age_range2) %>%
+            unique
+        
+        # Calc metric by age range
+        for (a in c("adult", "child", "neo")) {
+            for (ar in age_ranges) {
+                
+                # Filter for age range
+                df_filter <- df %>% filter(
+                    age_range2 == ar & is_agreed == TRUE & age == a
+                )
+                metric_name <- sprintf(
+                    "%s %s Age2 Agree %s", name, str_to_title(a), ar
                 )
                 
                 # Calc metric for cod
@@ -398,6 +436,16 @@ df <- raw_df %>% mutate(
         !str_detect(age_range, "Year|Years|Day|Days|month|Months|week|Weeks"),
         paste0(age_range, " Years"),
         age_range
+    ),
+    "age_range2" = str_to_title(str_replace(
+        age_range2,
+        "\\s*\\(.*\\)",
+        ""
+    )),
+    "age_range2" = if_else(
+        !str_detect(age_range2, "Year|Years|Day|Days|month|Months|week|Weeks"),
+        paste0(age_range2, " Years"),
+        age_range2
     )
 )
 df
@@ -1499,7 +1547,7 @@ for (a in c("adult", "child", "neo")) {
 }
 ```
 
-#### Age Range Performance
+#### Detailed Age Range Performance
 
 Display a plot for each age group of performance for physician agreed records by age ranges.
 
@@ -1690,9 +1738,202 @@ for (a in c("adult", "child", "neo")) {
 }
 ```
 
+#### General Age Range Performance
+
+Display a plot for each age group of performance for physician agreed records by age ranges.
+
+```{r}
+for (a in c("adult", "neo")) {
+    
+    # Create label and ref for age group
+    arows <- df %>% filter(is_agreed == TRUE & age == a) %>% nrow
+    alabel <- if (a == "neo") "Neonatal" else str_to_title(a)
+    atitle <- if (a == "neo") {
+        paste0("Physician Agreed\n", alabel, " Records\n(n=", arows, ", 100%)")
+    } else {
+        paste0("Physician Agreed ", alabel, " Records (n=", arows, ", 100%)")
+    }
+    aref <- str_to_title(a)
+    
+    # Get unique age range columns
+    arange_col <- out %>% select(starts_with(sprintf(
+            "PCCC %s Age2 Agree ",
+            aref
+        ))) %>%
+        names
+    
+    # Create age range with counts
+    arange_remap <- list()
+    arange_counts <- list()
+    for (ar_col in arange_col) {
+        
+        # Get cod without prefix
+        ar <- gsub(sprintf("PCCC %s Age2 Agree ", aref), "", ar_col)
+        
+        # Calc num and perc cases for age range
+        narange <- df %>% filter(age_range2 == ar & is_agreed == TRUE & age == a) %>% nrow
+        parange <- (narange / arows) * 100
+        parange_label <- if (round(parange) >= 1) round(parange) else "<1"
+        
+        # Add label for age ranges
+        arange_remap[[ar]] <- paste0(
+            ar,
+            "\n(n=", narange, ", ", parange_label, "%)"
+        )
+        
+        # Store age range count data
+        arange_counts[[ar]] <- narange
+    }
+    
+    # Prepare boxplot data
+    ar2data <- out %>%
+        select(
+            Model,
+            starts_with(sprintf("PCCC %s Age2 Agree", aref))
+        ) %>%
+        rename_at(
+             vars(-Model),
+             ~gsub(sprintf("PCCC %s Age2 Agree ", aref), "", .)
+        ) %>%
+        filter(!str_detect(Model, "&")) %>% # remove multi models
+        pivot_longer( # transform to long format
+            cols = -Model,
+            names_to = "Age Range",
+            values_to = "PCCC"
+        ) %>%
+        mutate( # rename cod with counts
+            "Age Range" = recode(`Age Range`, !!!arange_remap)
+        ) %>%
+        group_by(`Age Range`) %>%
+        mutate( # Make values less than 0 equal to 0
+            PCCC = if_else(PCCC <= 0, 0, PCCC)
+        ) %>%
+        mutate( # Add min, mid, and max model names to label
+            "PCCC Min" = if_else(
+                PCCC <= min(PCCC) + 0.05,
+                paste0(
+                    Model,
+                    if_else(round(PCCC, 2) != round(min(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+                ),
+                NA
+            ),
+            "PCCC Max" = if_else(
+                PCCC >= max(PCCC) - 0.05,
+                paste0(
+                    Model,
+                    if_else(round(PCCC, 2) != round(max(PCCC), 2), paste0(" (", round(PCCC, 2), ")"), "")
+                ),
+                NA
+            ),
+            "PCCC Mid" = if_else(
+                is.na(`PCCC Min`) & is.na(`PCCC Max`),
+                paste0(Model, "\n(", round(PCCC, 2), ")"),
+                NA
+            ),
+            "PCCC Min" = if_else( # Combine into one row if close PCCC
+                `PCCC` == min(PCCC),
+                if_else(
+                    sum(!is.na(`PCCC Min`)) > 1,
+                    paste0(na.omit(`PCCC Min`), collapse = "\n"),
+                    paste0(
+                        str_replace(na.omit(`PCCC Min`), "\\s*\\(.*\\)", ""),
+                        collapse = "\n"
+                    )
+                ),
+                NA
+            ),
+            "PCCC Max" = if_else(
+                `PCCC` == max(PCCC),
+                if_else(
+                    sum(!is.na(`PCCC Max`)) > 1,
+                    paste0(na.omit(`PCCC Max`), collapse = "\n"),
+                    paste0(str_replace(na.omit(`PCCC Max`), "\\s*\\(.*\\)", ""),
+                           collapse = "\n")
+                ),
+                NA
+            )
+        )
+    
+    # Create cod order based on max pccc
+    ar2order <- ar2data %>%
+        group_by(`Age Range`) %>%
+        summarise("PCCC Max Value" = max(PCCC, na.rm = TRUE)) %>%
+        select(`Age Range`, `PCCC Max Value`) %>%
+        arrange(desc(`PCCC Max Value`)) %>%
+        pull(`Age Range`)
+    ardata$`Age Range` <- factor(ardata$`Age Range`, levels = rev(ar2order))
+    
+    # Plot boxplot
+    ar2plot <- ar2data %>%
+        ggplot(aes(x = `Age Range`, y = PCCC)) +
+        geom_boxplot(
+            linewidth = 0.5,
+            width = 0.25
+        ) +
+        geom_text(
+            aes(label = `PCCC Min`),
+            color = "#4d4d4d",
+            size = 2.5,
+            hjust = 1,
+            position = position_nudge(y = -0.08)
+        ) +
+        geom_text(
+            aes(label = `PCCC Max`),
+            color = "#4d4d4d",
+            size = 2.5,
+            hjust = 0,
+            position = position_nudge(y = 0.08)
+        ) +
+        stat_summary( # min pccc txt on boxplot
+            geom = "text",
+            fun = min,
+            aes(label = sprintf("%1.2f", after_stat(y))),
+            position = position_nudge(y = -0.04),
+            size = 3
+        ) +
+        stat_summary( # max pccc txt on boxplot
+            geom = "text",
+            fun = max,
+            aes(label = sprintf("%1.2f", after_stat(y))),
+            position = position_nudge(y = 0.04),
+            size = 3
+        ) +
+        labs(
+            x = atitle,
+            y = "PCCC (0=Low, 1=High)"
+        ) +
+        ylim(0.1, 1) +
+        coord_flip() +
+        theme_minimal() +
+        theme(
+            panel.grid = element_blank(),
+            axis.line = element_blank(),
+            axis.line.y = element_blank(),
+            axis.title.x = element_text(margin = margin(t = 10)),
+            axis.title.y = element_text(margin = margin(r = 10)),
+            axis.line.x = element_line(
+                color = "black",
+                arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
+            )
+        )
+    
+    # Save the plot
+    print(ar2plot)
+    ggsave(
+        sprintf("../manuscript/fig-perf-agerange2-%s.pdf", a),
+        plot = ar2plot,
+        dpi = 300,
+        width = if (a == "adult") 6 else if (a == "neo") 6 else NA,
+        height = if (a == "adult") 8 else if (a == "neo") 2.5 else NA
+    )
+}
+```
+
 #### COD Performance
 
 Plot model performance for physician agreed records by cause of death category.
+
+Remove causes of death with less than 10 samples.
 
 ```{r}
 for (a in c("adult", "child", "neo")) {
