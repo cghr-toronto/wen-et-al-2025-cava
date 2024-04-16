@@ -434,6 +434,9 @@ out <- out %>% mutate(
         age_value >= 55 &
         age_value <= 69 ~
             "55-69",
+        age_unit == "Years" &
+        age_value >= 70 ~
+            "70+",
         .default = NA
     ),
     .after = age_range
