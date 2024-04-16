@@ -450,6 +450,11 @@ The datasets supporting the conclusions of this article are included within the 
 \clearpage
 \begin{appendices}
 
+% Fix figure hyperrefs for appendix
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{\thesection\arabic{figure}}
+\renewcommand{\theHfigure}{\thesection\arabic{figure}}
+
 %\section{Section title of first appendix}\label{secA1}
 
 %An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
