@@ -1972,6 +1972,22 @@ for (a in c("adult", "child", "neo")) {
         cod_counts[[cod]] <- ncod
     }
     
+    # Get cods with less than 10 samples
+    cod_low_counts <- cod_counts[cod_counts < 10]
+    cod_low_perc <- sapply(cod_low_counts, function(x) {
+        xprop <- (x / arows) * 100
+        if (xprop < 1) {
+            return("<1")
+        } else {
+            return(as.character(round(xprop)))
+        }
+    })
+    cod_low_label <- paste0(
+        names(cod_low_counts),
+        " (n=", cod_low_counts, ", ", cod_low_perc, "%)",
+        collapse = ", "
+    )
+    
     # Prepare boxplot data
     coddata <- out %>%
         select(
@@ -2039,6 +2055,9 @@ for (a in c("adult", "child", "neo")) {
                 ),
                 NA
             )
+        ) %>%
+        filter( # remove CODs with <10 samples
+            !str_detect(COD, paste0("^", names(cod_low_counts), collapse = "|"))
         )
     
     # Create cod order based on max pccc
@@ -2087,7 +2106,8 @@ for (a in c("adult", "child", "neo")) {
         ) +
         labs(
             x = atitle,
-            y = "PCCC (0=Low, 1=High)"
+            y = "PCCC (0=Low, 1=High)",
+            caption = paste0("CODs removed (n<10): ", cod_low_label, ".")
         ) +
         ylim(-0.3, 1.3) +
         coord_flip() +
@@ -2101,7 +2121,8 @@ for (a in c("adult", "child", "neo")) {
             axis.line.x = element_line(
                 color = "black",
                 arrow = grid::arrow(length = unit(0.2, "cm"), ends = "both")
-            )
+            ),
+            plot.caption = element_text(size = 6, face = "italic")
         )
     
     # Save the plot
