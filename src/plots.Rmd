@@ -2149,3 +2149,12 @@ for (a in c("adult", "child", "neo")) {
     )
 }
 ```
+
+#### COD Sensitivty and Specificity
+
+Create heat map of sensitivity and specificity for each cause of death by model.
+
+Remove causes of death with less than 10 samples.
+
+```{r}
+```
