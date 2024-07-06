@@ -367,7 +367,7 @@ This section discusses and summarizes the results from Section \ref{results}. Ad
 
 This section identifies advantages of performant models for assigning CODs. Section \ref{discuss-adv-cod} details the strategic use of models for particular CODs. Section \ref{discuss-adv-efficient} details the resource efficiency of GPT and InSilicoVA models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured data (e.g. questionnaires) for physician COD assignment.
 
-\subsubsection{Comparable to Physicians for Some Causes of Death}\label{discuss-adv-cod}
+\subsubsection{Performant for Particular Causes of Death}\label{discuss-adv-cod}
 
 At the population level, overall performances for all causes were similar (0.7 $\leq$ CSMF $\leq$ 0.79), but not close ($\geq$0.8  CSMF), to physicians at 0.74-0.79 CSMF. At the individual level, performance by PCCC varies across CODs, and for most CODs, GPT models (GPT-4 and GPT-3) performed better than InSilicoVA and InterVA-5 (Table \ref{tab-perf-geq80}). However, there were CODs where InSilicoVA performed better. For example, neonatal infections at 0.87 PCCC versus 0.23 for GPT-3.5, and adult tuberculosis at 0.72 versus 0.39 for GPT-3.5. For CODs with high performance ($\geq$0.8 PCCC) (Table \ref{tab-perf-geq80}), the results suggest that GPT models (and InSilicoVA for particular CODs) may assign CODs that are close physicians, when physicians would agree on the COD. Thus, when applying models to assign CODs, it may help to target CODs with a combination of models that performed well or close to physician assignment.
 
@@ -455,9 +455,15 @@ This section discusses research opportunities to improve GPT models for assignin
 
 Prompt engineering, the act of designing prompts to guide GPT models for better results \cite{wangPromptEngineeringHealthcare2024}, presents an important research opportunity that may improve performance of GPT models for COD assignment. As mentioned in Section \ref{discuss-limits-data} and exemplified in Appendix \ref{app-misclass}, an analysis of misclassified records may yield insights on adjusting prompts to assign more correct CODs in relation to physicians. In addition, subsequent prompts and examples can be used to add in correctional instructions and refine results, while additional information from the questionnaire and physician VA manuals may add better context \cite{meskoPromptEngineeringImportant2023}. Sensitivity analyses may be conducted to assess the effects on performance and consistency of results from modified prompts on a COD basis. GPT models may also be customized to specific domains or contexts, where objectives, behaviours, extra data, privacy, and evaluation tests can be adjusted to produce custom models that perform better in targeted domains or circumstances \cite{almasreDevelopmentEvaluationCustom2024}.
 
-\subsubsection{Verbal Autopsy Integration}\label{discuss-opp-vaint}
+\subsubsection{Computer Assisted Verbal Autopsy}\label{discuss-opp-vaint}
 
-Physician assisted verbal autopsy coding.
+Another research opportunity is in the integration of GPT, InterVA-5, and InSilicoVA models into VA systems to assist physicians in COD assignment. In dual-coded VA systems (described in Section \ref{methods-data}), two physicians are randomly assigned to each record and require second inspections of each other's assignment (reconciliation) and evaluation by a third more senior physician if their assignments do not agree. As mentioned in Section \ref{discuss-adv-efficient}, suggestion of alternative assignments from GPT and InSilicoVA models potentially reduces the disagreement between physicians, and ill-defined records, while allowing physicians to focus on more difficult records. Thus, model suggestions can be integrated into VA systems by presenting model suggestions to physicians after their initial COD assignment, which allows them to consider alternative assignments and possibly revise their assignments based on the suggestions (Figure \ref{fig-discuss-phyassist}). Our future work will assess the effects of these model suggestions on physician assignment outcomes (e.g. increase in agreed records, reduction of ill-defined deaths). In preparation, we have integrated GPT-4, InterVA-5, and InSilicoVA model suggestions into our HEAL-SL study for after survey round 2 \cite{njalauniversityHealthySierraLeone2023}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.98\textwidth]{fig-discuss-phyassist.pdf}
+    \caption{Addition of model suggestions into physician assignment process. GPT, InterVA-5, and InSilicoVA models can suggest COD assignments to consider, providing the option to revise or proceed with their initial assignment. The additional consideration potentially reduces disagreement between physicians and ill-defined deaths.}\label{fig-discuss-phyassist}
+\end{figure}
 
 \section{Conclusion}\label{conclude}
 
