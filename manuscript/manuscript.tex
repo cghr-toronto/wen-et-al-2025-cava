@@ -190,7 +190,7 @@ In 2019, 41 million people die prematurely from noncommunicable diseases every y
 
 VA involves two major components: survey and COD assignment \cite{worldhealthorganizationVerbalAutopsyStandards2023,chandramohanEstimatingCausesDeath2021,worldhealthorganizationVerbalAutopsyStandards2007}. In the survey component, trained lay surveyors interview those familiar with the deceased (e.g. living spouse, children, family, friends) to gather information using standardized questionnaires and open narratives. In the COD assignment component, physicians evaluate information available from the questionnaires and open narratives to assign probable CODs. Although VA surveys have been an effective alternative to collect mortality data at scale (e.g. less than \$3 USD per house in India \cite{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), COD assignment has been criticized to be expensive and difficult to reproduce due to reliance on physician assignment \cite{mccormickProbabilisticCauseofDeathAssignment2016b,morrisFactorsAssociatedPhysician2010,solemanVerbalAutopsyCurrent2006}. As an alternative to physician assignment, computer models, such as InterVA \cite{byassIntegratedApproachProcessing2019} and InSilicoVA \cite{mccormickProbabilisticCauseofDeathAssignment2016b}, have recently been studied to automatically assign CODs with performances close to physicians at the population level, but poor performances at the individual level \cite{jhaAutomatedPhysicianAssignment2019,leitaoComparisonPhysiciancertifiedVerbal2014,desaiPerformanceFourComputercoded2014,tungaVerbalAutopsyModels2021,otiVerbalAutopsyInterpretation2010}. These computer models often utilized data from the structured questionnaire, but often omit the free-text open narrative, which misses latent information, such as chronology or health-seeking behaviors, that may potentially help models perform better than using the questionnaire alone \cite{jebleeAutomaticallyDeterminingCause2019,blancoExtractingCauseDeath2021,kingQualityDiagnosticValue2016}.
 
-Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023a}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
+Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \cite{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. On November 30, 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \cite{wuBriefOverviewChatGPT2023}. On March 14, 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \cite{openaiGPT4TechnicalReport2023}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
 
 \section{Methods}\label{methods}
 
@@ -214,7 +214,7 @@ Four computer models were used to assign COD for each of the 6939 physician agre
 
 \subsubsection{Overview of GPT-3.5/4, InterVA-5, and InSilicoVA}\label{methods-models-overview}
 
-GPT-3.5 \cite{brownLanguageModelsAre2020} and GPT-4 \cite{openaiGPT4TechnicalReport2023a} are LLMs that utilize deep neural networks with transformer architectures \cite{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \cite{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in GPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \cite{wuBriefOverviewChatGPT2023}. GPT-3.5 and GPT-4 were instructed with text prompts to assign CODs based on the open narrative. InterVA-5 and InSilicoVA are widely used and studied standard statistical models \cite{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} for COD assignment in VAs under the openVA framework \cite{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \cite{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \cite{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \cite{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \cite{mccormickProbabilisticCauseofDeathAssignment2016b}. For assigning CODs, GPT-3.5 and GPT-4 require prompts containing conversation-like textual instructions as input, while InterVA-5 and InSilicoVA require structured symptom and associated sociodemographic data as input. 
+GPT-3.5 \cite{brownLanguageModelsAre2020} and GPT-4 \cite{openaiGPT4TechnicalReport2023} are LLMs that utilize deep neural networks with transformer architectures \cite{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \cite{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in GPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \cite{wuBriefOverviewChatGPT2023}. GPT-3.5 and GPT-4 were instructed with text prompts to assign CODs based on the open narrative. InterVA-5 and InSilicoVA are widely used and studied standard statistical models \cite{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} for COD assignment in VAs under the openVA framework \cite{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \cite{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \cite{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \cite{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \cite{mccormickProbabilisticCauseofDeathAssignment2016b}. For assigning CODs, GPT-3.5 and GPT-4 require prompts containing conversation-like textual instructions as input, while InterVA-5 and InSilicoVA require structured symptom and associated sociodemographic data as input. 
 
 \subsubsection{Input Data and Preprocessing}\label{methods-models-input}
 
@@ -365,7 +365,7 @@ This section discusses and summarizes the results from Section \ref{results}. Ad
 
 \subsection{Advantages}\label{discuss-adv}
 
-This section identifies advantages of performant models for assigning CODs. Section \ref{discuss-adv-cod} details the strategic use of models for particular CODs. Section \ref{discuss-adv-efficient} details the resource efficiency of GPT and InSilicoVA models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured data (e.g. questionnaires) for physician COD assignment.
+This section identifies advantages of performant models for assigning CODs. Section \ref{discuss-adv-cod} details the strategic use of models for particular CODs. Section \ref{discuss-adv-hscav} details the resource efficiency of GPT and InSilicoVA models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured data (e.g. questionnaires) for physician COD assignment.
 
 \subsubsection{Performant for Particular Causes of Death}\label{discuss-adv-cod}
 
@@ -398,7 +398,7 @@ Across age ranges, GPT and InSilicoVA models had performances below 0.8 PCCC, wh
     Injuries & 135 (5\%) & GPT-4 & 0.95\\
     Diarrhoeal diseases & 175 (7\%) & GPT-4 & 0.91\\
     Epilepsy, leukaemia, and\\other noncommunicable diseases & 114 (4\%) & GPT-3.5 & 0.89\\
-    Penumonia & 81 (3\%) & InSilicoVA & 0.8\\
+    Pneumonia & 81 (3\%) & InSilicoVA & 0.8\\
 
     \midrule
     \multicolumn{3}{l}{Neonatal (n=477, 99 (21\%) $\geq$ 0.8 PCCC)}\\
@@ -411,9 +411,9 @@ Across age ranges, GPT and InSilicoVA models had performances below 0.8 PCCC, wh
     \footnotetext{Note: Best models sorted from highest to lowest PCCC per age group.}
 \end{table}
 
-\subsubsection{Resource Efficient}\label{discuss-adv-efficient}
+\subsubsection{Highly Scalable and Available}\label{discuss-adv-hscav}
 
-The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models can offer more alternative COD assignments for physicians to consider, \cite{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement in physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA had no costs on 6939 physician agreed records \cite{openaiPricing2024}. These costs are likely lower than physicians (e.g. less than \$3 USD per house in India \cite{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while over 10,000 records can be coded in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, care needs to be taken to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-perf-geq80}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention For example, physicians can simply check cases, such as road traffic injury where models performed well at 0.84 PCCC, while spending more time on cases that related to acute respiratory infections, where the models performed poorly at 0.62 PCCC (Figure \ref{fig-perf-cod-adult}).
+The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models can offer more alternative COD assignments for physicians to consider, \cite{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement in physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA had no costs on 6939 physician agreed records \cite{openaiPricing2024}. These costs are likely lower than physicians (e.g. less than \$3 USD per house in India \cite{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while over 10,000 records can be coded in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, care needs to be taken to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-perf-geq80}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention For example, physicians can validate cases, such as road traffic injury where models performed well at 0.84 PCCC, while spending more time on cases that related to acute respiratory infections, where the models performed poorly at 0.62 PCCC (Figure \ref{fig-perf-cod-adult}). Lastly, as models can assign CODs on-demand, there is potential for models to provide CODs during the data collection process, and for GPT models to guide the surveyor to ask additional questions for improving narrative quality.
 
 \subsubsection{Natural Language Flexibility}\label{discuss-adv-nlf}
 
@@ -457,17 +457,18 @@ Prompt engineering, the act of designing prompts to guide GPT models for better 
 
 \subsubsection{Computer Assisted Verbal Autopsy}\label{discuss-opp-vaint}
 
-Another research opportunity is in the integration of GPT, InterVA-5, and InSilicoVA models into VA systems to assist physicians in COD assignment. In dual-coded VA systems (described in Section \ref{methods-data}), two physicians are randomly assigned to each record and require second inspections of each other's assignment (reconciliation) and evaluation by a third more senior physician if their assignments do not agree. As mentioned in Section \ref{discuss-adv-efficient}, suggestion of alternative assignments from GPT and InSilicoVA models potentially reduces the disagreement between physicians, and ill-defined records, while allowing physicians to focus on more difficult records. Thus, model suggestions can be integrated into VA systems by presenting model suggestions to physicians after their initial COD assignment, which allows them to consider alternative assignments and possibly revise their assignments based on the suggestions (Figure \ref{fig-discuss-phyassist}). Our future work will assess the effects of these model suggestions on physician assignment outcomes (e.g. increase in agreed records, reduction of ill-defined deaths). In preparation, we have integrated GPT-4, InterVA-5, and InSilicoVA model suggestions into our HEAL-SL study for after survey round 2 \cite{njalauniversityHealthySierraLeone2023}.
+Another research opportunity is in the integration of GPT, InterVA-5, and InSilicoVA models into VA systems to assist physicians in COD assignment. In dual-coded VA systems (described in Section \ref{methods-data}), two physicians are randomly assigned to each record and require second inspections of each other's assignment (reconciliation) and evaluation by a third more senior physician if their assignments do not agree. As mentioned in Section \ref{discuss-adv-hscav}, suggestion of alternative assignments from GPT and InSilicoVA models potentially reduces the disagreement between physicians, and ill-defined records, while allowing physicians to focus on more difficult records. Thus, model suggestions can be integrated into VA systems by presenting model suggestions to physicians after their initial COD assignment, which allows them to consider alternative assignments and possibly revise their assignments based on the suggestions (Figure \ref{fig-discuss-phyassist}). Our future work will be a first step in computer assisted verbal autopsy, assessing the effects of these model suggestions on physician assignment outcomes (e.g. increase in agreed records, reduction of ill-defined deaths). In preparation, we have integrated GPT-4, InterVA-5, and InSilicoVA model suggestions into our HEAL-SL study for after survey round 2 \cite{njalauniversityHealthySierraLeone2023}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.98\textwidth]{fig-discuss-phyassist.pdf}
-    \caption{Addition of model suggestions into physician assignment process. GPT, InterVA-5, and InSilicoVA models can suggest COD assignments to consider, providing the option to revise or proceed with their initial assignment. The additional consideration potentially reduces disagreement between physicians and ill-defined deaths.}\label{fig-discuss-phyassist}
+    \caption{Addition of model suggestions into the physician assignment process. At step 2, GPT, InterVA-5, and InSilicoVA models can suggest COD assignments to consider, providing the option in step 2b to revise or proceed with their initial assignment. The additional consideration potentially reduces disagreement between physicians and ill-defined deaths.}\label{fig-discuss-phyassist}
 \end{figure}
 
 \section{Conclusion}\label{conclude}
 
-TO DO.
+This study evaluates the performance of GPT-3.5, GPT-4, InterVA-5, and InSilicoVA models compared to physicians for assigning CODs for 6939 VA records in Sierra Leone (2019-2022). At the population level, all models had CSMF accuracies of 0.7-0.79. At the individual level, GPT-4 had the best performance (0.61 PCCC), followed by GPT-3.5 (0.58 PCCC), InSilicoVA (0.44 PCCC), and InterVA-5 (0.45 PCCC). When evaluating performance by COD, 7 of 19, 4 of 10, and 1 of 7 adult (12-69 years), child (28 days to 11 years),
+and neonatal (under 28 days) CODs respectively had models with $\geq$0.8 PCCC (see Table \ref{tab-perf-geq80}). Performance decreased from 0.72 to 0.59 PCCC as adults aged, and increased from 0.5 to 0.7 PCCC as children and neonates developed. Thus, GPT and InSilicoVA models were comparable to physicians for particular CODs (e.g. maternal conditions, injuries, diarrhoeal diseases, pneumonia), but not across age ranges. Advantages of GPT (and InSilicoVA for some CODs) models include being highly scalable and available, which allows the suggestion of multiple alternative COD assignments, and reduction of time spent on non-complex cases to assist physicians in COD assignment. In addition, GPT models provide flexible natural language input and output, capturing latent patterns (e.g. health-seeking and social issues) that potentially lead to their overall high performance compared to InterVA-5 and InSilicoVA. However, GPT models do not always assign the same COD for the same record on multiple runs, are trained on data from a specific time period, and require large computing infrastructure, leading to disadvantages in reliability of COD assignments, timeliness of up-to-date information, and data privacy issues. Limitations of this study were small sample sizes in relation to rarer CODs and other national level studies, need for more comprehensive exploration of disagreed and misclassified records, and lack of experimentation of model parameters, output consistency, and multiple COD assignments. Research opportunities include refining GPT models using prompt engineering and custom models, and future work towards computer assisted verbal autopsy, where GPT and other models are used to assist physician COD assignment by offering multiple alternative assignments, improving physician agreement on COD assignment and reducing ill-defined deaths.
 
 % Conclusions may be used to restate your hypothesis or research question, restate your major findings, explain the relevance and the added value of your work, highlight any limitations of your study, describe future directions for research and recommendations. 
 
@@ -495,6 +496,8 @@ Additional files were used to supplement this paper:
 % Acknowledgments are not compulsory. Where included they should be brief. Grant or contribution numbers may be acknowledged.
 
 % Please refer to Journal-level guidance for any specific requirements.
+
+TBD.
 
 \section*{Declarations}
 
@@ -532,11 +535,48 @@ Not applicable.
 
 \subsection*{Availability of data and materials}
 
-The datasets supporting the conclusions of this article are included within the article (and its additional files) and on \url{https://openmortality.org}.
+The datasets supporting the conclusions of this article are included within the article (and its additional files), at \url{https://openmortality.org} (available upon request) and at \url{https://github.com/cghr-toronto/healsl-gpt-paper}.
+
+\noindent\\Verbal Autopsy (VA) data by age group and survey rounds 1 and 2:
+
+\begin{itemize}
+    \item Adult VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_adult_v1}
+    \item Adult VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_adult_v1}
+    \item Child VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_child_v1}
+    \item Child VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_child_v1}
+    \item Neonatal VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_neo_v1}
+    \item Neonatal VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_neo_v1}
+\end{itemize}
+
+\noindent\\Narrative data by age group and survey rounds 1 and 2:
+
+\begin{itemize}
+    \item Adult Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_adult_narrative_v1}
+    \item Adult Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_adult_narrative_v1}
+    \item Child Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_child_narrative_v1}
+    \item Child Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_child_narrative_v1}
+    \item Neonatal Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_neo_narrative_v1}
+    \item Neonatal Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_neo_narrative_v1}
+\end{itemize}
+
+\noindent\\Cause of death code mappings to convert between ICD-10, WVA-2016, and CGHR-10 codes:
+
+\begin{itemize}
+    \item ICD-10 to CGHR-10:\\\url{https://openmortality.org/data/cghr10_v1}
+    \item WVA-2016 to ICD-10:\\\url{https://openmortality.org/data/icd10_wva2016_v1}
+\end{itemize}
+
+\noindent\\Result files:
+
+\begin{itemize}
+    \item Model and physician COD assignments:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_cod_v1.csv}
+    \item Metrics for model COD assignments:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_metrics_v1.csv}
+    \item GPT-3.5 repeated runs results in Appendix \ref{app-reprod}:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_rapid_gpt3_sample100_v2b.csv}
+\end{itemize}
 
 \subsection*{Code availability}
 
-The R and Python code is available on \url{https://github.com/cghr-toronto/rapid-paper1}.
+All code for this paper is available at \url{https://github.com/cghr-toronto/healsl-gpt-paper}.
 
 \subsection*{Authors' contributions}
 
