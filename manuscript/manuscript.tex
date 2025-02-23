@@ -127,8 +127,6 @@
 
 \author[1]{\fnm{Rajeev} \sur{Kamadod}}\email{rajeevk@kentropy.com}
 
-\author[1]{\fnm{Cheryl} \sur{Chin}}\email{cheryl.chin@unityhealth.to}
-
 %\equalcont{These authors contributed equally to this work.}
 
 \author[1]{\fnm{Asha} \sur{Behdinan}}\email{asha.behdinan@mail.utoronto.ca}
@@ -263,7 +261,7 @@ InterVA-5 & 0.43 & 0.78 & -\\
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{fig-perf-agegroup.pdf}
-\caption{Model performance by age group for assigning CGHR-10 CODs.}\label{fig-perf-agegroup}
+\caption{Model performance by age group.}\label{fig-perf-agegroup}
 \end{figure}
 
 \subsection{Performance for 3826 Adult Records (12 to 69 years)}\label{results-adult}
@@ -283,7 +281,7 @@ Across the child age ranges, the highest PCCC was observed for GPT-4 at 0.59 and
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{fig-perf-cod-child.pdf}
-\caption{Model performance for child records by CGHR-10 COD.}\label{fig-perf-cod-child}
+\caption{Model performance for child records by COD.}\label{fig-perf-cod-child}
 \end{figure}
 
 \subsection{Performance for 477 Neonatal Records (Under 28 Days)}\label{results-neo}
@@ -293,7 +291,7 @@ GPT-4 had the highest PCCC for 0-6 day and 7-27 day neonatal age ranges at 0.6 a
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{fig-perf-cod-neo.pdf}
-\caption{Model performance for neonatal records by COD. GPT-3.5, GPT-4, InterVA-5, and InSilicoVA model performance for assigning CGHR-10 CODs in the neonatal age group (under 28 years) by COD. PCCC values are sorted by the highest to lowest PCCC for each COD. Only models with PCCC values within .05 of the highest and lowest PCCC are shown. Congenital anomalies and other are not notable due to small sample sizes of 2 and 5 respectively.}\label{fig-perf-cod-neo}
+\caption{Model performance for neonatal records by COD.}\label{fig-perf-cod-neo}
 \end{figure}
 
 \section{Discussion}\label{discuss}
@@ -393,12 +391,12 @@ Prompt engineering, the act of designing prompts to guide GPT models for better 
 
 \subsubsection{Computer Assisted Verbal Autopsy}\label{discuss-opp-vaint}
 
-Another research opportunity is in the integration of GPT, InterVA-5, and InSilicoVA models into VA systems to assist physicians in COD assignment. In dual-coded VA systems (described in Section \ref{methods-data}), two physicians are randomly assigned to each record and require second inspections of each other's assignment (reconciliation) and evaluation by a third more senior physician if their assignments do not agree. As mentioned in Section \ref{discuss-adv-hscav}, suggestion of alternative assignments from GPT and InSilicoVA models potentially reduces the disagreement between physicians, and ill-defined records, while allowing physicians to focus on more difficult records. Thus, model suggestions can be integrated into VA systems by presenting model suggestions to physicians after their initial COD assignment, which allows them to consider alternative assignments and possibly revise their assignments based on the suggestions (Figure \ref{fig-discuss-phyassist}). Our future work will be a first step in computer assisted verbal autopsy, assessing the effects of these model suggestions on physician assignment outcomes (e.g. increase in agreed records, reduction of ill-defined deaths). In preparation, we have integrated GPT-4, InterVA-5, and InSilicoVA model suggestions into our HEAL-SL study for after survey round 2 \citep{njalauniversityHealthySierraLeone2023}.
+Another research opportunity is in the integration of GPT, InterVA-5, and InSilicoVA models into VA systems to assist physicians in COD assignment. In dual-coded VA systems (described in Section \ref{methods-data}), two physicians are randomly assigned to each record and require second inspections of each other's assignment (reconciliation) and evaluation by a third more senior physician if their assignments do not agree. As mentioned in Section \ref{discuss-adv-hscav}, suggestion of alternative assignments from GPT and InSilicoVA models potentially reduces the disagreement between physicians, and ill-defined records, while allowing physicians to focus on more difficult records. Thus, model suggestions can be integrated into VA systems by presenting COD suggestions to physicians after their initial COD assignment, which allows them to consider alternative assignments and possibly revise their assignments based on the suggestions. At step 2 in Figure \ref{fig-discuss-phyassist}, GPT, InterVA-5, and InSilicoVA models can suggest COD assignments to consider, providing the option in step 2b to revise or proceed with their initial assignment. Our future work will be a first step in computer assisted verbal autopsy, assessing the effects of these model suggestions on improve VA data quality (e.g. increase in agreed records, reduction of ill-defined deaths). In preparation, we have integrated GPT-4, InterVA-5, and InSilicoVA model suggestions into our HEAL-SL study after survey round 2 \citep{njalauniversityHealthySierraLeone2023}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{fig-discuss-phyassist.pdf}
-    \caption{Addition of model suggestions into the physician assignment process. At step 2, GPT, InterVA-5, and InSilicoVA models can suggest COD assignments to consider, providing the option in step 2b to revise or proceed with their initial assignment. The additional consideration potentially reduces disagreement between physicians and ill-defined deaths.}\label{fig-discuss-phyassist}
+    \caption{Model suggestions integrated in the physician assignment process.}\label{fig-discuss-phyassist}
 \end{figure}
 
 \section{Conclusion}\label{conclude}
@@ -543,66 +541,66 @@ PJ and PB are the study Principal Investigators. ATA and RK implemented the data
 %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
 %% tables and equations etc.
 
-\section{Case Study Data Exploration}\label{app-data}
+\section{Data Exploration}\label{app-data}
 
 The 6939 physician agreed records were relatively evenly distributed (approximately 40-57\% male and female) for the adult, child, and neonatal age groups in terms of sex (Figure \ref{fig-data-agesex}) with the most records in the 1-5 year (n=1633, 24\%) age range, and the least records in the 10-14 year (n=135, 2\%) and 7-27 day (n=82, 1\%) age ranges (Figure \ref{fig-data-agerange}). The other 15 five-year age ranges within 0 days to 69 years were relatively evenly distributed with approximately 4-6\% of the 6939 records each. The 3826 adult records had most records in the 65-69 year (n=575, 15\%), and the least in the 10-14 year (n=135, 4\%) age ranges, while the other 10 age ranges were relatively evenly distributed at 7-9\% of all records (Figure \ref{fig-data-agerange-adult}). For adult CODs, Malaria (n=799, 21\%) had the highest number of adult records, and cancers (n=49, 1\%), diabetes mellitus (n=27, \textless 1\%), and suicide (n=3, \textless 1\%) had the lowest number adult of adult records, while the other 15 CODs had between 2-11\% of all adult records (Figure \ref{fig-data-cod-adult}). The 2636 child records had most records in the 1-5 year (n=1633, 62\%) age range while the three other age ranges were relatively evenly distributed at 12-14\% of all records (Figure \ref{fig-data-agerange-child}). For child CODs, Malaria (n=1382, 52\%) and other infections (n=667, 25\%) had the highest number of child records, while nutritional deficiencies (n=11, \textless 1\%) and congenital anomalies (n=1, \textless 1\%) had the lowest number of records with the five other CODs between 3-7\% of all child records. The 477 neonatal records had two age ranges with most records in the 0-6 day (n=395, 83\%) age range and the rest in the 7-27 day (n=82, 17\%) age range (Figure \ref{fig-data-agerange-neo}). For neonatal CODs, stillbirth (n=172, 36\%) had the highest number of neonatal records, and ill-defined (n=23, 5\%), other (n=5, 1\%), and congenital anomalies (n=2, \textless 1\%) had the least number of records with the rest of the other three CODs between 15-22\% of all neonatal records (Figure \ref{fig-data-cod-neo}).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-sampling.pdf}
-\caption{HEAL-SL sampling areas and VA records with physician assigned CODs only from 2019-2022.}\label{fig-data-sampling}
+\caption{Case study data sampling areas.}\label{fig-data-sampling}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-agesex.pdf}
-\caption{Number of physician agreed VA records by age groups in Sierra Leone from 2019 to 2022.}\label{fig-data-agesex}
+\caption{All records by age group and five-year age range.}\label{fig-data-agesex}
 \end{figure}
 
 \newpage
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-agerange.pdf}
-\caption{Number of physician agreed VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange}
+\caption{All records by five-year age range.}\label{fig-data-agerange}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-agerange-adult.pdf}
-\caption{Number of physician agreed adult (12 to 69 years) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-adult}
+\caption{Adult records by five-year age range.}\label{fig-data-agerange-adult}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-cod-adult.pdf}
-\caption{Number of physician agreed adult (12 to 69 years) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-adult}
+\caption{Adult records by COD.}\label{fig-data-cod-adult}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-agerange-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-child}
+\caption{Child records by five-year age range.}\label{fig-data-agerange-child}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-cod-child.pdf}
-\caption{Number of physician agreed child (28 days to 11 years) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-child}
+\caption{Child records by COD.}\label{fig-data-cod-child}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-agerange-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) VA records by 5-year age ranges in Sierra Leone from 2019 to 2022.}\label{fig-data-agerange-neo}
+\caption{Neonatal records by five-year age range.}\label{fig-data-agerange-neo}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig-data-cod-neo.pdf}
-\caption{Number of physician agreed neonatal (less than 28 days) VA records by CGHR-10 COD code in Sierra Leone from 2019 to 2022.}\label{fig-data-cod-neo}
+\caption{Neonatal records by COD.}\label{fig-data-cod-neo}
 \end{figure}
 
-\section{Case Study Methods}\label{app-methods}
+\section{Details on Methods}\label{app-methods}
 
 \begin{figure}[H]
 \centering

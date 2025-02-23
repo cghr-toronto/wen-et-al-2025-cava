@@ -623,7 +623,7 @@ metrics <- list()
 
 ### PCCC
 
-Calculate Partial Chance Corrected Concordance (PCCC) to evaluate indivudal performance for each model by age and physician coding stage.
+Calculate Partial Chance Corrected Concordance (PCCC) to evaluate individual performance for each model by age and physician coding stage.
 
 ```{r}
 
