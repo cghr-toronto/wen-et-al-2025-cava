@@ -110,8 +110,14 @@ plot_perf <- function(
         x_title = NULL,
         y_title = NULL,
         text_mid_size = 2,
+        text_mid_vjust = 2.5,
         text_end_size = 3,
         text_hjust = 0.2,
+        add_min_points = F,
+        add_max_points = F,
+        mid_points_size = 1.5,
+        min_points_size = 2,
+        max_points_size,
         x_limits = c(0, 1),
         ...
     ) {
@@ -150,18 +156,7 @@ plot_perf <- function(
     out <- ggplot(df_plot, aes(x = metric, y = .data[[group]])) +
         geom_point( # mid points
             data = df_mids,
-            color = "gray60",
-            size = 1
-        ) +
-        geom_point (# min points
-            data = df_ends,
-            aes(x = min_metric),
-            size = 1.5
-        ) +
-        geom_point (# max points
-            data = df_ends,
-            aes(x = max_metric),
-            size = 1.5
+            size = mid_points_size
         ) +
         geom_segment( # min max lines
             data = df_ends,
@@ -199,6 +194,7 @@ plot_perf <- function(
             data = df_mids,
             aes(label = model_label),
             color = "gray60",
+            vjust = text_mid_vjust,
             max.overlaps = Inf,
             size = text_mid_size
         ) +
@@ -222,6 +218,22 @@ plot_perf <- function(
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank()
         )
+    
+    # Add min and max points
+    if (add_min_points) {
+        out <- out + geom_point( # min points
+            data = df_ends,
+            aes(x = min_metric),
+            size = 2
+        )
+    }
+    if (add_max_points) {
+        out <- out + geom_point( # max points
+            data = df_ends,
+            aes(x = max_metric),
+            size = 2
+        )
+    }
     return(out)
 }
 
@@ -438,6 +450,13 @@ df <- df %>%
 
 ```
 
+## Age Case Count
+
+Count the number and percentage of cases for each age group.
+
+```{r}
+```
+
 ## COD Case Count
 
 Count the number and percentage of cases for each CGHR-10 COD.
@@ -536,6 +555,20 @@ df_long
 
 ```
 
+## PCCC By Age
+
+```{r}
+plot_perf(
+    df_long,
+    calc_pccc,
+    group = "age_name",
+    x_title = "Partial Chance Corrected Concordance (PCCC)",
+    y_title = "Cause of Death",
+    text_mid_size = 2.5,
+    text_mid_vjust = 3
+)
+```
+
 ## PCCC by COD
 
 Age, stage, cod.
@@ -546,6 +579,7 @@ Age, stage, cod.
 plot_perf(
     df_long %>% filter(age == "adult"),
     calc_pccc,
+    group = "cod_name",
     title = paste0("(a) Adult Records (n=", n_adult, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
     y_title = "Cause of Death"
@@ -553,6 +587,7 @@ plot_perf(
     plot_perf(
         df_long %>% filter(age == "child"),
         calc_pccc,
+        group = "cod_name",
         title = paste0("(b) Child Records (n=", n_child, ")"),
         x_title = "Partial Chance Corrected Concordance (PCCC)",
         y_title = "Cause of Death"
@@ -560,6 +595,7 @@ plot_perf(
     plot_perf(
         df_long %>% filter(age == "neo"),
         calc_pccc,
+        group = "cod_name",
         title = paste0("(c) Neonatal Records (n=", n_child, ")"),
         x_title = "Partial Chance Corrected Concordance (PCCC)",
         y_title = "Cause of Death"
@@ -571,7 +607,7 @@ plot_perf(
 
 ```
 
-### CSMF Accuracy
+## CSMF Accuracy
 
 Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model by age and physician coding stage.
 
