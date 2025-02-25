@@ -1,2 +1,5 @@
 install.packages("openVA")
 install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("ggrepel")
+install.packages("patchwork")

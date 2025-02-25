@@ -13,7 +13,10 @@ options(readr.show_col_types = FALSE)
 ```
 
 ```{r, echo=FALSE, eval=FALSE}
-install.packages("tidyverse")
+#install.packages("tidyverse")
+#install.packages("dplyr")
+#install.packages("ggrepel")
+#install.packages("patchwork")
 ```
 
 # Libraries
@@ -22,6 +25,7 @@ install.packages("tidyverse")
 library(tidyverse)
 library(dplyr)
 library(ggrepel)
+library(patchwork)
 ```
 
 ```{r, echo=FALSE}
@@ -33,6 +37,8 @@ cat(paste0("\ntidyverse ", packageVersion("tidyverse")))
 ```
 
 # Functions
+
+## Metric Functions
 
 Functions for PCCC and CSMF Accuracy.
 
@@ -87,6 +93,138 @@ calc_csmf_acc <- function(actual, pred) {
     out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }
+```
+
+## Plot Functions
+
+Functions for generating plots.
+
+```{r}
+
+# Plot performance of models
+plot_perf <- function(
+        df_long,
+        f = calc_pccc,
+        group = "cod_name",
+        title = NULL,
+        x_title = NULL,
+        y_title = NULL,
+        text_mid_size = 2,
+        text_end_size = 3,
+        text_hjust = 0.2,
+        x_limits = c(0, 1),
+        ...
+    ) {
+    
+    # Calc metric
+    df_plot <- df_long %>%
+        group_by(.data[[group]], model_name, .drop = F) %>%
+        summarize( # calc pccc
+            metric = f(cod, model_cghr10, N = unique(ncod)[1], ...)
+        ) %>%
+        mutate( # add pccc to model name
+            model_label = paste0(model_name, " (", round(metric, 2), ")")
+        )
+    
+    # Add min and max values for each cause of death
+    df_ends <- df_plot %>%
+        group_by(.data[[group]]) %>%
+        summarize(
+            min_metric = min(metric),
+            max_metric = max(metric),
+            model_min = model_name[which.min(metric)],
+            model_max = model_name[which.max(metric)]
+        ) %>%
+        arrange(max_metric)
+    
+    # Sort cod by max model metric
+    df_plot[[group]] <- factor(df_plot[[group]], levels = df_ends[[group]])
+    df_ends[[group]] <- factor(df_ends[[group]], levels = df_ends[[group]])
+    
+    # Filter out the mid models
+    df_mids <- df_plot %>%
+        left_join(df_ends, by = group) %>%
+        filter(model_name != model_max & model_name != model_min)
+    
+    # Plot metric for each model
+    out <- ggplot(df_plot, aes(x = metric, y = .data[[group]])) +
+        geom_point( # mid points
+            data = df_mids,
+            color = "gray60",
+            size = 1
+        ) +
+        geom_point (# min points
+            data = df_ends,
+            aes(x = min_metric),
+            size = 1.5
+        ) +
+        geom_point (# max points
+            data = df_ends,
+            aes(x = max_metric),
+            size = 1.5
+        ) +
+        geom_segment( # min max lines
+            data = df_ends,
+            aes(
+                x = min_metric,
+                xend = max_metric,
+                y = .data[[group]],
+                yend = .data[[group]]
+            ),
+            linewidth = 0.75
+        ) +
+        geom_text( # min model text
+            data = df_ends,
+            aes(
+                x = min_metric,
+                y = .data[[group]],
+                label = paste0(model_min, " (", round(min_metric, 2), ")")
+            ),
+            hjust = 1 + text_hjust,
+            vjust = 0.5,
+            size = text_end_size
+        ) +
+        geom_text( # max model text
+            data = df_ends,
+            aes(
+                x = max_metric,
+                y = .data[[group]],
+                label = paste0(model_max, " (", round(max_metric, 2), ")")
+            ),
+            hjust = 0 - text_hjust,
+            vjust = 0.5,
+            size = text_end_size
+        ) +
+        geom_text_repel( # mid model text
+            data = df_mids,
+            aes(label = model_label),
+            color = "gray60",
+            max.overlaps = Inf,
+            size = text_mid_size
+        ) +
+        scale_x_continuous(
+            limits = x_limits,
+            expand = expansion(add = 0.2)
+        ) +
+        labs(
+            title = title,
+            x = x_title,
+            y = y_title
+        ) +
+        theme_minimal() +
+        theme(
+            panel.border = element_rect(
+                color = "black",
+                fill = NA,
+                linewidth = 0.5
+            ),
+            legend.position = "none",
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank()
+        )
+    return(out)
+}
+
 ```
 
 # Data
@@ -288,6 +426,18 @@ df <- df %>% filter(is_agreed == TRUE)
 
 ```
 
+## Shorten COD Names
+
+Shorten long names into new lines.
+
+```{r}
+
+# Shorten COD names
+df <- df %>%
+    mutate(physician_cghr10 = str_wrap(physician_cghr10, width = 34))
+
+```
+
 ## COD Case Count
 
 Count the number and percentage of cases for each CGHR-10 COD.
@@ -372,6 +522,14 @@ df_long <- df %>%
 # Calc num of records for each age
 n_all <- df %>% group_by(age) %>% count
 n_adult <- n_all %>% filter(age == "adult") %>% pull(n)
+n_child <- n_all %>% filter(age == "child") %>% pull(n)
+n_neo <- n_all %>% filter(age == "neo") %>% pull(n)
+
+# Calc num of cods for each age
+cod_all <- df_long %>% group_by(age) %>% summarize(n = n_distinct(cod))
+cod_adult <- cod_all %>% filter(age == "adult") %>% pull(n)
+cod_child <- cod_all %>% filter(age == "child") %>% pull(n)
+cod_neo <- cod_all %>% filter(age == "neo") %>% pull(n)
 
 # Preview
 df_long
@@ -383,112 +541,24 @@ df_long
 Age, stage, cod.
 
 ```{r}
-    
-# Calc pccc
-df_plot <- df_long %>%
-    group_by(age_name, cod_name, model_name, .drop = F) %>%
-    summarize( # calc pccc
-        pccc = calc_pccc(cod, model_cghr10, N = unique(ncod)[1])
-    ) %>%
-    mutate( # add pccc to model name
-        model_label = paste0(model_name, " (", round(pccc, 2), ")")
-    ) %>%
-    filter(age_name == "Adult")
 
-# Add min and max values for each cause of death
-df_ends <- df_plot %>%
-    group_by(cod_name) %>%
-    summarize(
-        min_pccc = min(pccc),
-        max_pccc = max(pccc),
-        model_min = model_name[which.min(pccc)],
-        model_max = model_name[which.max(pccc)]
-    ) %>%
-    arrange(max_pccc)
-
-# Sort cod by max model pccc
-df_plot <- df_plot %>%
-    mutate(cod_name = factor(cod_name, levels = df_ends$cod_name))
-df_ends <- df_ends %>%
-    mutate(cod_name = factor(cod_name, levels = df_ends$cod_name))
-
-# Filter out the mid models
-df_mids <- df_plot %>%
-    left_join(df_ends, by = "cod_name") %>%
-    filter(model_name != model_max & model_name != model_min)
-
-# Plot
-ggplot(df_plot, aes(x = pccc, y = cod_name)) +
-    geom_point( # mid points
-        data = df_mids,
-        color = "gray60",
-        size = 1
+# Plot perf for pccc
+plot_perf(
+    df_long %>% filter(age == "adult"),
+    calc_pccc,
+    title = paste0(cod_adult, " Causes of Death for ", n_adult, " Adult Records")
+) /
+    plot_perf(
+        df_long %>% filter(age == "child"),
+        calc_pccc,
+        title = paste0(cod_child, " Causes of Death for ", n_child, " Child Records")
+    ) /
+    plot_perf(
+        df_long %>% filter(age == "neo"),
+        calc_pccc,
+        title = paste0(cod_neo, " Causes of Death for ", n_neo, " Neonatal Records")
     ) +
-    geom_point (# min points
-        data = df_ends,
-        aes(x = min_pccc),
-        size = 1.5
-    ) +
-    geom_point (# max points
-        data = df_ends,
-        aes(x = max_pccc),
-        size = 1.5
-    ) +
-    geom_segment( # min max lines
-        data = df_ends,
-        aes(
-            x = min_pccc,
-            xend = max_pccc,
-            y = cod_name,
-            yend = cod_name
-        ),
-        linewidth = 0.75
-    ) +
-    geom_text( # min model text
-        data = df_ends,
-        aes(
-            x = min_pccc,
-            y = cod_name,
-            label = paste0(model_min, " (", round(min_pccc, 2), ")")
-        ),
-        hjust = 1.2,
-        vjust = 0.5,
-        size = 3
-    ) +
-    geom_text( # max model text
-        data = df_ends,
-        aes(
-            x = max_pccc,
-            y = cod_name,
-            label = paste0(model_max, " (", round(max_pccc, 2), ")")
-        ),
-        hjust = -0.2,
-        vjust = 0.5,
-        size = 3
-    ) +
-    geom_text_repel( # mid model text
-        data = df_mids,
-        aes(label = model_label),
-        color = "gray60",
-        max.overlaps = Inf,
-        size = 2
-    ) +
-    scale_x_continuous(expand = expansion(add = 0.2)) +
-    labs(
-        x = "Partial Chance Corrected Concordance (PCCC)",
-        y = paste0(length(unique(df_plot$cod_name)), " Causes of Death for ", n_adult, " Adult Records")
-    ) +
-    theme_minimal() +
-    theme(
-        panel.border = element_rect(
-            color = "black",
-            fill = NA,
-            linewidth = 0.5
-        ),
-        legend.position = "none",
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()
-    )
+    plot_layout(heights = c(2, 1, 1))
 
 ```
 
