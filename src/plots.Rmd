@@ -546,19 +546,28 @@ Age, stage, cod.
 plot_perf(
     df_long %>% filter(age == "adult"),
     calc_pccc,
-    title = paste0(cod_adult, " Causes of Death for ", n_adult, " Adult Records")
+    title = paste0("(a) Adult Records (n=", n_adult, ")"),
+    x_title = "Partial Chance Corrected Concordance (PCCC)",
+    y_title = "Cause of Death"
 ) /
     plot_perf(
         df_long %>% filter(age == "child"),
         calc_pccc,
-        title = paste0(cod_child, " Causes of Death for ", n_child, " Child Records")
+        title = paste0("(b) Child Records (n=", n_child, ")"),
+        x_title = "Partial Chance Corrected Concordance (PCCC)",
+        y_title = "Cause of Death"
     ) /
     plot_perf(
         df_long %>% filter(age == "neo"),
         calc_pccc,
-        title = paste0(cod_neo, " Causes of Death for ", n_neo, " Neonatal Records")
+        title = paste0("(c) Neonatal Records (n=", n_child, ")"),
+        x_title = "Partial Chance Corrected Concordance (PCCC)",
+        y_title = "Cause of Death"
     ) +
-    plot_layout(heights = c(2, 1, 1))
+    plot_layout(
+        heights = c(2, 1, 1),
+        axis_titles = "collect"
+    )
 
 ```
 
