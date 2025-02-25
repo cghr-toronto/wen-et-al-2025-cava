@@ -450,13 +450,6 @@ df <- df %>%
 
 ```
 
-## Age Case Count
-
-Count the number and percentage of cases for each age group.
-
-```{r}
-```
-
 ## COD Case Count
 
 Count the number and percentage of cases for each CGHR-10 COD.
@@ -476,6 +469,7 @@ df <- df %>%
         by = c("age", "physician_cghr10")
     )
 df %>% select(rowid, age, physician_cghr10, physician_cghr10_n)
+
 ```
 
 # Plots
@@ -544,6 +538,11 @@ n_adult <- n_all %>% filter(age == "adult") %>% pull(n)
 n_child <- n_all %>% filter(age == "child") %>% pull(n)
 n_neo <- n_all %>% filter(age == "neo") %>% pull(n)
 
+# Calc perc of records for each age
+perc_adult <- (n_adult / nrow(df)) * 100
+perc_child <- (n_child / nrow(df)) * 100
+perc_neo <- (n_neo / nrow(df)) * 100
+
 # Calc num of cods for each age
 cod_all <- df_long %>% group_by(age) %>% summarize(n = n_distinct(cod))
 cod_adult <- cod_all %>% filter(age == "adult") %>% pull(n)
@@ -559,11 +558,22 @@ df_long
 
 ```{r}
 plot_perf(
-    df_long,
+    df_long %>%
+        mutate(
+            age_label = case_when(
+                age_name == "Adult"
+                    ~ paste0(age_name, "\n12+ Years\n(n=", n_adult, ", ", round(perc_adult), "%)"),
+                age_name == "Child"
+                    ~ paste0(age_name, "\n28 Days to 11 Years\n(n=", n_child, ", ", round(perc_child), "%)"),
+                age_name == "Neonate"
+                    ~ paste0(age_name, "\n<28 Days\n(n=", n_neo, ", ", round(perc_neo), "%)"),
+                .default = age_name
+            )
+        ),
     calc_pccc,
-    group = "age_name",
+    group = "age_label",
     x_title = "Partial Chance Corrected Concordance (PCCC)",
-    y_title = "Cause of Death",
+    y_title = paste0("Physician Agreed Records (n=", nrow(df), ")"),
     text_mid_size = 2.5,
     text_mid_vjust = 3
 )
@@ -580,7 +590,7 @@ plot_perf(
     df_long %>% filter(age == "adult"),
     calc_pccc,
     group = "cod_name",
-    title = paste0("(a) Adult Records (n=", n_adult, ")"),
+    title = paste0("(a) Adult, 12+ Years (n=", n_adult, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
     y_title = "Cause of Death"
 ) /
@@ -588,7 +598,7 @@ plot_perf(
         df_long %>% filter(age == "child"),
         calc_pccc,
         group = "cod_name",
-        title = paste0("(b) Child Records (n=", n_child, ")"),
+        title = paste0("(b) Child, 28 Days to 11 Years (n=", n_child, ")"),
         x_title = "Partial Chance Corrected Concordance (PCCC)",
         y_title = "Cause of Death"
     ) /
@@ -596,9 +606,10 @@ plot_perf(
         df_long %>% filter(age == "neo"),
         calc_pccc,
         group = "cod_name",
-        title = paste0("(c) Neonatal Records (n=", n_child, ")"),
+        title = paste0("(c) Neonatal, <28 Days (n=", n_child, ")"),
         x_title = "Partial Chance Corrected Concordance (PCCC)",
-        y_title = "Cause of Death"
+        y_title = "Cause of Death",
+        text_mid_vjust = 3
     ) +
     plot_layout(
         heights = c(2, 1, 1),
