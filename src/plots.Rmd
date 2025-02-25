@@ -1,5 +1,5 @@
 ---
-title: "Metrics"
+title: "Plots"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: "Richard Wen <richard.wen@unityhealth.to>"
 ---
@@ -16,10 +16,12 @@ options(readr.show_col_types = FALSE)
 install.packages("tidyverse")
 ```
 
-## Libraries
+# Libraries
 
 ```{r}
 library(tidyverse)
+library(dplyr)
+library(ggrepel)
 ```
 
 ```{r, echo=FALSE}
@@ -30,33 +32,14 @@ cat("\nPackage Versions\n---")
 cat(paste0("\ntidyverse ", packageVersion("tidyverse")))
 ```
 
-## Settings
-
-```{r}
-models_format <- c(
-    "_cghr10" = "",
-    "_" = " & ",
-    "gpt3" = "GPT-3.5",
-    "gpt4" = "GPT-4",
-    "insilicova" = "InSilicoVA",
-    "interva5" = "InterVA-5"
-)
-stage_format <- c(
-    "is_" = "",
-    "recon" = "Reconciliation",
-    "agreed" = "Agreement",
-    "adj" = "Adjudication"
-)
-```
-
-## Functions
+# Functions
 
 Functions for PCCC and CSMF Accuracy.
 
 ```{r}
 
 # Calc PCCC
-calc_pccc <- function(actual, pred, k = 1, N = NULL) {
+calc_pccc <- function(actual, pred, k = 1, N = NULL, assume_zero = T) {
     
     # Calc N num of causes if not known
     N <- if (is.null(N)) length(unique(na.omit(c(actual, pred)))) else N
@@ -68,6 +51,9 @@ calc_pccc <- function(actual, pred, k = 1, N = NULL) {
     
     # Calc PCCC
     out <- (C - (k/N)) / (1 - (k/N))
+    
+    # Scale negative numbers to 0 for easier plotting
+    out <- if (assume_zero & out < 0) 0 else out
     return(out)
 }
 
@@ -101,377 +87,51 @@ calc_csmf_acc <- function(actual, pred) {
     out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
     return(out)
 }
-
-# Bulk calc per model
-calc_per_model <- function(actual, pred, func, name = "Metric", ...) {
-    
-    # Prep data in long format grouped by model
-    out <- pred %>%
-        pivot_longer( # to long format
-            everything(),
-            names_to = "Model",
-            values_to = "prediction"
-        ) %>% group_by(Model)
-    
-    # Calc k if pccc as it is diff for model combos
-    if (identical(func, calc_pccc)) {
-        out <- out %>%
-            summarise(
-                !!name := func(
-                    actual,
-                    prediction,
-                    k = str_count(unique(Model), "_"),
-                    ...
-                )
-            )
-    } else { # otherwise apply func
-        out <- out %>%
-            summarise(
-                !!name := func(
-                    actual,
-                    prediction,
-                    ...
-                )
-            )
-    }
-    
-    # Format display and return
-    out <- out %>%
-        mutate(Model = str_replace_all(Model, models_format)) %>%
-        arrange(across({{name}}, desc))
-    return(out)
-}
-
-# Bulk calc per model based on age, physician coding stage, and cause of death
-calc_by <- function(
-        df,
-        func,
-        name = "Metric",
-        by_age = TRUE,
-        by_stage = TRUE,
-        by_sex = TRUE,
-        by_cod = TRUE,
-        by_age_range = TRUE,
-        by_age_range2 = TRUE,
-        ...
-    ) {
-    out <- list()
-    
-    # Calc overall metric
-    out[[name]] <- calc_per_model(
-        actual = df %>% pull(physician_cghr10),
-        pred = df %>% select(ends_with("_cghr10"), -physician_cghr10),
-        func = func,
-        ...
-    ) %>% rename(
-        {{ name }} := Metric
-    )
-    
-    # Calc metric for va coding stage
-    if (by_stage) {
-        for (stage in c("is_agreed", "is_recon", "is_adj")) {
-            
-            # Filter data for stage
-            df_filter <- df %>% filter(.[[stage]] == TRUE)
-            metric_name = paste0(
-                name,
-                " ",
-                str_replace_all(stage, stage_format)
-            )
-            
-            # Calc metric for stage
-            out[[metric_name]] <- calc_per_model(
-                actual = df_filter %>%
-                    pull(physician_cghr10),
-                pred = df_filter %>%
-                    select(ends_with("_cghr10"), -physician_cghr10),
-                func = func,
-                ...
-            ) %>% rename(
-                 {{ metric_name }} := Metric
-            )
-        }
-    }
-    
-    # Calc pcc for each age group
-    if (by_age) {
-        for (age_group in c("adult", "child", "neo")) {
-            
-            # Filter data for age
-            df_filter <- df %>% filter(age == age_group)
-            metric_name = paste0(
-                name,
-                " ",
-                str_to_title(age_group)
-            )
-        
-            # Calc metric for age
-            out[[metric_name]] <- calc_per_model(
-                actual = df_filter %>%
-                    pull(physician_cghr10),
-                pred = df_filter %>%
-                    select(ends_with("_cghr10"), -physician_cghr10),
-                func = func,
-                ...
-            ) %>% rename(
-                 {{ metric_name }} := Metric
-            )
-            
-            # Calc metric for each stage within age group
-            for (stage in c("is_agreed", "is_recon", "is_adj")) {
-            
-                # Filter data for stage within age group
-                df_filter <- df %>% filter(
-                    .[[stage]] == TRUE & age == age_group
-                )
-                metric_name <- paste0(
-                    name,
-                    " ",
-                    str_to_title(age_group),
-                    " ",
-                    str_replace_all(stage, stage_format)
-                )
-                
-                # Calc metric for stage within age group
-                out[[metric_name]] <- calc_per_model(
-                    actual = df_filter %>%
-                        pull(physician_cghr10),
-                    pred = df_filter %>%
-                        select(ends_with("_cghr10"), -physician_cghr10),
-                    func = func,
-                    ...
-                ) %>% rename(
-                     {{ metric_name }} := Metric
-                )
-            }
-        }
-    }
-    
-    # Calc metric by sex for each age group
-    if (by_sex) {
-        
-        # Calc metric by cod
-        for (a in c("adult", "child", "neo")) {
-            for (sx in c("Male", "Female")) {
-                
-                # Filter data for cod
-                df_filter <- df %>% filter(
-                    sex == sx & is_agreed == TRUE & age == a
-                )
-                metric_name <- sprintf(
-                    "%s %s Sex Agree %s", name, str_to_title(a), sx
-                )
-                
-                # Calc metric for cod
-                if (nrow(df_filter) > 0) {
-                    out[[metric_name]] <- calc_per_model(
-                        actual = df_filter %>%
-                            pull(physician_cghr10),
-                        pred = df_filter %>%
-                            select(ends_with("_cghr10"), -physician_cghr10),
-                        func = func,
-                        ...
-                    ) %>% rename(
-                         {{ metric_name }} := Metric
-                    )
-                }
-            }
-        }
-    }
-    
-    # Calc metric by cause of death for each age group
-    if (by_cod) {
-        
-        # Get unique causes of death
-        causes <- df %>%
-            select(ends_with("_cghr10")) %>%
-            pivot_longer(
-                everything(),
-                names_to = "column",
-                values_to = "cod"
-            ) %>%
-            distinct(cod) %>%
-            filter(!is.na(cod)) %>%
-            pull(cod)
-        
-        # Calc metric by cod
-        for (a in c("adult", "child", "neo")) {
-            for (cod in causes) {
-                
-                # Filter data for cod
-                df_filter <- df %>% filter(
-                    physician_cghr10 == cod & is_agreed == TRUE & age == a
-                )
-                metric_name <- sprintf(
-                    "%s %s COD Agree %s", name, str_to_title(a), cod
-                )
-                
-                # Calc metric for cod
-                if (nrow(df_filter) > 0) {
-                    out[[metric_name]] <- calc_per_model(
-                        actual = df_filter %>%
-                            pull(physician_cghr10),
-                        pred = df_filter %>%
-                            select(ends_with("_cghr10"), -physician_cghr10),
-                        func = func,
-                        ...
-                    ) %>% rename(
-                         {{ metric_name }} := Metric
-                    )
-                }
-            }
-        }
-    }
-    
-    # Calc metric by detailed age range
-    if (by_age_range) {
-        
-        # Get unique age ranges
-        age_ranges <- df %>%
-            pull(age_range) %>%
-            unique
-        
-        # Calc metric by age range
-        for (a in c("adult", "child", "neo")) {
-            for (ar in age_ranges) {
-                
-                # Filter for age range
-                df_filter <- df %>% filter(
-                    age_range == ar & is_agreed == TRUE & age == a
-                )
-                metric_name <- sprintf(
-                    "%s %s Age Agree %s", name, str_to_title(a), ar
-                )
-                
-                # Calc metric for cod
-                if (nrow(df_filter) > 0) {
-                    out[[metric_name]] <- calc_per_model(
-                        actual = df_filter %>%
-                            pull(physician_cghr10),
-                        pred = df_filter %>%
-                            select(ends_with("_cghr10"), -physician_cghr10),
-                        func = func,
-                        ...
-                    ) %>% rename(
-                         {{ metric_name }} := Metric
-                    )
-                }
-            }
-        }
-    }
-    
-    # Calc metric by general age range
-    if (by_age_range2) {
-        
-        # Get unique age ranges
-        age_ranges <- df %>%
-            pull(age_range2) %>%
-            unique
-        
-        # Calc metric by age range
-        for (a in c("adult", "child", "neo")) {
-            for (ar in age_ranges) {
-                
-                # Filter for age range
-                df_filter <- df %>% filter(
-                    age_range2 == ar & is_agreed == TRUE & age == a
-                )
-                metric_name <- sprintf(
-                    "%s %s Age2 Agree %s", name, str_to_title(a), ar
-                )
-                
-                # Calc metric for cod
-                if (nrow(df_filter) > 0) {
-                    out[[metric_name]] <- calc_per_model(
-                        actual = df_filter %>%
-                            pull(physician_cghr10),
-                        pred = df_filter %>%
-                            select(ends_with("_cghr10"), -physician_cghr10),
-                        func = func,
-                        ...
-                    ) %>% rename(
-                         {{ metric_name }} := Metric
-                    )
-                }
-            }
-        }
-    }
-    
-    # Combine all pccc metrics
-    out <- reduce(out,
-        function(x, y) left_join(x, y, by = "Model")
-    ) %>%
-        arrange(across({{ name }}, desc))
-    return(out)
-}
 ```
 
-## Data
+# Data
 
-### Raw Data
+## Raw Data
 
 Load data from `data` folder.
 
 ```{r}
-raw_df <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
+
+# Read preds
+df_raw <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
+
+# Display preds
+cat("Cases: ", nrow(df_raw), "\n")
+print(head(df_raw))
+
 ```
 
-```{r, echo=FALSE}
-cat("Cases: ", nrow(raw_df), "\n")
-print(head(raw_df))
-```
-
-### Clean Labels
-
-Clean `age_range` labels to include only values and unit of measure in titlecase.
-
-```{r}
-df <- raw_df %>% mutate(
-    "age_range" = str_to_title(str_replace(
-        age_range,
-        "\\s*\\(.*\\)",
-        ""
-    )),
-    "age_range" = if_else(
-        !str_detect(age_range, "Year|Years|Day|Days|month|Months|week|Weeks"),
-        paste0(age_range, " Years"),
-        age_range
-    ),
-    "age_range2" = str_to_title(str_replace(
-        age_range2,
-        "\\s*\\(.*\\)",
-        ""
-    )),
-    "age_range2" = if_else(
-        !str_detect(age_range2, "Year|Years|Day|Days|month|Months|week|Weeks"),
-        paste0(age_range2, " Years"),
-        age_range2
-    )
-)
-df
-```
-
-### Physician Cases
+## Physician Cases
 
 Filter for cases that were coded by physicians.
 
 ```{r}
-df <- df %>%
+
+# Filter for phy cases
+df <- df_raw %>%
     filter(!is.na(physician_cghr10) & !is.null(physician_cghr10))
+
+# Preview phy cases
+cat("Non-coded Cases: ", nrow(df_raw) - nrow(df))
+cat("\nPhysician Coded Cases: ", nrow(df))
+df
+
 ```
 
-```{r, echo=FALSE}
-cat("Physician Coded Cases: ", nrow(df))
-print(head(df))
-```
-
-### Combined Models
+## Combined Models
 
 Create model combinations where if any of the models have the physician code, then set the combined model's output for the case to be the physician code. 
 
 ```{r}
+
+# Calc combine preds
 df <- df %>%
-    mutate( # Combine models
+    mutate(
         "gpt3_insilicova_cghr10" = if_else(
             gpt3_cghr10 == physician_cghr10 | 
                 insilicova_cghr10 == physician_cghr10,
@@ -511,9 +171,8 @@ df <- df %>%
             gpt4_cghr10
         )
     )
-```
 
-```{r, echo=FALSE}
+# Display combine preds
 print(head(df %>% select(
     gpt3_insilicova_cghr10,
     gpt4_insilicova_cghr10,
@@ -522,9 +181,10 @@ print(head(df %>% select(
     gpt3_insilicova_interva5_cghr10,
     gpt4_insilicova_interva5_cghr10
 )))
+
 ```
 
-### Prepared Data
+## Inspect Data
 
 Display case counts for raw data and prepared data after combining models and filtering for physician coded cases.
 
@@ -533,7 +193,7 @@ Display case counts for raw data and prepared data after combining models and fi
 cat("\nRaw Data\n--------\n\n")
 
 # Physician info
-raw_physicians <- raw_df$physician_cghr10
+raw_physicians <- df_raw$physician_cghr10
 cat(paste0(
     "Cases (",
     length(unique(na.omit(raw_physicians))), " CODs): ",
@@ -542,7 +202,7 @@ cat(paste0(
 ))
 
 # Physician agreed cases
-raw_physicians_agree <- raw_df %>%
+raw_physicians_agree <- df_raw %>%
     filter(is_agreed == TRUE) %>%
     pull(physician_cghr10)
 cat(paste0(
@@ -553,7 +213,7 @@ cat(paste0(
 ))
 
 # Models cases
-raw_models <- raw_df %>% select(ends_with("_cghr10"), -physician_cghr10)
+raw_models <- df_raw %>% select(ends_with("_cghr10"), -physician_cghr10)
 for (mcol in colnames(raw_models)) {
     m <- raw_models[[mcol]]
     cat(paste0(
@@ -613,36 +273,223 @@ for (mcol in colnames(models_agree)) {
 }
 ```
 
-## Metrics
+# Preparation
 
-Calculate metrics from model outputs compared to physician codes.
+Prepare data for plotting.
+
+## Agreed Cases
+
+Filter for agreed cases only.
 
 ```{r}
-metrics <- list()
+
+# Agreed cases only
+df <- df %>% filter(is_agreed == TRUE)
+
 ```
 
-### PCCC
+## COD Case Count
 
-Calculate Partial Chance Corrected Concordance (PCCC) to evaluate individual performance for each model by age and physician coding stage.
+Count the number and percentage of cases for each CGHR-10 COD.
 
 ```{r}
 
-# Get num of unique causes
-ncauses <- df %>%
-    select(ends_with("_cghr10")) %>%
-    pivot_longer(
-        everything(),
-        names_to = "column",
-        values_to = "cod"
-    ) %>%
-    distinct(cod) %>%
-    filter(!is.na(cod)) %>%
-    pull(cod) %>%
-    length
+# Count cases per cod
+df <- df %>%
+    left_join( # count cases and add as column
+        df %>%
+            group_by(age, physician_cghr10) %>%
+            count(name = "physician_cghr10_n") %>%
+            group_by(age) %>%
+            mutate(
+                physician_cghr10_perc = (physician_cghr10_n / sum(physician_cghr10_n)) * 100
+            ),
+        by = c("age", "physician_cghr10")
+    )
+df %>% select(rowid, age, physician_cghr10, physician_cghr10_n)
+```
 
-# Calc pccc for age, stage, and cod
-metrics$pccc <- calc_by(df, calc_pccc, "PCCC", N = ncauses)
-metrics$pccc
+# Plots
+
+Generate plots from the predictions.
+
+```{r}
+
+# Number of causes for each age group
+ncod_adult <- 19
+ncod_child <- 10
+ncod_neo <- 7
+
+# Model full name
+gpt3_name <- "GPT-3.5"
+gpt4_name <- "GPT-4"
+isva_name <- "InSilicoVA"
+iva5_name <- "InterVA-5"
+
+# Pivot data into long format for calc
+df_long <- df %>%
+    filter( # remove low count cod
+        physician_cghr10_n >= 10
+    ) %>%
+    pivot_longer( # long format
+        ends_with("_cghr10") & !starts_with("physician_"),
+        names_to = "model",
+        values_to = "model_cghr10"
+    ) %>%
+    mutate(
+        model = str_replace( # remove cghr10
+            model,
+            "_cghr10",
+            ""
+        ),
+        model_name = str_replace_all(model, "_", " or ") %>% # use full model names
+            str_replace(., "gpt3", gpt3_name) %>%
+            str_replace(., "gpt4", gpt4_name) %>%
+            str_replace(., "insilicova", isva_name) %>%
+            str_replace(., "interva5", iva5_name),
+        age_name = case_when( # use full age name
+            age == "adult" ~ "Adult",
+            age == "child" ~ "Child",
+            age == "neo" ~ "Neonate",
+            .default = NA
+        ),
+        cod = physician_cghr10,
+        cod_name = paste0(
+            cod,
+            "\n(n=", physician_cghr10_n, ", ", round(physician_cghr10_perc), "%)"
+        ),
+        ncod = case_when( # num of cods for each age group
+            age == "adult" ~ ncod_adult,
+            age == "child" ~ ncod_child,
+            age == "neo" ~ ncod_neo,
+            .default = NA
+        )
+    ) %>%
+    filter( # remove combine models
+        !str_detect(model_name, " or ")
+    )
+
+# Calc num of records for each age
+n_all <- df %>% group_by(age) %>% count
+n_adult <- n_all %>% filter(age == "adult") %>% pull(n)
+
+# Preview
+df_long
+
+```
+
+## PCCC by COD
+
+Age, stage, cod.
+
+```{r}
+    
+# Calc pccc
+df_plot <- df_long %>%
+    group_by(age_name, cod_name, model_name, .drop = F) %>%
+    summarize( # calc pccc
+        pccc = calc_pccc(cod, model_cghr10, N = unique(ncod)[1])
+    ) %>%
+    mutate( # add pccc to model name
+        model_label = paste0(model_name, " (", round(pccc, 2), ")")
+    ) %>%
+    filter(age_name == "Adult")
+
+# Add min and max values for each cause of death
+df_ends <- df_plot %>%
+    group_by(cod_name) %>%
+    summarize(
+        min_pccc = min(pccc),
+        max_pccc = max(pccc),
+        model_min = model_name[which.min(pccc)],
+        model_max = model_name[which.max(pccc)]
+    ) %>%
+    arrange(max_pccc)
+
+# Sort cod by max model pccc
+df_plot <- df_plot %>%
+    mutate(cod_name = factor(cod_name, levels = df_ends$cod_name))
+df_ends <- df_ends %>%
+    mutate(cod_name = factor(cod_name, levels = df_ends$cod_name))
+
+# Filter out the mid models
+df_mids <- df_plot %>%
+    left_join(df_ends, by = "cod_name") %>%
+    filter(model_name != model_max & model_name != model_min)
+
+# Plot
+ggplot(df_plot, aes(x = pccc, y = cod_name)) +
+    geom_point( # mid points
+        data = df_mids,
+        color = "gray60",
+        size = 1
+    ) +
+    geom_point (# min points
+        data = df_ends,
+        aes(x = min_pccc),
+        size = 1.5
+    ) +
+    geom_point (# max points
+        data = df_ends,
+        aes(x = max_pccc),
+        size = 1.5
+    ) +
+    geom_segment( # min max lines
+        data = df_ends,
+        aes(
+            x = min_pccc,
+            xend = max_pccc,
+            y = cod_name,
+            yend = cod_name
+        ),
+        linewidth = 0.75
+    ) +
+    geom_text( # min model text
+        data = df_ends,
+        aes(
+            x = min_pccc,
+            y = cod_name,
+            label = paste0(model_min, " (", round(min_pccc, 2), ")")
+        ),
+        hjust = 1.2,
+        vjust = 0.5,
+        size = 3
+    ) +
+    geom_text( # max model text
+        data = df_ends,
+        aes(
+            x = max_pccc,
+            y = cod_name,
+            label = paste0(model_max, " (", round(max_pccc, 2), ")")
+        ),
+        hjust = -0.2,
+        vjust = 0.5,
+        size = 3
+    ) +
+    geom_text_repel( # mid model text
+        data = df_mids,
+        aes(label = model_label),
+        color = "gray60",
+        max.overlaps = Inf,
+        size = 2
+    ) +
+    scale_x_continuous(expand = expansion(add = 0.2)) +
+    labs(
+        x = "Partial Chance Corrected Concordance (PCCC)",
+        y = paste0(length(unique(df_plot$cod_name)), " Causes of Death for ", n_adult, " Adult Records")
+    ) +
+    theme_minimal() +
+    theme(
+        panel.border = element_rect(
+            color = "black",
+            fill = NA,
+            linewidth = 0.5
+        ),
+        legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+    )
+
 ```
 
 ### CSMF Accuracy
@@ -650,13 +497,12 @@ metrics$pccc
 Calculate Cause Specific Mortality Fraction (CSMF) Accuracy to evaluate population performance for each model by age and physician coding stage.
 
 ```{r}
-metrics$csmf_acc <- calc_by(
-    df,
-    calc_csmf_acc,
-    "CSMF Accuracy",
-    by_cod = FALSE
-)
-metrics$csmf_acc
+
+# Create csmf for each age group
+csmf_adult <- list()
+csmf_child <- list()
+csmf_neo <- list()
+
 ```
 
 ## Plots
