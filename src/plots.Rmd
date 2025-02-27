@@ -525,7 +525,7 @@ raw_models <- df_raw %>% select(ends_with("_cghr10"), -physician_cghr10)
 for (mcol in colnames(raw_models)) {
     m <- raw_models[[mcol]]
     cat(paste0(
-        str_replace_all(mcol, models_format), " Predicted Cases (", 
+        mcol, " Predicted Cases (", 
         length(unique(na.omit(m))), " CODs): ",
         length(m) - sum(is.na(m) | is.null(m)),
         "\n"
@@ -559,7 +559,7 @@ models <- df %>% select(ends_with("_cghr10"), -physician_cghr10)
 for (mcol in colnames(models)) {
     m <- models[[mcol]]
     cat(paste0(
-        str_replace_all(mcol, models_format), " Predicted Cases (", 
+        mcol, " Predicted Cases (", 
         length(unique(na.omit(m))), " CODs): ",
         length(m) - sum(is.na(m) | is.null(m)),
         "\n"
@@ -573,7 +573,7 @@ models_agree <- df %>%
 for (mcol in colnames(models_agree)) {
     m <- models_agree[[mcol]]
     cat(paste0(
-        str_replace_all(mcol, models_format), " Agreed Predicted Cases (", 
+        mcol, " Agreed Predicted Cases (", 
         length(unique(na.omit(m))), " CODs): ",
         length(m) - sum(is.na(m) | is.null(m)),
         "\n"
@@ -931,7 +931,7 @@ fig_pccc <- plot_perf(
         ),
     calc_pccc,
     group = "age_label",
-    x_title = "Partial Chance Corrected Concordance (PCCC, 0=Low, 1=High)",
+    x_title = "PCCC",
     text_mid_vjust = 3,
     sort_group = F,
     x_limits = c(0.2, 0.8),
@@ -965,7 +965,7 @@ fig_pccc_cod_adult <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
-    x_title =  "Partial Chance Corrected Concordance (PCCC, 0=Low, 1=High)",
+    x_title =  "PCCC",
     text_mid_vjust = -1,
     text_scale = 0.8
 )
@@ -995,7 +995,7 @@ fig_pccc_cod_child <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
-    x_title =  "Partial Chance Corrected Concordance (PCCC, 0=Low, 1=High)",
+    x_title = "PCCC",
     text_scale = 0.95
 )
 
@@ -1024,7 +1024,7 @@ fig_pccc_cod_neo <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
-    x_title =  "Partial Chance Corrected Concordance (PCCC, 0=Low, 1=High)",
+    x_title = "PCCC",
     text_mid_vjust = 3,
     text_end_size = 2.25,
     text_scale = 0.95
@@ -1060,7 +1060,7 @@ fig_pccc_age <- plot_perf_trend(
             age_range = str_replace(age_range, " ", "\n") %>%
                 factor(., levels = age_levels)
         ),
-    title = "Partial Chance Corrected Concordance (PCCC, 0=Low, 1=High)",
+    title = "PCCC",
     text_scale = 0.9
 )
 
