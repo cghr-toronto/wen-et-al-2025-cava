@@ -276,7 +276,7 @@ Figure \ref{fig-pccc-cod-adult} shows model performance by PCCC across 17 adult 
 
 \subsection{Performance for 2636 Child Records (28 Days to 11 Years)}\label{results-child}
 
-Figure \ref{fig-pccc-cod-child} presents individual performances for each of the models by 8 child CODs, excluding congenital anomalies due to low sample size (n=1, \textless 1\%). GPT-4 had the highest individual performance for 4 of 8 CODs (0.65-0.94 PCCC), GPT-3.5 for 3 CODs (0.44-0.88 PCCC), and InSilicoVA for 1 COD (0.78 PCCC). InterVA-5 had the lowest performance for 4 of 8 CODs (0.09-0.79 PCCC), InSilicoVA for 3 CODs (0-0.35 PCCC), and GPT-3.5 for 1 COD (0.58 PCCC). 
+Figure \ref{fig-pccc-cod-child} presents individual performances for each of the models by 8 child CODs, excluding congenital anomalies due to low sample size (n=1, \textless 1\%). GPT-4 had the highest individual performance for 4 of 8 CODs (0.65-0.94 PCCC), GPT-3.5 for 3 CODs (0.44-0.88 PCCC), and InSilicoVA for 1 COD (0.78 PCCC). InterVA-5 had the lowest performance for 4 of 8 CODs (0.09-0.79 PCCC), InSilicoVA for 3 CODs (0-0.35 PCCC), and GPT-3.5 for 1 COD (0.58 PCCC). All models had \textgreater 0.7 PCCC for injuries (0.79-0.94 PCCC), and \textless 0.6 PCCC for malaria (0.35-0.54 PCCC) and other infections (0.29-0.44 PCCC). GPT-4 had improvements \textgreater 0.3 PCCC compared to other models for ill-defined CODs (+0.38-0.65 PCCC), and larger improvements over other models for injuries (+0.11-0.15 compared to +0.01-0.04 PCCC).
 
 \begin{figure}[h!]
 \centering
@@ -286,7 +286,7 @@ Figure \ref{fig-pccc-cod-child} presents individual performances for each of the
 
 \subsection{Performance for 477 Neonatal Records (Under 28 Days)}\label{results-neo}
 
-Across 5 neonatal CODs (excluding congenital anomalies and other due to small sizes of 2 (\textless 1\%) and 5 (1\%) respectively), the highest PCCC was observed for GPT-4 for 3 of the 5 CODs (GPT-3.5 identical for prematurity and low birthweight), GPT-3.5 for 2 of the 5 CODs (InSilicoVA identical for stillbirth), and InSilicoVA for neonatal infections (Figure \ref{fig-pccc-cod-neo}). Stillbirth had small differences between minimum and maximum PCCC at 0.07. The other 4 CODs had large differences between minimum and maximum PCCC ranging from 0.46 to 0.64. Each neonatal COD had between 23 (5\%) to 172 (38\%) records, with stillbirth (n=172, 36\%), birth asphyxia and birth trauma (n=103, 22\%), and neonatal infections (n=99, 21\%), and prematurity and low birthweight (n=73, 15\%) making 94\% of all records, while the rest are in ill-defined.
+Model performance across 5 neonatal CODs, excluding congenital anomalies (n=2, \textless 1\%) and other (n=5, 1\%) due to small sample sizes is shown in Figure \ref{fig-pccc-cod-neo}. GPT-4 had the highest individual performance for 3 of 5 CODs (0.00-0.00 PCCC), GPT-3.5 for 2 CODs (0.00-0.00 PCCC), and InSilicoVA for 1 COD (0.00-0.00 PCCC).
 
 \begin{figure}[h!]
 \centering
