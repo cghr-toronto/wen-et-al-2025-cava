@@ -300,56 +300,40 @@ This section discusses and summarizes the results from Section \ref{results}. Ad
 
 \subsection{Advantages}\label{discuss-adv}
 
-This section identifies the advantages of models for assigning CODs. Section \ref{discuss-adv-cod} details the application of models for particular CODs. Section \ref{discuss-adv-hscav} details the resource efficiency of computer models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured questionnaire data for physician COD assignment.
+This section identifies the advantages of models for assigning CODs. Section \ref{discuss-adv-cod} details the application of models for particular CODs and age ranges. Section \ref{discuss-adv-hscav} details the resource efficiency of computer models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured questionnaire data for physician COD assignment.
 
 \subsubsection{Cause and Age Specific Models}\label{discuss-adv-cod}
 
-At the population level, overall performances for all models were similar to physicians (0.74-0.79 CSMF). At the individual level, performance varied across CODs (0-0.99 PCCC). For most CODs, GPT-3.5/GPT-4 performed better than InSilicoVA/InterVA-5 (top PCCC for 15 of 17, 7 of 8, and 4 of 5 adult, child, and neonatal CODs respectively), while, InSilicoVA performed better for particular CODs (road and transport injuries, tuberculosis, pneumonia, and neonatal infections with 0.84, 0.71, 0.78, and 0.86 PCCC respectively). For CODs with high performance ($\geq$0.8 PCCC) (Table \ref{tab-perf-geq80}), the results suggest that GPT models and InSilicoVA may assign CODs that are close physicians, when physicians would agree on the COD. Thus, when applying models to assign CODs, it may help to target CODs with a combination of models that performed well or close to physician assignment.
+At the population level, overall performances for all models were similar to physicians (0.74-0.79 CSMF). At the individual level, performance varied across CODs (0-0.99 PCCC). For most CODs, GPT-3.5/GPT-4 performed better than InSilicoVA/InterVA-5 (top PCCC for 15 of 17, 7 of 8, and 4 of 5 adult, child, and neonatal CODs respectively), while InSilicoVA performed better for particular CODs (road and transport injuries, tuberculosis, pneumonia, and neonatal infections with 0.84, 0.71, 0.78, and 0.86 PCCC respectively). For CODs with high performance (e.g. GPT-3.5/4 with 0.91-0.99 PCCC for maternal conditions, chronic respiratory disease, diabetes melitus, and cancers, InSilicoVA with 0.84 and 0.86 PCCC for road and transport injuries, and neonatal infections), the results suggest that GPT-3.5/4 and InSilicoVA may assign CODs that are very similar to physicians. Thus, it may be beneficial to evaluate performance at the COD level, and apply a combination of models that perform well in comparison to physicians for each COD. Particular attention may be given to the leading causes of death \cite{worldhealthorganizationWorldHealthStatistics2024,worldhealthorganizationCausespecificMortality2000} in which (Table \ref{tab-topcod}).
 
-Across age ranges, all models followed a similar upward trend from 6 months to 14 years of age, and a downward trend from 15-69 years with GPT models having higher performance than InSilicoVA/InterVA-5 models, while more mixed trends were observed from 0 days to 5 months (recall Figure \ref{fig-pccc-age}). For adult age ranges, performance generally decreased as age increased, which suggested that models had difficult assigning CODs for older than younger adults with some improvements after the age of 59. For child and neonatal age ranges, the performance improves drastically as the age increases after 5 months, suggesting less difficulty in COD assignment when children and neonates are more developed. As the models did not perform particularly well (\textgreater 0.8 PCCC) for any particular age range, it may not be suggested to apply specific models to target cases by five-year age range. However, the patterns of increases and decreases of performance in relation to age are useful in comparing expected patterns in well-studied medical literature and knowledge.
+Across age ranges, all models followed a similar upward trend from 6 months to 14 years of age, and a downward trend from 15-69 years with GPT models having higher performance than InSilicoVA/InterVA-5 models, while more mixed trends were observed from 0 days to 5 months (recall Figure \ref{fig-pccc-age}). For adult age ranges, performance generally decreased as age increased, which suggested that models had difficult assigning CODs for older than younger adults with some improvements after the age of 59. For child and neonatal age ranges, the performance improves drastically as the age increases after 5 months, suggesting less difficulty in COD assignment when children and neonates are more developed. As the models did not perform particularly well ($\geq$ 0.8 PCCC) for any specific age range, it is not recommended to apply specific models that target cases by five-year age range. However, the patterns of increases and decreases of performance in relation to age provide insight in comparing expected patterns in well-studied medical literature and knowledge. For example, 
 
 \begin{table}[h]
-    \caption{Models with performances close to physician COD assignment ($\geq$0.8 PCCC) across age groups}\label{tab-perf-geq80}%
+    \caption{Top 10 leading causes of death in 2021.}\label{tab-topcod}%
     \begin{tabular}{@{}llll@{}}
     \toprule
-    \makecell{Cause of Death} & Cases & \makecell{Best Model} & \makecell{PCCC} \\
-    
-    \midrule
-    \multicolumn{3}{l}{Adult (n=3826, 1303 (34\%) $\geq$ 0.8 PCCC)}\\
+    \makecell{Cause of Death} & \makecell{Deaths (68.3M Total)} & \makecell{Best Model} & \makecell{PCCC} \\
     \midrule
 
-    Maternal conditions & 130 (3\%) & GPT-4 & 0.99\\
-    Chronic respiratory diseases & 75 (2\%) & GPT-3.5 & 0.94\\
-    Diabetes mellitus & 27 (1\%) & GPT-3.5 & 0.92\\
-    Cancers & 49 (1\%) & GPT-4 & 0.92\\
-    Road and transport injuries & 251 (7\%) & InSilicoVA & 0.84\\
-    Other injuries & 357 (9\%) & GPT-4 & 0.84\\
-    Other noncommunicable diseases & 414 (11\%) & GPT-3.5 & 0.82\\
-    
-    \midrule
-    \multicolumn{3}{l}{Child (n=2636, 505 (19\%) $\geq$ 0.8 PCCC)}\\
-    \midrule
-
-    Injuries & 135 (5\%) & GPT-4 & 0.95\\
-    Diarrhoeal diseases & 175 (7\%) & GPT-4 & 0.91\\
-    Epilepsy, leukaemia, and\\other noncommunicable diseases & 114 (4\%) & GPT-3.5 & 0.89\\
-    Pneumonia & 81 (3\%) & InSilicoVA & 0.8\\
-
-    \midrule
-    \multicolumn{3}{l}{Neonatal (n=477, 99 (21\%) $\geq$ 0.8 PCCC)}\\
-    \midrule
-
-    Neonatal infections & 99 (21\%) & InSilicoVA & 0.87\\
+    Ischaemic heart disease & 9M (13\%) & GPT-4 & 0.99\\ 
+    Stroke & 7M (10\%) & GPT-4 & 0.99\\ 
+    Lower respiratory infections & 2.4M (4\%) & GPT-4 & 0.99\\
+    Trachea, bronchus, lung cancers & 1.8M (3\%) & GPT-4 & 0.99\\
+    Alzheimer disease and other dementias & 1.8M (3\%) & GPT-4 & 0.99\\
+    Diabetes mellitus & 1.6M (2\%) & GPT-4 & 0.99\\ 
+    Kidney diseases & 1.4M (2\%) & GPT-4 & 0.99\\
+    Tuberculosis & 1.4M (2\%) & GPT-4 & 0.99\\
+    Hypertensive heart disease & 1.4M (2\%) & GPT-4 & 0.99\\
 
     \botrule
     \end{tabular}
 \end{table}
 
-\subsubsection{Highly Scalable and Available}\label{discuss-adv-hscav}
+\subsubsection{Scalability and Availability}\label{discuss-adv-hscav}
 
-The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models can offer more alternative COD assignments for physicians to consider, \citep{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement in physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA had no costs on 6939 physician agreed records \citep{openaiPricing2024}. These costs are likely lower than physicians (e.g. less than \$3 USD per house in India \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while over 10,000 records can be coded in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, care needs to be taken to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-perf-geq80}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention For example, physicians can validate cases, such as road traffic injury where models performed well at 0.84 PCCC, while spending more time on cases that related to acute respiratory infections, where the models performed poorly at 0.62 PCCC (Figure \ref{fig-perf-cod-adult}). Lastly, as models can assign CODs on-demand, there is potential for models to provide CODs during the data collection process, and for GPT models to guide the surveyor to ask additional questions for improving narrative quality.
+The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models offer more alternative COD assignments for physicians to consider, \citep{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement in physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA had no costs on 6939 physician agreed records \citep{openaiPricing2024}. These costs are likely lower than physicians (e.g. less than \$3 USD per house in India \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while over 10,000 records can be coded in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, care needs to be taken to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-perf-geq80}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention For example, physicians can validate cases, such as road traffic injury where models performed well at 0.84 PCCC, while spending more time on cases that related to acute respiratory infections, where the models performed poorly at 0.62 PCCC (Figure \ref{fig-perf-cod-adult}). Lastly, as models can assign CODs on-demand, there is potential for models to provide CODs during the data collection process, and for GPT models to guide the surveyor to ask additional questions for improving narrative quality.
 
-\subsubsection{Natural Language Flexibility}\label{discuss-adv-nlf}
+\subsubsection{Natural Language Input and Output}\label{discuss-adv-nlf}
 
 All models did not require training data to assign CODs, which allowed them to be used without domain expertise and supplying training datasets. The main advantage to GPT-3.5 and GPT-4 was the use of natural language text as input and output. Compared to InterVA-5 and InSilicoVA, GPT models were able to assign COD codes in ICD-10, as physicians do, and potentially assign CODs in more broad categories depending on the prompts. In comparison, InterVA-5 and InSilicoVA relied on structured input and output data from WHO VA 2016 questionnaires, and assigned CODs in WHO VA 2016 codes only. This required that these codes and forms be maintained with conversions between different form (e.g. WHO VA 2012 to WHO VA 2016) and code standards (e.g. WHO VA 2016 to ICD-10), which reduces interoperability and comparability when other models and VA systems do not use the same or interchangeable standards. Thus, GPT models did not require strict formats for training and testing data, which can capture latent and more ambiguous patterns (e.g. health-seeking behaviours and social issues) outside the scope of WHO VA codes and forms \citep{jebleeAutomaticallyDeterminingCause2019,kingQualityDiagnosticValue2016}. For example, GPT-3.5 and GPT-4 had higher performance (+0.14-0.67 PCCC) than InterVA-5 and InSilicoVA for more ambiguous CODs (e.g. other/unspecified infections, ill-defined, other cardiovascular diseases). GPT models also performed better (+0.57 PCCC) on CODs with a small number of cases, such as nutritional deficiencies (n=11) and diabetes mellitus (n=27), which may not have enough cases for questionnaires to capture statistical patterns, but may possibly have richer contextual information from articles, web sources, or books that GPT models can leverage.
 
@@ -461,7 +445,7 @@ Not applicable.
 
 \subsection*{Ethics approval}
 
-TBD.
+Not applicable.
 
 \subsection*{Consent for publication}
 
@@ -549,55 +533,6 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
 \centering
 \includegraphics[width=\textwidth]{fig-map.pdf}
 \caption{Case study data sampling areas.}\label{fig-map}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-agesex.pdf}
-\caption{All records by age group and five-year age range.}\label{fig-data-agesex}
-\end{figure}
-
-\newpage
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-agerange.pdf}
-\caption{All records by five-year age range.}\label{fig-data-agerange}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-agerange-adult.pdf}
-\caption{Adult records by five-year age range.}\label{fig-data-agerange-adult}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-cod-adult.pdf}
-\caption{Adult records by COD.}\label{fig-data-cod-adult}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-agerange-child.pdf}
-\caption{Child records by five-year age range.}\label{fig-data-agerange-child}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-cod-child.pdf}
-\caption{Child records by COD.}\label{fig-data-cod-child}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-agerange-neo.pdf}
-\caption{Neonatal records by five-year age range.}\label{fig-data-agerange-neo}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{fig-data-cod-neo.pdf}
-\caption{Neonatal records by COD.}\label{fig-data-cod-neo}
 \end{figure}
 
 \section{Details on Methods}\label{app-methods}
