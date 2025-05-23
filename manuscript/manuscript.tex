@@ -302,40 +302,53 @@ This section discusses and summarizes the results from Section \ref{results}. Ad
 
 This section identifies the advantages of models for assigning CODs. Section \ref{discuss-adv-cod} details the application of models for particular CODs and age ranges. Section \ref{discuss-adv-hscav} details the resource efficiency of computer models for assisting in physician COD assignment. Section \ref{discuss-adv-nlf} notes the strength of using natural language text in GPT models compared to structured questionnaire data for physician COD assignment.
 
-\subsubsection{Cause and Age Specific Models}\label{discuss-adv-cod}
+\subsubsection{Cause-specific Models}\label{discuss-adv-cod}
 
-At the population level, overall performances for all models were similar to physicians (0.74-0.79 CSMF). At the individual level, performance varied across CODs (0-0.99 PCCC). For most CODs, GPT-3.5/GPT-4 performed better than InSilicoVA/InterVA-5 (top PCCC for 15 of 17, 7 of 8, and 4 of 5 adult, child, and neonatal CODs respectively), while InSilicoVA performed better for particular CODs (road and transport injuries, tuberculosis, pneumonia, and neonatal infections with 0.84, 0.71, 0.78, and 0.86 PCCC respectively). For CODs with high performance (e.g. GPT-3.5/4 with 0.91-0.99 PCCC for maternal conditions, chronic respiratory disease, diabetes melitus, and cancers, InSilicoVA with 0.84 and 0.86 PCCC for road and transport injuries, and neonatal infections), the results suggest that GPT-3.5/4 and InSilicoVA may assign CODs that are very similar to physicians. Thus, it may be beneficial to evaluate performance at the COD level, and apply a combination of models that perform well in comparison to physicians for each COD. Particular attention may be given to the leading causes of death \cite{worldhealthorganizationWorldHealthStatistics2024,worldhealthorganizationCausespecificMortality2000} in which (Table \ref{tab-topcod}).
-
-Across age ranges, all models followed a similar upward trend from 6 months to 14 years of age, and a downward trend from 15-69 years with GPT models having higher performance than InSilicoVA/InterVA-5 models, while more mixed trends were observed from 0 days to 5 months (recall Figure \ref{fig-pccc-age}). For adult age ranges, performance generally decreased as age increased, which suggested that models had difficult assigning CODs for older than younger adults with some improvements after the age of 59. For child and neonatal age ranges, the performance improves drastically as the age increases after 5 months, suggesting less difficulty in COD assignment when children and neonates are more developed. As the models did not perform particularly well ($\geq$ 0.8 PCCC) for any specific age range, it is not recommended to apply specific models that target cases by five-year age range. However, the patterns of increases and decreases of performance in relation to age provide insight in comparing expected patterns in well-studied medical literature and knowledge. For example, 
+At the population level, overall performances for all models were similar to physicians (0.74-0.79 CSMF), indicating potential for adequately estimating COD distributions for large populations. Although all models did not perform well for all records at the individual level (0.44-0.61 PCCC), several models performed well for certain CODs (0-0.99 PCCC). For most CODs, GPT-3.5/GPT-4 performed better than InSilicoVA/InterVA-5 (top PCCC for 15 of 17, 7 of 8, and 4 of 5 adult, child, and neonatal CODs respectively), while InSilicoVA performed better for particular CODs (road and transport injuries, tuberculosis, pneumonia, and neonatal infections with 0.84, 0.71, 0.78, and 0.86 PCCC respectively). For CODs with high performance (e.g. GPT-3.5/4 with 0.91-0.99 PCCC for maternal conditions, chronic respiratory disease, diabetes melitus, and cancers, InSilicoVA with 0.84 and 0.86 PCCC for road and transport injuries, and neonatal infections), the results suggest that GPT-3.5/4 and InSilicoVA may assign CODs that are very similar to physicians. Thus, it may be beneficial to evaluate performance at the COD level, and apply a combination of models that perform well in comparison to physicians for each COD. For example, different models perform well for various leading CODs as seen in Table \ref{tab-leadcod} \cite{worldhealthorganizationWorldHealthStatistics2024,worldhealthorganizationCausespecificMortality2000}.
 
 \begin{table}[h]
-    \caption{Top 10 leading causes of death in 2021.}\label{tab-topcod}%
+    \caption{Leading causes globally in 2021 and most relevant models.}\label{tab-leadcod}%
     \begin{tabular}{@{}llll@{}}
     \toprule
-    \makecell{Cause of Death} & \makecell{Deaths (68.3M Total)} & \makecell{Best Model} & \makecell{PCCC} \\
+    \makecell{Leading Causes of Death\\($\sim$55\% of 68M deaths)\footnotemark[1]} & \makecell{Deaths\\(of 68M)\footnotemark[2]} & \makecell{Best\\Model(s)} & \makecell{PCCC} \\
     \midrule
 
-    Ischaemic heart disease & 9M (13\%) & GPT-4 & 0.99\\ 
-    Stroke & 7M (10\%) & GPT-4 & 0.99\\ 
-    Lower respiratory infections & 2.4M (4\%) & GPT-4 & 0.99\\
-    Trachea, bronchus, lung cancers & 1.8M (3\%) & GPT-4 & 0.99\\
-    Alzheimer disease and other dementias & 1.8M (3\%) & GPT-4 & 0.99\\
-    Diabetes mellitus & 1.6M (2\%) & GPT-4 & 0.99\\ 
-    Kidney diseases & 1.4M (2\%) & GPT-4 & 0.99\\
-    Tuberculosis & 1.4M (2\%) & GPT-4 & 0.99\\
-    Hypertensive heart disease & 1.4M (2\%) & GPT-4 & 0.99\\
+    Ischaemic heart disease & 9M (13\%) & GPT-4 & 0.65 (n=168)\\ 
+    Stroke & 7M (10\%) & GPT-4 & 0.77 (n=331)\\
+    Cancers & 4.3M (4\%) & GPT-4 & 0.91 (n=49)\\
+    Lower respiratory infections & 2.4M (3\%) & GPT-3.5/4 & 0.78 (n=180)\footnotemark[3]\\
+    Diabetes mellitus & 1.6M (2\%) & GPT-3.5 & 0.92 (n=27)\\
+    Kidney disease & 1.4M (2\%)  & GPT-3.5 & 0.92 (n=27)\footnotemark[4]\\
+    Tuberculosis & 1.4M (2\%) & InSilicoVA & 0.71 (n=171)\\
+    Hypertensive heart disease & 1.4M (2\%) & GPT-4 & 0.78 (n=107)\footnotemark[5]\\
+    Cirrhosis of the liver & 1.3M (2\%) & GPT-3.5 & 0.78 (n=128)\footnotemark[6]\\ 
+    Diarrhoeal diseases & 1.2M (2\%) & GPT-4 & 0.68 (n=205)\\ 
+    Road injury & 1,183 (2\%) & InSilicoVA & 0.84 (n=357)\\
+    Preterm birth complications & 0.9M (1\%) & GPT-4 & 0.71 (n=73)\\
+    Falls & 0.7M (1\%) & GPT-4 & 0.89 (n=492)\footnotemark[7]\\
 
     \botrule
     \end{tabular}
+    \footnotetext[1]{Does not include COVID-19, alzheimer disease, other dementias, and self-harm. Trachea, bronchus, lung, colon, rectum, stomache, and breast cancers were generalized into cancers.}
+    \footnotetext[2]{Total of $\sim$68 Million (M) deaths globally. Numbers are rounded.}
+    \footnotetext[3]{Mean of chronic and acute respiratory infections.}
+    \footnotetext[4]{Derived from diabetes mellitus.}
+    \footnotetext[5]{Derived from other cardiovascular diseases.}
+    \footnotetext[6]{Derived from liver and alcohol related diseases.}
+    \footnotetext[7]{Mean of adult and child injuries.}
 \end{table}
+
+\subsubsection{Age-specific Performance Patterns}\label{discuss-adv-age}
+
+Across age ranges, all models followed a similar upward trend from 6 months to 14 years of age, and a downward trend from 15-69 years with GPT models having higher performance than InSilicoVA/InterVA-5 models, while more mixed trends were observed from 0 days to 5 months (recall Figure \ref{fig-pccc-age}). For adult age ranges, performance generally decreased as age increased, which suggested that models had difficult assigning CODs for older than younger adults with some improvements after the age of 59. For child and neonatal age ranges, the performance improves drastically as the age increases after 5 months, suggesting less difficulty in COD assignment when children and neonates are more developed. As the models did not perform particularly well ($\geq$ 0.8 PCCC) for any specific five-year age range, it is not recommended to apply specific models that target cases by age. However, the patterns of increases and decreases of performance in relation to age provide valuable insight for comparison to expected physician diagnosis patterns in well-studied medical literature and knowledge. For example, it may be expected that physicians are more uncertain in diagnosing diseases that are prevalent in neonatal patients \cite{rasmussenComplexityPhysiciansUnderstanding2019,faisonWhenUnknownUnknowable2023}, which are present in our findings from Figure \ref{fig-pccc-age}.
 
 \subsubsection{Scalability and Availability}\label{discuss-adv-hscav}
 
-The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models offer more alternative COD assignments for physicians to consider, \citep{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement in physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA had no costs on 6939 physician agreed records \citep{openaiPricing2024}. These costs are likely lower than physicians (e.g. less than \$3 USD per house in India \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while over 10,000 records can be coded in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, care needs to be taken to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-perf-geq80}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention For example, physicians can validate cases, such as road traffic injury where models performed well at 0.84 PCCC, while spending more time on cases that related to acute respiratory infections, where the models performed poorly at 0.62 PCCC (Figure \ref{fig-perf-cod-adult}). Lastly, as models can assign CODs on-demand, there is potential for models to provide CODs during the data collection process, and for GPT models to guide the surveyor to ask additional questions for improving narrative quality.
+The models in this study can assist physicians in assigning CODs in a variety of ways due to low costs and speed of COD assignment. Similar to differential diagnoses, GPT and InSilicoVA models offer alternative COD assignments for physicians to consider \citep{barnettComparativeAccuracyDiagnosis2019}, which can potentially help lower the number of records with ill-defined causes or reduce disagreement between physicians. At the time of this study, running GPT-3.5 cost $\sim$\$1.6 USD (\$0.5 per one million tokens), GPT-4 cost $\sim$\$115 USD (\$30 per one million tokens), and InSilicoVA was cost free on 6939 records \citep{openaiPricing2024}. These costs were lower than physicians (e.g. less than \$3 USD per house in India \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005}), while it is possible to code over 10,000 records in under a day. When physicians are unavailable, GPT and InSilicoVA models can be a cost-efficient alternative to code large amounts of records for population estimates of CODs. However, it is recommended to apply these models only for certain CODs where models perform well, such as in Table \ref{tab-leadcod}. In addition, these models can also help divert physician resources to cases that are more difficult to code or require more attention. For example, physicians can validate cases where models performed well (e.g. maternal conditions at 0.79-0.99 PCCC), while spending more time on cases where models performed poorly (e.g. acute respiratory infections at 0.25-0.61 PCCC). Lastly, as models can assign CODs on-demand, there is potential for models to provide immediate COD estimates during the data collection process to monitor data quality.
 
 \subsubsection{Natural Language Input and Output}\label{discuss-adv-nlf}
 
-All models did not require training data to assign CODs, which allowed them to be used without domain expertise and supplying training datasets. The main advantage to GPT-3.5 and GPT-4 was the use of natural language text as input and output. Compared to InterVA-5 and InSilicoVA, GPT models were able to assign COD codes in ICD-10, as physicians do, and potentially assign CODs in more broad categories depending on the prompts. In comparison, InterVA-5 and InSilicoVA relied on structured input and output data from WHO VA 2016 questionnaires, and assigned CODs in WHO VA 2016 codes only. This required that these codes and forms be maintained with conversions between different form (e.g. WHO VA 2012 to WHO VA 2016) and code standards (e.g. WHO VA 2016 to ICD-10), which reduces interoperability and comparability when other models and VA systems do not use the same or interchangeable standards. Thus, GPT models did not require strict formats for training and testing data, which can capture latent and more ambiguous patterns (e.g. health-seeking behaviours and social issues) outside the scope of WHO VA codes and forms \citep{jebleeAutomaticallyDeterminingCause2019,kingQualityDiagnosticValue2016}. For example, GPT-3.5 and GPT-4 had higher performance (+0.14-0.67 PCCC) than InterVA-5 and InSilicoVA for more ambiguous CODs (e.g. other/unspecified infections, ill-defined, other cardiovascular diseases). GPT models also performed better (+0.57 PCCC) on CODs with a small number of cases, such as nutritional deficiencies (n=11) and diabetes mellitus (n=27), which may not have enough cases for questionnaires to capture statistical patterns, but may possibly have richer contextual information from articles, web sources, or books that GPT models can leverage.
+All models did not require training data to assign CODs, which allowed them to be used without domain expertise and supplying training datasets. The main advantage to GPT-3.5 and GPT-4 was the use of natural language text as input and output. Compared to InterVA-5 and InSilicoVA, GPT models were able to assign COD codes in ICD-10, as physicians do, and potentially assign CODs in more broad categories depending on the prompts. In comparison, InterVA-5 and InSilicoVA relied on structured input and output data from WHO VA 2016 questionnaires, and assigned CODs in WHO VA 2016 codes only. This required that these codes and forms be maintained with conversions between different form (e.g. WHO VA 2012 to WHO VA 2016) and code standards (e.g. WHO VA 2016 to ICD-10), which reduces interoperability and comparability when other models and VA systems do not use the same or interchangeable standards. Thus, GPT models did not require strict formats for training and testing data, which can capture latent and more ambiguous patterns (e.g. health-seeking behaviours and social issues) outside the scope of WHO VA codes and forms \citep{jebleeAutomaticallyDeterminingCause2019,kingQualityDiagnosticValue2016}. For example, GPT-3.5 and GPT-4 had higher performance (+0.13-0.68 PCCC) than InterVA-5 and InSilicoVA for more ambiguous CODs (e.g. other/unspecified infections, ill-defined, other cardiovascular diseases). GPT models also performed better (+0.57 PCCC) on CODs with a small number of cases, such as nutritional deficiencies (n=11) and diabetes mellitus (n=27), which may not have enough cases for questionnaires to capture statistical patterns, but may possibly have richer contextual information from articles, web sources, or books that GPT models can leverage. GPT models may also guide surveyors during VA interviews to ask better questions from households that improve narrative quality.
 
 \subsection{Disadvantages}\label{discuss-disadv}
 
@@ -453,44 +466,7 @@ Not applicable.
 
 \subsection*{Availability of data and materials}
 
-The datasets supporting the conclusions of this article are included within the article (and its additional files), at \url{https://openmortality.org} (available upon request) and at \url{https://github.com/cghr-toronto/healsl-gpt-paper}.
-
-\noindent\\Verbal Autopsy (VA) data by age group and survey rounds 1 and 2:
-
-\begin{itemize}
-    \item Adult VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_adult_v1}
-    \item Adult VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_adult_v1}
-    \item Child VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_child_v1}
-    \item Child VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_child_v1}
-    \item Neonatal VA (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_neo_v1}
-    \item Neonatal VA (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_neo_v1}
-\end{itemize}
-
-\noindent\\Narrative data by age group and survey rounds 1 and 2:
-
-\begin{itemize}
-    \item Adult Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_adult_narrative_v1}
-    \item Adult Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_adult_narrative_v1}
-    \item Child Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_child_narrative_v1}
-    \item Child Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_child_narrative_v1}
-    \item Neonatal Narratives (Round 1):\\\url{https://openmortality.org/data/healsl_rd1_neo_narrative_v1}
-    \item Neonatal Narratives (Round 2):\\\url{https://openmortality.org/data/healsl_rd2_neo_narrative_v1}
-\end{itemize}
-
-\noindent\\Cause of death code mappings to convert between ICD-10, WVA-2016, and CGHR-10 codes:
-
-\begin{itemize}
-    \item ICD-10 to CGHR-10:\\\url{https://openmortality.org/data/cghr10_v1}
-    \item WVA-2016 to ICD-10:\\\url{https://openmortality.org/data/icd10_wva2016_v1}
-\end{itemize}
-
-\noindent\\Result files:
-
-\begin{itemize}
-    \item Model and physician COD assignments:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_cod_v1.csv}
-    \item Metrics for model COD assignments:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_metrics_v1.csv}
-    \item GPT-3.5 repeated runs results in Appendix \ref{app-reprod}:\\\url{https://github.com/cghr-toronto/healsl-gpt-paper/blob/main/data/healsl_rd1to2_rapid_gpt3_sample100_v2b.csv}
-\end{itemize}
+The datasets supporting the conclusions of this article are included within the article (and its additional files), at \url{https://openmortality.org} (available upon request) and at \url{https://github.com/cghr-toronto/healsl-gpt-paper}. Verbal Autopsy (VA) and narrative data by age group and survey rounds 1 and 2 available at \url{https://openmortality.org/dataset/heal-sl}. Cause of death code mappings to convert between ICD-10, WVA-2016, and CGHR-10 codes available at \url{https://openmortality.org/dataset/icd}. Model evaluation result files at \url{https://github.com/cghr-toronto/healsl-gpt-paper/tree/main/data}.
 
 \subsection*{Code availability}
 
