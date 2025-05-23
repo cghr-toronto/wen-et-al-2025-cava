@@ -501,7 +501,7 @@ PJ and PB are the study Principal Investigators. ATA and RK implemented the data
 %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
 %% tables and equations etc.
 
-\section{Data Exploration}\label{app-data}
+\section{Data Profile}\label{app-data}
 
 The 6939 physician agreed records were relatively evenly distributed (approximately 40-57\% male and female) for the adult, child, and neonatal age groups in terms of sex (Figure \ref{fig-data-agesex}) with the most records in the 1-5 year (n=1633, 24\%) age range, and the least records in the 10-14 year (n=135, 2\%) and 7-27 day (n=82, 1\%) age ranges (Figure \ref{fig-data-agerange}). The other 15 five-year age ranges within 0 days to 69 years were relatively evenly distributed with approximately 4-6\% of the 6939 records each. The 3826 adult records had most records in the 65-69 year (n=575, 15\%), and the least in the 10-14 year (n=135, 4\%) age ranges, while the other 10 age ranges were relatively evenly distributed at 7-9\% of all records (Figure \ref{fig-data-agerange-adult}). For adult CODs, Malaria (n=799, 21\%) had the highest number of adult records, and cancers (n=49, 1\%), diabetes mellitus (n=27, \textless 1\%), and suicide (n=3, \textless 1\%) had the lowest number adult of adult records, while the other 15 CODs had between 2-11\% of all adult records (Figure \ref{fig-data-cod-adult}). The 2636 child records had most records in the 1-5 year (n=1633, 62\%) age range while the three other age ranges were relatively evenly distributed at 12-14\% of all records (Figure \ref{fig-data-agerange-child}). For child CODs, Malaria (n=1382, 52\%) and other infections (n=667, 25\%) had the highest number of child records, while nutritional deficiencies (n=11, \textless 1\%) and congenital anomalies (n=1, \textless 1\%) had the lowest number of records with the five other CODs between 3-7\% of all child records. The 477 neonatal records had two age ranges with most records in the 0-6 day (n=395, 83\%) age range and the rest in the 7-27 day (n=82, 17\%) age range (Figure \ref{fig-data-agerange-neo}). For neonatal CODs, stillbirth (n=172, 36\%) had the highest number of neonatal records, and ill-defined (n=23, 5\%), other (n=5, 1\%), and congenital anomalies (n=2, \textless 1\%) had the least number of records with the rest of the other three CODs between 15-22\% of all neonatal records (Figure \ref{fig-data-cod-neo}).
 
@@ -534,10 +534,10 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
         &  Stroke  &  147 (44.4\%)  &  184 (55.6\%)  &  331 (8.7\%)  \\ 
         &  Suicide  &  N/A  &  3 (100\%)  &  3 (0.1\%)  \\ 
         &  Tuberculosis  &  54 (31.6\%)  &  117 (68.4\%)  &  171 (4.5\%)  \\ 
-        &  UnspecifiedInfections  &  175 (45\%)  &  214 (55\%)  &  389 (10.2\%)  \\ 
-    \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  CongenitalAnomalies  &  1 (100\%)  &  N/A  &  1 (0\%)  \\ 
+        &  Unspecified Infections  &  175 (45\%)  &  214 (55\%)  &  389 (10.2\%)  \\ 
+    \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  Congenital Anomalies  &  1 (100\%)  &  N/A  &  1 (0\%)  \\ 
         &  Diarrhoeal Diseases  &  79 (45.1\%)  &  96 (54.9\%)  &  175 (6.6\%)  \\ 
-        &  Epilepsy, Leukaemia, And Other Noncommunicable Diseases  &  61 (53.5\%)  &  53 (46.5\%)  &  114 (4.3\%)  \\ 
+        &  \makecell[l]{Epilepsy, Leukaemia, And\\Other Noncommunicable Diseases}  &  61 (53.5\%)  &  53 (46.5\%)  &  114 (4.3\%)  \\ 
         &  Ill-Defined  &  34 (48.6\%)  &  36 (51.4\%)  &  70 (2.7\%)  \\ 
         &  Injuries  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (5.1\%)  \\ 
         &  Malaria  &  680 (49.2\%)  &  702 (50.8\%)  &  1382 (52.4\%)  \\ 
@@ -551,53 +551,37 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
         &  Other  &  2 (40\%)  &  3 (60\%)  &  5 (1\%)  \\ 
         &  Prematurity And Low Birthweight  &  39 (53.4\%)  &  34 (46.6\%)  &  73 (15.3\%)  \\ 
         &  Stillbirth  &  86 (50\%)  &  86 (50\%)  &  172 (36.1\%)  \\
-        \botrule
+    \botrule
 \end{tabular*}
 \end{sidewaystable}
 
-\begin{sidewaystable}
-    \caption{Case study data by age range.}\label{tab-data-age}
-    \begin{tabular*}{\textheight}{@{\extracolsep\fill}lllll}
-        \toprule%
-        Age Group  &  Cause of Death (COD)  &  Female  &  Male  &  Total  \\
-        \midrule
-        \makecell[l]{\\Adult (n=3826, 55.1\%, 18 CODs)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  Acute Respiratory Infections  &  48 (45.7\%)  &  57 (54.3\%)  &  105 (2.7\%)  \\ 
-            &  Cancers  &  32 (65.3\%)  &  17 (34.7\%)  &  49 (1.3\%)  \\ 
-            &  Chronic Respiratory Diseases  &  29 (38.7\%)  &  46 (61.3\%)  &  75 (2\%)  \\ 
-            &  Diabetes Mellitus  &  14 (51.9\%)  &  13 (48.1\%)  &  27 (0.7\%)  \\ 
-            &  Diarrhoeal Diseases  &  102 (49.8\%)  &  103 (50.2\%)  &  205 (5.4\%)  \\ 
-            &  Ill-Defined  &  56 (47.9\%)  &  61 (52.1\%)  &  117 (3.1\%)  \\ 
-            &  Ischemic Heart Disease  &  89 (53\%)  &  79 (47\%)  &  168 (4.4\%)  \\ 
-            &  Liver And Alcohol Related Diseases  &  58 (45.3\%)  &  70 (54.7\%)  &  128 (3.3\%)  \\ 
-            &  Malaria  &  372 (46.6\%)  &  427 (53.4\%)  &  799 (20.9\%)  \\ 
-            &  Maternal Conditions  &  130 (100\%)  &  N/A  &  130 (3.4\%)  \\ 
-            &  Other Cardiovascular Diseases  &  59 (55.1\%)  &  48 (44.9\%)  &  107 (2.8\%)  \\ 
-            &  Other Noncommunicable Diseases  &  160 (38.6\%)  &  254 (61.4\%)  &  414 (10.8\%)  \\ 
-            &  Other Injuries  &  83 (23.2\%)  &  274 (76.8\%)  &  357 (9.3\%)  \\ 
-            &  Road And Transport Injuries  &  73 (29.1\%)  &  178 (70.9\%)  &  251 (6.6\%)  \\ 
-            &  Stroke  &  147 (44.4\%)  &  184 (55.6\%)  &  331 (8.7\%)  \\ 
-            &  Suicide  &  N/A  &  3 (100\%)  &  3 (0.1\%)  \\ 
-            &  Tuberculosis  &  54 (31.6\%)  &  117 (68.4\%)  &  171 (4.5\%)  \\ 
-            &  UnspecifiedInfections  &  175 (45\%)  &  214 (55\%)  &  389 (10.2\%)  \\ 
-        \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  CongenitalAnomalies  &  1 (100\%)  &  N/A  &  1 (0\%)  \\ 
-            &  Diarrhoeal Diseases  &  79 (45.1\%)  &  96 (54.9\%)  &  175 (6.6\%)  \\ 
-            &  Epilepsy, Leukaemia, And Other Noncommunicable Diseases  &  61 (53.5\%)  &  53 (46.5\%)  &  114 (4.3\%)  \\ 
-            &  Ill-Defined  &  34 (48.6\%)  &  36 (51.4\%)  &  70 (2.7\%)  \\ 
-            &  Injuries  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (5.1\%)  \\ 
-            &  Malaria  &  680 (49.2\%)  &  702 (50.8\%)  &  1382 (52.4\%)  \\ 
-            &  Nutritional Deficiencies  &  7 (63.6\%)  &  4 (36.4\%)  &  11 (0.4\%)  \\ 
-            &  Other Infections  &  338 (50.7\%)  &  329 (49.3\%)  &  667 (25.3\%)  \\ 
-            &  Pneumonia  &  39 (48.1\%)  &  42 (51.9\%)  &  81 (3.1\%)  \\ 
-        \makecell[l]{\\Neonate (n=477, 6.9\%, 7 CODs)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  Birth Asphyxia And Birth Trauma  &  38 (36.9\%)  &  65 (63.1\%)  &  103 (21.6\%)  \\ 
-            &  Congenital Anomalies  &  2 (100\%)  &  N/A  &  2 (0.4\%)  \\ 
-            &  Ill-Defined  &  11 (47.8\%)  &  12 (52.2\%)  &  23 (4.8\%)  \\ 
-            &  Neonatal Infections  &  49 (49.5\%)  &  50 (50.5\%)  &  99 (20.8\%)  \\ 
-            &  Other  &  2 (40\%)  &  3 (60\%)  &  5 (1\%)  \\ 
-            &  Prematurity And Low Birthweight  &  39 (53.4\%)  &  34 (46.6\%)  &  73 (15.3\%)  \\ 
-            &  Stillbirth  &  86 (50\%)  &  86 (50\%)  &  172 (36.1\%)  \\
-            \botrule
-    \end{tabular*}
-    \end{sidewaystable}
+\begin{table}
+\caption{Case study data by age range.}\label{tab-data-age}
+\begin{tabular}{@{}lllll@{}}
+\toprule%
+    Age Group  &  Age Range  &  Female  &  Male  &  Total  \\
+    \midrule
+        \makecell[l]{\\Adult (n=3826, 55.1\%, 18 CODs)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  10-14 Years  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (3.5\%)  \\ 
+        &  15-19 Years  &  115 (42.8\%)  &  154 (57.2\%)  &  269 (7\%)  \\ 
+        &  20-24 Years  &  146 (53.1\%)  &  129 (46.9\%)  &  275 (7.2\%)  \\ 
+        &  25-29 Years  &  159 (45.2\%)  &  193 (54.8\%)  &  352 (9.2\%)  \\ 
+        &  30-34 Years  &  174 (50.9\%)  &  168 (49.1\%)  &  342 (8.9\%)  \\ 
+        &  35-39 Years  &  153 (45.4\%)  &  184 (54.6\%)  &  337 (8.8\%)  \\ 
+        &  40-44 Years  &  134 (42\%)  &  185 (58\%)  &  319 (8.3\%)  \\ 
+        &  45-49 Years  &  148 (47\%)  &  167 (53\%)  &  315 (8.2\%)  \\ 
+        &  50-54 Years  &  134 (39.6\%)  &  204 (60.4\%)  &  338 (8.8\%)  \\ 
+        &  55-59 Years  &  96 (37.6\%)  &  159 (62.4\%)  &  255 (6.7\%)  \\ 
+        &  60-64 Years  &  128 (40.8\%)  &  186 (59.2\%)  &  314 (8.2\%)  \\ 
+        &  65-69 Years  &  243 (42.3\%)  &  332 (57.7\%)  &  575 (15\%)  \\ 
+        \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  1-5 Months  &  146 (47.4\%)  &  162 (52.6\%)  &  308 (11.7\%)  \\ 
+        &  6-11 Months  &  160 (50.8\%)  &  155 (49.2\%)  &  315 (11.9\%)  \\ 
+        &  1-5 Years  &  822 (50.3\%)  &  811 (49.7\%)  &  1633 (61.9\%)  \\ 
+        &  6-11 Years  &  162 (42.6\%)  &  218 (57.4\%)  &  380 (14.4\%)  \\ 
+        \makecell[l]{\\Neonate (n=477, 6.9\%, 7 CODs)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  0-6 Days  &  184 (46.6\%)  &  211 (53.4\%)  &  395 (82.8\%)  \\ 
+        &  7-27 Days  &  43 (52.4\%)  &  39 (47.6\%)  &  82 (17.2\%)  \\
+    \botrule
+\end{tabular}
+\end{table}
 
 \section{Details on Methods}\label{app-methods}
 

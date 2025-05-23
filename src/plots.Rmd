@@ -1188,8 +1188,9 @@ tab_cod_html <- tab_cod_format %>%
     kable(format = "html", escape = FALSE, align = "l") %>%
     kable_styling(full_width = FALSE, position = "left", html_font = "Arial") %>%
     row_spec(0, extra_css = "border-top: 2px solid; border-bottom: 1px solid;") %>%     # thick top border
-    row_spec(nrow(df_selected), extra_css = "border-bottom: 2px solid;")
+    row_spec(nrow(tab_cod_format), extra_css = "border-bottom: 2px solid;")
 tab_cod_html
+
 ```
 
 ## Records by Age
@@ -1198,8 +1199,84 @@ tab_cod_html
 
 # Get n records by age
 tab_age_n <- df %>%
-    group_by(age, physician_cghr10) %>%
-    summarize(n_cod = n())
+    group_by(age, age_range) %>%
+    summarize(n_age = n())
+
+# Get n records by age and sex
+tab_age_sex <- df %>%
+    group_by(age, age_range, sex) %>%
+    summarize(n_age_sex = n()) %>%
+    pivot_wider(
+        names_from = sex,
+        values_from = n_age_sex,
+        names_glue = "n_age_{str_to_lower(sex)}"
+    )
+
+# Combine all
+tab_age <- tab_age_n %>%
+    left_join(tab_agegroup, by = "age") %>%
+    left_join(tab_agegroup_sex, by = "age") %>%
+    left_join(tab_age_sex, by = c("age", "age_range"))
+
+# Calc perc
+tab_age <- tab_age %>%
+    mutate(
+        n_perc = round(n / nrow(df) * 100, 1),
+        n_male_perc = round(n_male / n * 100, 1),
+        n_female_perc = round(n_female / n * 100, 1),
+        n_age_perc = round(n_age / n * 100, 1),
+        n_age_male_perc = round(n_age_male / n_age * 100, 1),
+        n_age_female_perc = round(n_age_female / n_age * 100, 1)
+    ) %>%
+    ungroup
+
+# Add labels to combined
+tab_age <- tab_age %>%
+    mutate(
+        age = if_else(age == "neo", "Neonate", str_to_title(age)),
+        `Age Group` = glue(
+            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n{age} Female (n={n_female}, {n_female_perc}%)\n{age} Male (n={n_male}, {n_male_perc}%)"
+        ),
+        `Age Range` = glue(
+            "{str_to_title(age_range)}"
+        ),
+        `Female` = glue("{n_age_female} ({n_age_female_perc}%)"),
+        `Male` = glue("{n_age_male} ({n_age_male_perc}%)"),
+        `Total` = glue("{n_age} ({n_age_perc}%)")
+    ) %>%
+    mutate(across(
+        c(`Female`, `Male`, `Total`),
+        ~ if_else(.x == "NA (NA%)", NA, .x)
+    ))
+
+# Save table
+write_csv(tab_age, "../data/healsl_rd1to2_age_profile_v1.csv", na = "")
+
+# Display table
+tab_age
 
 ```
 
+```{r}
+
+# Prepare and format the data
+tab_age_format <- tab_age %>%
+    ungroup %>%
+    select(`Age Group`, `Age Range`, Female, Male, Total) %>%
+    mutate(
+        `Age Group` = str_replace_all(`Age Group`, "\\\\n|\\n", "<br>"),
+        `Age Range` = str_replace_all(`Age Range`, "\\\\n|\\n", "<br>")
+    ) %>%
+    group_by(`Age Group`) %>%
+    mutate(`Age Group` = ifelse(row_number() == 1, `Age Group`, "")) %>%
+    ungroup()
+
+# Build the table
+tab_age_html <- tab_age_format %>%
+    kable(format = "html", escape = FALSE, align = "l") %>%
+    kable_styling(full_width = FALSE, position = "left", html_font = "Arial") %>%
+    row_spec(0, extra_css = "border-top: 2px solid; border-bottom: 1px solid;") %>%     # thick top border
+    row_spec(nrow(tab_age_format), extra_css = "border-bottom: 2px solid;")
+tab_age_html
+
+```
