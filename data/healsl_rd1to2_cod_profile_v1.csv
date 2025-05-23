@@ -1,0 +1,151 @@
+age,physician_cghr10,n_cod,n,n_cod_uniq,n_female,n_male,n_cod_female,n_cod_male,n_perc,n_male_perc,n_female_perc,n_cod_perc,n_cod_male_perc,n_cod_female_perc,Age Group,Cause of Death (COD),Female,Male,Total
+Adult,"Acute respiratory
+infections",105,3826,18,1681,2145,48,57,55.1,56.1,43.9,2.7,54.3,45.7,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Acute Respiratory
+Infections",48 (45.7%),57 (54.3%),105 (2.7%)
+Adult,Cancers,49,3826,18,1681,2145,32,17,55.1,56.1,43.9,1.3,34.7,65.3,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Cancers,32 (65.3%),17 (34.7%),49 (1.3%)
+Adult,"Chronic
+respiratory
+diseases",75,3826,18,1681,2145,29,46,55.1,56.1,43.9,2,61.3,38.7,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Chronic
+Respiratory
+Diseases",29 (38.7%),46 (61.3%),75 (2%)
+Adult,Diabetes mellitus,27,3826,18,1681,2145,14,13,55.1,56.1,43.9,0.7,48.1,51.9,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Diabetes Mellitus,14 (51.9%),13 (48.1%),27 (0.7%)
+Adult,"Diarrhoeal
+diseases",205,3826,18,1681,2145,102,103,55.1,56.1,43.9,5.4,50.2,49.8,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Diarrhoeal
+Diseases",102 (49.8%),103 (50.2%),205 (5.4%)
+Adult,Ill-defined,117,3826,18,1681,2145,56,61,55.1,56.1,43.9,3.1,52.1,47.9,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Ill-Defined,56 (47.9%),61 (52.1%),117 (3.1%)
+Adult,"Ischemic heart
+disease",168,3826,18,1681,2145,89,79,55.1,56.1,43.9,4.4,47,53,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Ischemic Heart
+Disease",89 (53%),79 (47%),168 (4.4%)
+Adult,"Liver and alcohol
+related diseases",128,3826,18,1681,2145,58,70,55.1,56.1,43.9,3.3,54.7,45.3,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Liver And Alcohol
+Related Diseases",58 (45.3%),70 (54.7%),128 (3.3%)
+Adult,Malaria,799,3826,18,1681,2145,372,427,55.1,56.1,43.9,20.9,53.4,46.6,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Malaria,372 (46.6%),427 (53.4%),799 (20.9%)
+Adult,"Maternal
+conditions",130,3826,18,1681,2145,130,,55.1,56.1,43.9,3.4,,100,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Maternal
+Conditions",130 (100%),,130 (3.4%)
+Adult,"Other
+cardiovascular
+diseases",107,3826,18,1681,2145,59,48,55.1,56.1,43.9,2.8,44.9,55.1,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Other
+Cardiovascular
+Diseases",59 (55.1%),48 (44.9%),107 (2.8%)
+Adult,"Other
+noncommunicable
+diseases",414,3826,18,1681,2145,160,254,55.1,56.1,43.9,10.8,61.4,38.6,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Other
+Noncommunicable
+Diseases",160 (38.6%),254 (61.4%),414 (10.8%)
+Adult,Other injuries,357,3826,18,1681,2145,83,274,55.1,56.1,43.9,9.3,76.8,23.2,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Other Injuries,83 (23.2%),274 (76.8%),357 (9.3%)
+Adult,"Road and transport
+injuries",251,3826,18,1681,2145,73,178,55.1,56.1,43.9,6.6,70.9,29.1,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Road And Transport
+Injuries",73 (29.1%),178 (70.9%),251 (6.6%)
+Adult,Stroke,331,3826,18,1681,2145,147,184,55.1,56.1,43.9,8.7,55.6,44.4,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Stroke,147 (44.4%),184 (55.6%),331 (8.7%)
+Adult,Suicide,3,3826,18,1681,2145,,3,55.1,56.1,43.9,0.1,100,,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Suicide,,3 (100%),3 (0.1%)
+Adult,Tuberculosis,171,3826,18,1681,2145,54,117,55.1,56.1,43.9,4.5,68.4,31.6,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)",Tuberculosis,54 (31.6%),117 (68.4%),171 (4.5%)
+Adult,"Unspecified
+infections",389,3826,18,1681,2145,175,214,55.1,56.1,43.9,10.2,55,45,"Adult (n=3826, 55.1%, 18 CODs)
+Adult Female (n=1681, 43.9%)
+Adult Male (n=2145, 56.1%)","Unspecified
+Infections",175 (45%),214 (55%),389 (10.2%)
+Child,"Congenital
+anomalies",1,2636,9,1290,1346,1,,38,51.1,48.9,0,,100,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)","Congenital
+Anomalies",1 (100%),,1 (0%)
+Child,"Diarrhoeal
+diseases",175,2636,9,1290,1346,79,96,38,51.1,48.9,6.6,54.9,45.1,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)","Diarrhoeal
+Diseases",79 (45.1%),96 (54.9%),175 (6.6%)
+Child,"Epilepsy,
+leukaemia,
+and other
+noncommunicable
+diseases",114,2636,9,1290,1346,61,53,38,51.1,48.9,4.3,46.5,53.5,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)","Epilepsy,
+Leukaemia,
+And Other
+Noncommunicable
+Diseases",61 (53.5%),53 (46.5%),114 (4.3%)
+Child,Ill-defined,70,2636,9,1290,1346,34,36,38,51.1,48.9,2.7,51.4,48.6,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)",Ill-Defined,34 (48.6%),36 (51.4%),70 (2.7%)
+Child,Injuries,135,2636,9,1290,1346,51,84,38,51.1,48.9,5.1,62.2,37.8,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)",Injuries,51 (37.8%),84 (62.2%),135 (5.1%)
+Child,Malaria,1382,2636,9,1290,1346,680,702,38,51.1,48.9,52.4,50.8,49.2,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)",Malaria,680 (49.2%),702 (50.8%),1382 (52.4%)
+Child,"Nutritional
+deficiencies",11,2636,9,1290,1346,7,4,38,51.1,48.9,0.4,36.4,63.6,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)","Nutritional
+Deficiencies",7 (63.6%),4 (36.4%),11 (0.4%)
+Child,Other infections,667,2636,9,1290,1346,338,329,38,51.1,48.9,25.3,49.3,50.7,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)",Other Infections,338 (50.7%),329 (49.3%),667 (25.3%)
+Child,Pneumonia,81,2636,9,1290,1346,39,42,38,51.1,48.9,3.1,51.9,48.1,"Child (n=2636, 38%, 9 CODs)
+Child Female (n=1290, 48.9%)
+Child Male (n=1346, 51.1%)",Pneumonia,39 (48.1%),42 (51.9%),81 (3.1%)
+Neonate,"Birth asphyxia and
+birth trauma",103,477,7,227,250,38,65,6.9,52.4,47.6,21.6,63.1,36.9,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)","Birth Asphyxia And
+Birth Trauma",38 (36.9%),65 (63.1%),103 (21.6%)
+Neonate,"Congenital
+anomalies",2,477,7,227,250,2,,6.9,52.4,47.6,0.4,,100,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)","Congenital
+Anomalies",2 (100%),,2 (0.4%)
+Neonate,Ill-defined,23,477,7,227,250,11,12,6.9,52.4,47.6,4.8,52.2,47.8,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)",Ill-Defined,11 (47.8%),12 (52.2%),23 (4.8%)
+Neonate,"Neonatal
+infections",99,477,7,227,250,49,50,6.9,52.4,47.6,20.8,50.5,49.5,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)","Neonatal
+Infections",49 (49.5%),50 (50.5%),99 (20.8%)
+Neonate,Other,5,477,7,227,250,2,3,6.9,52.4,47.6,1,60,40,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)",Other,2 (40%),3 (60%),5 (1%)
+Neonate,"Prematurity and
+low birthweight",73,477,7,227,250,39,34,6.9,52.4,47.6,15.3,46.6,53.4,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)","Prematurity And
+Low Birthweight",39 (53.4%),34 (46.6%),73 (15.3%)
+Neonate,Stillbirth,172,477,7,227,250,86,86,6.9,52.4,47.6,36.1,50,50,"Neonate (n=477, 6.9%, 7 CODs)
+Neonate Female (n=227, 47.6%)
+Neonate Male (n=250, 52.4%)",Stillbirth,86 (50%),86 (50%),172 (36.1%)

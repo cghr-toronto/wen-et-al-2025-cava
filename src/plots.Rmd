@@ -13,10 +13,12 @@ options(readr.show_col_types = FALSE)
 ```
 
 ```{r, echo=FALSE, eval=FALSE}
+#install.packages("openVA")
 #install.packages("tidyverse")
 #install.packages("dplyr")
 #install.packages("ggrepel")
 #install.packages("patchwork")
+#install.packages("glue")
 ```
 
 # Libraries
@@ -26,6 +28,7 @@ library(tidyverse)
 library(dplyr)
 library(ggrepel)
 library(patchwork)
+library(glue)
 ```
 
 ```{r, echo=FALSE}
@@ -1078,3 +1081,125 @@ ggsave(
 fig_pccc_age
 
 ```
+
+# Tables
+
+```{r}
+
+# Get n records by age group
+tab_agegroup <- df %>%
+    group_by(age) %>%
+    summarize(
+        n = n(),
+        n_cod_uniq = n_distinct(physician_cghr10)
+    )
+
+# Get n records by age group and sex
+tab_agegroup_sex <- df %>%
+    group_by(age, sex) %>%
+    summarize(n_sex = n()) %>%
+    pivot_wider(
+        names_from = sex,
+        values_from = n_sex,
+        names_glue = "n_{str_to_lower(sex)}"
+    )
+
+```
+
+## Records by COD
+
+```{r}
+
+# Get n records by cod
+tab_cod_n <- df %>%
+    group_by(age, physician_cghr10) %>%
+    summarize(n_cod = n())
+
+# Get n records by cod and sex
+tab_cod_sex <- df %>%
+    group_by(age, physician_cghr10, sex) %>%
+    summarize(n_cod_sex = n()) %>%
+    pivot_wider(
+        names_from = sex,
+        values_from = n_cod_sex,
+        names_glue = "n_cod_{str_to_lower(sex)}"
+    )
+
+# Combine all
+tab_cod <- tab_cod_n %>%
+    left_join(tab_agegroup, by = "age") %>%
+    left_join(tab_agegroup_sex, by = "age") %>%
+    left_join(tab_cod_sex, by = c("age", "physician_cghr10"))
+
+# Calc perc
+tab_cod <- tab_cod %>%
+    mutate(
+        n_perc = round(n / nrow(df) * 100, 1),
+        n_male_perc = round(n_male / n * 100, 1),
+        n_female_perc = round(n_female / n * 100, 1),
+        n_cod_perc = round(n_cod / n * 100, 1),
+        n_cod_male_perc = round(n_cod_male / n_cod * 100, 1),
+        n_cod_female_perc = round(n_cod_female / n_cod * 100, 1)
+    ) %>%
+    ungroup
+
+# Add labels to combined
+tab_cod <- tab_cod %>%
+    mutate(
+        age = if_else(age == "neo", "Neonate", str_to_title(age)),
+        `Age Group` = glue(
+            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n{age} Female (n={n_female}, {n_female_perc}%)\n{age} Male (n={n_male}, {n_male_perc}%)"
+        ),
+        `Cause of Death (COD)` = glue(
+            "{str_to_title(physician_cghr10)}"
+        ),
+        `Female` = glue("{n_cod_female} ({n_cod_female_perc}%)"),
+        `Male` = glue("{n_cod_male} ({n_cod_male_perc}%)"),
+        `Total` = glue("{n_cod} ({n_cod_perc}%)")
+    ) %>%
+    mutate(across(
+        c(`Female`, `Male`, `Total`),
+        ~ if_else(.x == "NA (NA%)", NA, .x)
+    ))
+
+# Save table
+write_csv(tab_cod, "../data/healsl_rd1to2_cod_profile_v1.csv", na = "")
+
+# Display table
+tab_cod
+```
+
+```{r}
+
+# Prepare and format the data
+tab_cod_format <- tab_cod %>%
+    ungroup %>%
+    select(`Age Group`, `Cause of Death (COD)`, Female, Male, Total) %>%
+    mutate(
+        `Age Group` = str_replace_all(`Age Group`, "\\\\n|\\n", "<br>"),
+        `Cause of Death (COD)` = str_replace_all(`Cause of Death (COD)`, "\\\\n|\\n", "<br>")
+    ) %>%
+    group_by(`Age Group`) %>%
+    mutate(`Age Group` = ifelse(row_number() == 1, `Age Group`, "")) %>%
+    ungroup()
+
+# Build the table
+tab_cod_html <- tab_cod_format %>%
+    kable(format = "html", escape = FALSE, align = "l") %>%
+    kable_styling(full_width = FALSE, position = "left", html_font = "Arial") %>%
+    row_spec(0, extra_css = "border-top: 2px solid; border-bottom: 1px solid;") %>%     # thick top border
+    row_spec(nrow(df_selected), extra_css = "border-bottom: 2px solid;")
+tab_cod_html
+```
+
+## Records by Age
+
+```{r}
+
+# Get n records by age
+tab_age_n <- df %>%
+    group_by(age, physician_cghr10) %>%
+    summarize(n_cod = n())
+
+```
+
