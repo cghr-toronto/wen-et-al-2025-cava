@@ -182,9 +182,9 @@
 
 In 2019, 41 million people die prematurely from noncommunicable diseases every year, accounting for 74\% of all deaths globally \citep{worldhealthorganizationNonCommunicableDiseases2019}. Most of these deaths are preventable, but require adequate resource allocation, guided by evidence, to implement effective interventions and policies that target populations at risk \citep{benzigerGlobalBurdenDisease2016}. Thus, reliable counts and diagnoses of deaths enable decision makers to identify populations at risk to save lives and reduce premature deaths worldwide \citep{lawnMillionNeonatalDeaths2010,lassiCommunityBasedIntervention2015,liuExcessMortalityPersons2017,ewigCommunityacquiredPneumoniaEmergency2011}. However, most low-income countries do not have data on deaths or have registered less than half of the deaths in their country, with an even fewer 8\% of these registered deaths having a Cause of Death (COD) recorded \citep{worldhealthorganizationSCOREHealthData2021}. To fill this gap in death registrations, an alternative method known as Verbal Autopsy (VA) is used to collect data on deaths and determine their likely causes at scale \citep{desavignyIntegratingCommunitybasedVerbal2017,thomasVerbalAutopsyHealth2018,rampatigeSystematicReviewStatistics2014}, outside of traditional healthcare facilities where over half of deaths occur at home \citep{adairWhoDiesWhere2021}.
 
-VA involves two major components: survey and COD assignment \citep{worldhealthorganizationVerbalAutopsyStandards2023,chandramohanEstimatingCausesDeath2021,worldhealthorganizationVerbalAutopsyStandards2007}. In the survey component, trained lay surveyors interview those familiar with the deceased (e.g. living spouse, children, family, friends) to gather information using standardized questionnaires and open narratives. In the COD assignment component, physicians evaluate information available from the questionnaires and open narratives to assign probable CODs. This component has been criticized to be difficult to reproduce due to reliance on physician assignment \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005,mccormickProbabilisticCauseofDeathAssignment2016b,morrisFactorsAssociatedPhysician2010,solemanVerbalAutopsyCurrent2006}. As an alternative to physician assignment, computer models, such as InterVA \citep{byassIntegratedApproachProcessing2019} and InSilicoVA \citep{mccormickProbabilisticCauseofDeathAssignment2016b}, have been studied to automatically assign CODs with performances close to physicians at the population level, but poor performances at the individual level \citep{jhaAutomatedPhysicianAssignment2019,leitaoComparisonPhysiciancertifiedVerbal2014,desaiPerformanceFourComputercoded2014,tungaVerbalAutopsyModels2021,otiVerbalAutopsyInterpretation2010}. These computer models often utilize data from the structured questionnaire, but often omit the free-text open narrative, which misses latent information, such as chronology or health-seeking behaviors, that may potentially help models perform better than using the questionnaire alone \citep{jebleeAutomaticallyDeterminingCause2019,blancoExtractingCauseDeath2021,kingQualityDiagnosticValue2016}.
+VA involves two major components: survey and COD assignment \citep{worldhealthorganizationVerbalAutopsyStandards2023,chandramohanEstimatingCausesDeath2021,worldhealthorganizationVerbalAutopsyStandards2007}. In the survey component, trained lay surveyors interview those familiar with the deceased (e.g. living spouse, children, family, friends) to gather information using standardized questionnaires and open narratives. In the COD assignment component, physicians evaluate information available from the questionnaires and open narratives to assign probable CODs. This component has been criticized to be difficult to reproduce due to reliance on physician assignment \citep{gomesNationwideMortalityStudies2017,jhaProspectiveStudyOne2005,mccormickProbabilisticCauseofDeathAssignment2016b,morrisFactorsAssociatedPhysician2010,solemanVerbalAutopsyCurrent2006}. As an alternative to physician assignment, computer models, such as InterVA \citep{byassIntegratedApproachProcessing2019} and InSilicoVA \citep{mccormickProbabilisticCauseofDeathAssignment2016b}, have been studied to automatically assign CODs with performances close to physicians at the population level, but poor performances at the individual level \citep{jhaAutomatedPhysicianAssignment2019,leitaoComparisonPhysiciancertifiedVerbal2014,desaiPerformanceFourComputercoded2014,tungaVerbalAutopsyModels2021,otiVerbalAutopsyInterpretation2010}. InterVA-5 and InSilicoVA are widely used and studied standard statistical models \citep{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} for COD assignment in VAs under the openVA framework \citep{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \citep{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \citep{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \citep{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \citep{mccormickProbabilisticCauseofDeathAssignment2016b}. These computer models often utilize data from the structured questionnaire, but often omit the free-text open narrative, which misses latent information, such as chronology or health-seeking behaviors, that may potentially help models perform better than using the questionnaire alone \citep{jebleeAutomaticallyDeterminingCause2019,blancoExtractingCauseDeath2021,kingQualityDiagnosticValue2016}.
 
-Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \citep{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. In 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \citep{wuBriefOverviewChatGPT2023}. In March 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \citep{openaiGPT4TechnicalReport2023}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conduct a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
+Recently, Large Language Models (LLM), leveraging massive datasets and deep learning approaches, have made advances in performing a variety of Natural Language Processing (NLP) tasks using free-text, such as question answering, code generation, and even medical diagnosis \citep{changSurveyEvaluationLarge2023,lundChattingChatGPTHow2023,svyatkovskiyIntelliCodeComposeCode2020,hauptAIGeneratedMedicalAdvice2023}. In 2022, a widely-available LLM called ChatGPT was released by OpenAI with capabilities of answering natural language text inquiries using training data up to September 2021. ChatGPT-3 was based on several Generative Pre-trained Transformer (GPT) models between 2018 to 2020, namely GPT-1 to GPT-3, which had notable differences in training data sizes of 5 gigabytes to 45 terabytes from web sources that resulted in 117 million to 175 billion parameter models \citep{wuBriefOverviewChatGPT2023}. In March 2023, ChatGPT-4 was released with human-level performance on various professional and academic exams and benchmarks that outperformed ChatGPT-3 \citep{openaiGPT4TechnicalReport2023}. GPT-3.5 \citep{brownLanguageModelsAre2020} and GPT-4 \citep{openaiGPT4TechnicalReport2023} are LLMs that utilize deep neural networks with transformer architectures \citep{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \citep{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in GPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \citep{wuBriefOverviewChatGPT2023}. Given the limited usage of free-text open narratives in computer models for determining CODs, and recent advances in LLMs that leverage natural language text prompts, we conducted a case study with Sierra Leone deaths from VA in 2019 to 2022 to compare four models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for determining CODs.
 
 \section{Methods}\label{methods}
 
@@ -192,45 +192,19 @@ This study uses 6939 physician agreed records (two physicians with similar COD a
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
 
-Initially, 11,920 records from the HEAL-SL study \citep{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \citep{worldhealthorganizationICD10InternationalStatistical2011}. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). For each record, two codes were assigned by two different randomly selected physicians, where codes were evaluated for agreement using Central Medical Evaluation Agreement 10 (CMEA-10) codes. CMEA-10 groups a range of similar ICD-10 codes together, where if they are in agreement if they are within the same group \citep{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation.
+Initially, 11,920 records from the HEAL-SL study \citep{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022} were collected from dual-coded EVA, where each record was randomly coded by two different physicians that assigned CODs as International Classification of Diseases Revision 10 (ICD-10) codes \citep{worldhealthorganizationICD10InternationalStatistical2011}. For each record, two codes were assigned by two different randomly selected physicians, where codes were evaluated for agreement using Central Medical Evaluation Agreement 10 (CMEA-10) codes. CMEA-10 groups a range of similar ICD-10 codes together, where if they are in agreement if they are within the same group \citep{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). When codes were not in agreement, a record enters the reconciliation phase, where the two physicians were provided reasoning and initial codes from each other to: (1) keep their initial code (2) assign the other physician's code or (3) assign a new code. If codes were not in agreement after the reconciliation phase, a record enters the adjudication phase, where a third senior physician evaluates both physicians' reasoning and codes before and after reconciliation, and assigns a final code based on their evaluation.
 
-The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records. Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \citep{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups.  After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code. The 6939 physician agreed records were evenly distributed in terms of sex and age, except for children aged 1-5 years (n=1633, 24\%), while Malaria (n=799, 21\%) was the COD for about a fifth of the records. See Appendix \ref{app-data} for further details on data distributions across age groups.
+Since computer models were compared to physicians in this study, there was more certainty that COD assignments agreed by both physicians were representative of physician assignment than when they disagreed \citep{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. Thus, we used 6942 physician agreed records of the 11,920 total records. For better comparison, we standardized all codes to CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups. After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation. See Appendix \ref{app-methods-data} and \ref{app-data} for further details on data preprocessing and characteristics of the physician agreed records.
 
 \subsection{Modelling}\label{methods-models}
 
-Four computer models were used to assign COD for each of the 6939 physician agreed records: GPT-3.5, GPT-4, InterVA-5, and InSilicoVA. Each model required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from GPT-3.5 and GPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. All model outputs were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians.
-
-\subsubsection{Overview of GPT-3.5/4, InterVA-5, and InSilicoVA}\label{methods-models-overview}
-
-GPT-3.5 \citep{brownLanguageModelsAre2020} and GPT-4 \citep{openaiGPT4TechnicalReport2023} are LLMs that utilize deep neural networks with transformer architectures \citep{vaswaniAttentionAllYou2017} and reinforcement learning from human feedback \citep{ouyangTrainingLanguageModels2022,christianoDeepReinforcementLearning2017,stiennonLearningSummarizeHuman2020,wirthSurveyPreferencebasedReinforcement2017} to follow instructions from prompts and provide human-level responses, with known differences in GPT-4 possessing multimodal capabilites (e.g. image/voice input/output), more recent training data, and improved responses compared to ChatGPT-3 \citep{wuBriefOverviewChatGPT2023}. GPT-3.5 and GPT-4 were instructed with text prompts to assign CODs based on the open narrative. InterVA-5 and InSilicoVA are widely used and studied standard statistical models \citep{murrayUsingVerbalAutopsy2014,otiVerbalAutopsyInterpretation2010,benaraEvaluationMethodsAssigning2023,chandramohanEstimatingCausesDeath2021,tungaVerbalAutopsyModels2021,leitaoComparisonPhysiciancertifiedVerbal2014,jhaAutomatedPhysicianAssignment2019} for COD assignment in VAs under the openVA framework \citep{liOpenVAToolkitVerbal2023}. InterVA-5 applies Bayesian probabilistic modelling \citep{bayesEssaySolvingProblem1958} using a set of standardized symptoms from reports and related conditional probabilities from medical experts to assign CODs based on the highest probability \citep{byassIntegratedApproachProcessing2019,byassStrengtheningStandardisedInterpretation2012}. InSilicoVA improves upon InterVA (e.g. comparable probabilities across individuals, measures of uncertainty, and inclusion of additional data sources) with a hierarchical Bayesian framework and Markov Chain Monte Carlo (MCMC) simulations \citep{brooksMarkovChainMonte1998,chibMarkovChainMonte2001,hanMarkovChainMonte2001} to incorporate multiple sources of uncertainty for assigning CODs based on the highest probability \citep{mccormickProbabilisticCauseofDeathAssignment2016b}. For assigning CODs, GPT-3.5 and GPT-4 require prompts containing conversation-like textual instructions as input, while InterVA-5 and InSilicoVA require structured symptom and associated sociodemographic data as input. 
-
-\subsubsection{Input Data and Preprocessing}\label{methods-models-input}
-
-For GPT-3.5 and GPT-4, 6939 text prompts were generated for each physician agreed record as input to instruct the models to assign CODs based on the open narratives. Two types of text prompts were used: user prompts and system prompts. System prompts contained textual instructions to assign the role of a physician ICD-10 coder with expertise in Sierra Leone. The following system prompt was used for each record:
-
-\begin{lstlisting}
-You are a physician with expertisein determining underlying causes of death in Sierra Leone by assigning the most probable ICD-10 code for each death using verbal autopsy narratives. Return only the ICD-10 code without description. E.g. A00. If there are multiple ICD-10 codes, show one code per line.
-\end{lstlisting}
-
-\noindent User prompts contained textual instructions to perform coding of VA records based on the age, sex, and narrative of the deceased. The following template was used to generate user prompts for each record, where \verb|<age>| and \verb|<sex>| from the questionnaire, and \verb|<narrative>| from the narratives, were replaced with values from the data:
+Four computer models were used to assign COD for each of the 6939 physician agreed records: GPT-3.5, GPT-4, InterVA-5, and InSilicoVA. For GPT-3.5 and GPT-4, the following user prompt was used to instruct each model to produce COD assignments as ICD-10 codes, where \verb|<age>| and \verb|<sex>| from the questionnaire, and \verb|<narrative>| from the narratives, were replaced with values from the data:
 
 \begin{lstlisting}
 Determine the underlying cause of death and provide the most probable ICD-10 code for a verbal autopsy narrative of a <age> years old <sex> death in Sierra Leone:  <narrative>
 \end{lstlisting}
 
-\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \citep{worldhealthorganizationODKVerbalAutopsy2022,nafundiODKCollectData2023} consisting of 526 variables \citep{dipasqualeReleaseODK20162016}, followed by further conversion into OpenVA format \citep{liOpenVAToolkitVerbal2023} consisting of 353 variables \citep{byassInterVA5UserGuide2020} using the \verb|pyCrossVA| version 0.97 Python package \citep{thomasPycrossvaPrepareData}. The 6939 records were all converted into OpenVA formatted records for InterVA-5 and InSilicoVA.
-
-\subsubsection{Models and Parameters}\label{methods-models-params}
-
-The GPT-3.5 and GPT-4 Application Programming Interface (API) was accessed using Python version 3.11.4 and used to assign CODs for each record. GPT-3.5 used the \verb|gpt-3.5-turbo| model, while GPT-4 used the \verb|gpt-4-0613| model. The parameter \verb|temperature| for GPT-3.5 and GPT-4, representing the sampling temperature ranging from 0 to 2 (default of 1), was set to 0 to produce more deterministic outputs \citep{openaiOpenAIPlatformAPI2024}. Higher values closer to 2 may produce less deterministic outputs, while lower values closer to 0 produce more deterministic outputs.
-
-The \verb|openVA| R package was used to run InterVA-5 and InSilicoVA models to assign CODs for each record in R version 4.3.1. The \verb|openVA| package version 1.1.1 used dependent packages \verb|InterVA5| version 1.1.3 and \verb|InSilicoVA| version 1.4.0. The \verb|Nsim| (number of iterations to run) parameter \citep{liInSilicoVAProbabilisticVerbal2022} for InSilicoVA was set to 9500, while the \verb|HIV| (level of prevalence of human immunodeficiency virus) and \verb|Malaria| (level of prevalence of Malaria) parameters \citep{thomasInterVA5ReplicateAnalyse2021} for InterVA-5 were both set to \verb|'h'| (high) reflecting HIV and Malaria disease assumptions in Sierra Leone \citep{yendewaHIVAIDSSierra2018,walkerMalariaMorbidityMortality2015}.
-
-% Note that the default value of \verg|Nsim=10000| for InSilicoVA ran until 9500 iterations before it stopped due to errors, thus Nsim=9500 was used and ran successfully for all iterations.
-
-\subsubsection{Output Data and Code Conversions}\label{methods-models-output}
-
-Of the 6939 input records, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA were able to assign CODs for 6939 (100\%), 6935 (\textgreater 99\%), 6830 (98\%), 6830 (98\%) records respectively. All 6830 (100\%) InterVA-5 and InSilicoVA records with WHO VA 2016 v1.5 output codes \citep{worldhealthorganizationVerbalAutopsyStandards2016} were converted into ICD-10 codes respectively. After all model outputs were converted to ICD-10 codes, they were further converted to CGHR-10 codes. The 6939 GPT-3.5 and 6935 GPT-4 output records with ICD-10 codes were converted into 6930 (\textgreater 99\%) and 6931 (\textgreater 99) records with CGHR-10 codes, where \textless 1\% (9 and 8) records did not have matching CGHR-10 codes respectively. The 6830 InterVA-5 and InSilicoVA records with ICD-10 codes were converted into 6802 (\textgreater 99\%) and 6726 (98\%) records with CGHR-10 codes respectively, where 28 (\textless 1\%) and 104 (1\%) of records could not be converted into CGHR-10 codes.
+\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from EVA were converted into into OpenVA format \citep{liOpenVAToolkitVerbal2023}, and fed into each model to produce COD assignments as WHOVA 2016 codes. All model outputs (ICD-10 for GPT-3.5/4 and WHOVA-2016 for InSilicoVA/InterVA-5) were converted to CGHR-10 codes to evaluate performances of models for COD assignment relative to physicians. See Appendix \ref{app-methods-model} for additional details regarding input parameters and code conversions for each model.
 
 \subsection{Performance Evaluation}\label{methods-eval}
 
@@ -310,7 +284,7 @@ At the population level, overall performances for all models were similar to phy
     \caption{Leading causes globally in 2021 and most relevant models.}\label{tab-leadcod}%
     \begin{tabular}{@{}llll@{}}
     \toprule
-    \makecell{Leading Causes of Death\\($\sim$55\% of 68M deaths)\footnotemark[1]} & \makecell{Deaths\\(of 68M)\footnotemark[2]} & \makecell{Best\\Model(s)} & \makecell{PCCC} \\
+    \makecell{Leading Causes of Death\\($\sim$53\% of 68M deaths)\footnotemark[1]} & \makecell{Deaths\\(\% of 68M)\footnotemark[2]} & \makecell{Best\\Model(s)} & \makecell{PCCC} \\
     \midrule
 
     Ischaemic heart disease & 9M (13\%) & GPT-4 & 0.65 (n=168)\\ 
@@ -318,24 +292,22 @@ At the population level, overall performances for all models were similar to phy
     Cancers & 4.3M (4\%) & GPT-4 & 0.91 (n=49)\\
     Lower respiratory infections & 2.4M (3\%) & GPT-3.5/4 & 0.78 (n=180)\footnotemark[3]\\
     Diabetes mellitus & 1.6M (2\%) & GPT-3.5 & 0.92 (n=27)\\
-    Kidney disease & 1.4M (2\%)  & GPT-3.5 & 0.92 (n=27)\footnotemark[4]\\
     Tuberculosis & 1.4M (2\%) & InSilicoVA & 0.71 (n=171)\\
-    Hypertensive heart disease & 1.4M (2\%) & GPT-4 & 0.78 (n=107)\footnotemark[5]\\
-    Cirrhosis of the liver & 1.3M (2\%) & GPT-3.5 & 0.78 (n=128)\footnotemark[6]\\ 
+    Hypertensive heart disease & 1.4M (2\%) & GPT-4 & 0.78 (n=107)\footnotemark[4]\\
+    Cirrhosis of the liver & 1.3M (2\%) & GPT-3.5 & 0.78 (n=128)\footnotemark[5]\\ 
     Diarrhoeal diseases & 1.2M (2\%) & GPT-4 & 0.68 (n=205)\\ 
     Road injury & 1,183 (2\%) & InSilicoVA & 0.84 (n=357)\\
     Preterm birth complications & 0.9M (1\%) & GPT-4 & 0.71 (n=73)\\
-    Falls & 0.7M (1\%) & GPT-4 & 0.89 (n=492)\footnotemark[7]\\
+    Falls & 0.7M (1\%) & GPT-4 & 0.89 (n=492)\footnotemark[6]\\
 
     \botrule
     \end{tabular}
-    \footnotetext[1]{Does not include COVID-19, alzheimer disease, other dementias, and self-harm. Trachea, bronchus, lung, colon, rectum, stomache, and breast cancers were generalized into cancers.}
-    \footnotetext[2]{Total of $\sim$68 Million (M) deaths globally. Numbers are rounded.}
+    \footnotetext[1]{COVID-19, kidney disease, alzheimer disease, other dementias, and self-harm were excluded as a relevant CGHR-10 code was not present. Trachea, bronchus, lung, colon, rectum, stomache, and breast cancers were generalized into cancers.}
+    \footnotetext[2]{Percentage of $\sim$68 Million (M) deaths globally. Numbers are rounded.}
     \footnotetext[3]{Mean of chronic and acute respiratory infections.}
-    \footnotetext[4]{Derived from diabetes mellitus.}
-    \footnotetext[5]{Derived from other cardiovascular diseases.}
-    \footnotetext[6]{Derived from liver and alcohol related diseases.}
-    \footnotetext[7]{Mean of adult and child injuries.}
+    \footnotetext[4]{Derived from other cardiovascular diseases.}
+    \footnotetext[5]{Derived from liver and alcohol related diseases.}
+    \footnotetext[6]{Mean of adult and child injuries.}
 \end{table}
 
 \subsubsection{Age-specific Performance Patterns}\label{discuss-adv-age}
@@ -501,13 +473,87 @@ PJ and PB are the study Principal Investigators. ATA and RK implemented the data
 %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
 %% tables and equations etc.
 
-\section{Data Profile}\label{app-data}
+\section{Details on Methods}\label{app-methods}
 
-The 6939 physician agreed records were relatively evenly distributed (approximately 40-57\% male and female) for the adult, child, and neonatal age groups in terms of sex (Figure \ref{fig-data-agesex}) with the most records in the 1-5 year (n=1633, 24\%) age range, and the least records in the 10-14 year (n=135, 2\%) and 7-27 day (n=82, 1\%) age ranges (Figure \ref{fig-data-agerange}). The other 15 five-year age ranges within 0 days to 69 years were relatively evenly distributed with approximately 4-6\% of the 6939 records each. The 3826 adult records had most records in the 65-69 year (n=575, 15\%), and the least in the 10-14 year (n=135, 4\%) age ranges, while the other 10 age ranges were relatively evenly distributed at 7-9\% of all records (Figure \ref{fig-data-agerange-adult}). For adult CODs, Malaria (n=799, 21\%) had the highest number of adult records, and cancers (n=49, 1\%), diabetes mellitus (n=27, \textless 1\%), and suicide (n=3, \textless 1\%) had the lowest number adult of adult records, while the other 15 CODs had between 2-11\% of all adult records (Figure \ref{fig-data-cod-adult}). The 2636 child records had most records in the 1-5 year (n=1633, 62\%) age range while the three other age ranges were relatively evenly distributed at 12-14\% of all records (Figure \ref{fig-data-agerange-child}). For child CODs, Malaria (n=1382, 52\%) and other infections (n=667, 25\%) had the highest number of child records, while nutritional deficiencies (n=11, \textless 1\%) and congenital anomalies (n=1, \textless 1\%) had the lowest number of records with the five other CODs between 3-7\% of all child records. The 477 neonatal records had two age ranges with most records in the 0-6 day (n=395, 83\%) age range and the rest in the 7-27 day (n=82, 17\%) age range (Figure \ref{fig-data-agerange-neo}). For neonatal CODs, stillbirth (n=172, 36\%) had the highest number of neonatal records, and ill-defined (n=23, 5\%), other (n=5, 1\%), and congenital anomalies (n=2, \textless 1\%) had the least number of records with the rest of the other three CODs between 15-22\% of all neonatal records (Figure \ref{fig-data-cod-neo}).
+This section provides additional details on the methods described in Section \ref{methods}. An overview of the methods used in this study is seen in Figure \ref{fig-methods} as a five-step process. Section \ref{app-methods-data} provides details on the preprocessed data used for modelling. Section \ref{app-methods-model} describes the data and parameter inputs and outputs for each model, while Section \ref{app-methods-eval} details the evaluation of model outputs at the individual and population level across different CODs, age groups, and age ranges.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{fig-map.pdf}
+\includegraphics[width=.7\textwidth]{fig-methods.pdf}
+\caption{Case study methods.}\label{fig-methods}
+\end{figure}
+
+\subsection{CGHR-10 Physician Agreed Records}\label{app-methods-data}
+
+Initially, 11,920 records were collected from dual-coded EVA in the HEAL-SL study. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records (based on comparisons using CMEA-10 codes, see Additional File 2). The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups. After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+
+\subsection{Modelling Details}\label{app-methods-model}
+
+Each model (GPT-3.5, GPT-4, InSilicoVA, and InterVA-5) required pre-processing of the 6939 records into input data, and standardization of output COD codes from models for performance evaluation as not all models produced comparable codes across outputs. Although each model can assign multiple CODs per record, only the first generated COD response from GPT-3.5 and GPT-4, and the most probable COD from InterVA-5 and InSilicoVA were used for evaluation. Section \ref{app-methods-input} describes the input data and parameters for each model, while Section \ref{app-methods-output} details the outputs from running each model.
+
+\subsubsection{Input Data and Preprocessing}\label{app-methods-input}
+
+For GPT-3.5 and GPT-4, 6939 text prompts were generated for each physician agreed record as input to instruct the models to assign CODs based on the open narratives. Two types of text prompts were used: user prompts and system prompts. System prompts contained textual instructions to assign the role of a physician ICD-10 coder with expertise in Sierra Leone. The following system prompt was used for each record:
+
+\begin{lstlisting}
+You are a physician with expertise in determining underlying causes of death in Sierra Leone by assigning the most probable ICD-10 code for each death using verbal autopsy narratives. Return only the ICD-10 code without description. E.g. A00. If there are multiple ICD-10 codes, show one code per line.
+\end{lstlisting}
+
+\noindent User prompts contained textual instructions to perform coding of VA records based on the age, sex, and narrative of the deceased. The following template was used to generate user prompts for each record, where \verb|<age>| and \verb|<sex>| from the questionnaire, and \verb|<narrative>| from the narratives, were replaced with values from the data:
+
+\begin{lstlisting}
+Determine the underlying cause of death and provide the most probable ICD-10 code for a verbal autopsy narrative of a <age> years old <sex> death in Sierra Leone:  <narrative>
+\end{lstlisting}
+
+\noindent For InterVA-5 and InSilicoVA, the standardized questionnaire data from the HEAL-SL EVA were first converted into 2016 World Health Organization (WHO) VA questionnaire revision 1.5.1 Open Data Kit (ODK) format \citep{worldhealthorganizationODKVerbalAutopsy2022,nafundiODKCollectData2023} consisting of 526 variables \citep{dipasqualeReleaseODK20162016}, followed by further conversion into OpenVA format \citep{liOpenVAToolkitVerbal2023} consisting of 353 variables \citep{byassInterVA5UserGuide2020} using the \verb|pyCrossVA| version 0.97 Python package \citep{thomasPycrossvaPrepareData}. The 6939 records were all converted into OpenVA formatted records for InterVA-5 and InSilicoVA.
+
+\subsubsection{Models and Parameters}\label{methods-models-params}
+
+The GPT-3.5 and GPT-4 Application Programming Interface (API) was accessed using Python version 3.11.4 and used to assign CODs for each record. GPT-3.5 used the \verb|gpt-3.5-turbo| model, while GPT-4 used the \verb|gpt-4-0613| model. The parameter \verb|temperature| for GPT-3.5 and GPT-4, representing the sampling temperature ranging from 0 to 2 (default of 1), was set to 0 to produce more deterministic outputs \citep{openaiOpenAIPlatformAPI2024}. Higher values closer to 2 may produce less deterministic outputs, while lower values closer to 0 produce more deterministic outputs.
+
+The \verb|openVA| R package was used to run InterVA-5 and InSilicoVA models to assign CODs for each record in R version 4.3.1. The \verb|openVA| package version 1.1.1 used dependent packages \verb|InterVA5| version 1.1.3 and \verb|InSilicoVA| version 1.4.0. The \verb|Nsim| (number of iterations to run) parameter \citep{liInSilicoVAProbabilisticVerbal2022} for InSilicoVA was set to 9500, while the \verb|HIV| (level of prevalence of human immunodeficiency virus) and \verb|Malaria| (level of prevalence of Malaria) parameters \citep{thomasInterVA5ReplicateAnalyse2021} for InterVA-5 were both set to \verb|'h'| (high) reflecting HIV and Malaria disease assumptions in Sierra Leone \citep{yendewaHIVAIDSSierra2018,walkerMalariaMorbidityMortality2015}. Note that the default value of \verb|Nsim=10000| for InSilicoVA ran until 9500 iterations before it stopped due to errors, thus \verb|Nsim=9500| was used and ran successfully for all iterations.
+
+\subsection{Output Data and Code Conversion}\label{app-methods-output}
+
+Of the 6939 input records, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA were able to assign CODs for 6939 (100\%), 6935 (\textgreater 99\%), 6830 (98\%), 6830 (98\%) records respectively. All 6830 (100\%) InterVA-5 and InSilicoVA records with WHO VA 2016 v1.5 output codes \citep{worldhealthorganizationVerbalAutopsyStandards2016} were converted into ICD-10 codes respectively. After all model outputs were converted to ICD-10 codes, they were further converted to CGHR-10 codes. The 6939 GPT-3.5 and 6935 GPT-4 output records with ICD-10 codes were converted into 6930 (\textgreater 99\%) and 6931 (\textgreater 99) records with CGHR-10 codes, where \textless 1\% (9 and 8) records did not have matching CGHR-10 codes respectively. The 6830 InterVA-5 and InSilicoVA records with ICD-10 codes were converted into 6802 (\textgreater 99\%) and 6726 (98\%) records with CGHR-10 codes respectively, where 28 (\textless 1\%) and 104 (1\%) of records could not be converted into CGHR-10 codes.
+
+\subsection{Performance Evaluation Details}\label{app-methods-eval}
+
+\subsubsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
+
+CSMF accuracy measures the performance of models at the population level, comparing distributions of CODs between the physicians and the models \citep{murrayRobustMetricsAssessing2011}. To calculate CSMF accuracy, we first calculate $CSMF_j$ as is the fraction of physician or model records for cause $j$, given by dividing the number of records for cause $j$ with the total number of records as seen in Equation \ref{eq-csmf}. Then, the $CSMFMaximumError$, representing the worst possible model, is calculated using Equation \ref{eq-csmferr}. Finally, the CSMF accuracy is given by Equation \ref{eq-csmfa}, where $k$ is the number of causes, $j$ is a cause, $CSMF^{true}_j$ is the true physician CSMF for cause $j$, and $CSMF^{pred}_j$ is the prediction model CSMF for cause $j$. CSMF accuracy ranges from 0 to 1, where 1 means that the model completely matched the physician COD distribution and 0 means that it did not match the distribution at all.
+
+\begin{equation}\label{eq-csmf}
+    CSMF_j = Records_j / Records
+\end{equation}
+
+\begin{equation}\label{eq-csmferr}
+    CSMFMaximumError = 2(1 - Min(CSMF^{true}_j)
+\end{equation}
+
+\begin{equation}\label{eq-csmfa}
+    CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
+\end{equation}
+
+\subsubsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
+
+PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, correcting for COD assignments made purely by chance \citep{murrayRobustMetricsAssessing2011}. PCCC is given by Equation \ref{eq-pccc}, where $k$ is the number of top COD assignments from the model to consider, $N$ is number of causes, and $C$ is fraction of records where the physician COD assignment is one of the top COD assignments from the model. For this study, we set $k$ to 1, making $C$ equivalent to the fraction of true positives $TP$ or records where the physician COD assignment is equal to the model COD assignment as shown in Equation \ref{eq-pccc-c}. Higher PCCC values closer to 1 indicate that model COD assignments are similar to physician COD assignments, while values closer to 0 indicate that model COD assignments are not similar to physicians.
+
+\begin{equation}\label{eq-pccc-c}
+    C = \frac{TP}{Records}
+\end{equation}
+
+\begin{equation}\label{eq-pccc}
+    PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
+\end{equation}
+
+\section{Data Profile}\label{app-data}
+
+The 6939 physician agreed records were collected using VA from the HEAL-SL study between 2019-2022, where records were collected using nation wide samples across Sierra Leone provinces seen in Figure \ref{fig-map}. More populous areas (e.g. southern and north east provinces with $~$197,000 and $~$135,000 population respectively) had more sampling areas versus less populous areas (e.g. north west and eastern provinces with $~$50,000 and $~$69,000 people respectively). The distribution of the case study data are shown by CGHR-10 causes of death in Table \ref{tab-data-cod}. All age groups had relatively evenly distributed female and male records (44-55\% of 6939 records each). Across CODs, there were noticeably more female records for cancers (65\%), and maternal conditions (100\%), while more male records for chronic respiratory diseases (61\%), other noncommunicable diseases (61\%), other injuries (77\%), road and transport injuries (71\%), and tuberculosis (68\%). Most records were coded by physicians as malaria for adults (20\%) and children (52\%), and stillbirth (36\%) and neonatal infections (21\%) for neonates. Suicide, congenital anomalies, nutritional deficiencies, and other had low sample sizes for each age group (\textless 1\% of total records for each age group). Table \ref{tab-data-age} shows the distribution of the study data by age ranges. Across age ranges, there were more male records for 50-59 years (60-62\%), while all other records had between 49-59\% female and male records. Most records were in the 65-69 years age range for adults (15\%), 1-5 years for children (62\%), and 0-6 days for neonates (83\%).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{fig-map.pdf}
 \caption{Case study data sampling areas.}\label{fig-map}
 \end{figure}
 
@@ -515,7 +561,7 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
 \caption{Case study data by cause of death.}\label{tab-data-cod}
 \begin{tabular*}{\textheight}{@{\extracolsep\fill}lllll}
     \toprule%
-    Age Group  &  Cause of Death (COD)  &  Female  &  Male  &  Total  \\
+    Age Group  &  CGHR-10 Cause of Death (COD)  &  Female  &  Male  &  Total  \\
     \midrule
     \makecell[l]{\\Adult (n=3826, 55.1\%, 18 CODs)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  Acute Respiratory Infections  &  48 (45.7\%)  &  57 (54.3\%)  &  105 (2.7\%)  \\ 
         &  Cancers  &  32 (65.3\%)  &  17 (34.7\%)  &  49 (1.3\%)  \\ 
@@ -561,7 +607,7 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
 \toprule%
     Age Group  &  Age Range  &  Female  &  Male  &  Total  \\
     \midrule
-        \makecell[l]{\\Adult (n=3826, 55.1\%, 18 CODs)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  10-14 Years  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (3.5\%)  \\ 
+        \makecell[l]{\\Adult (n=3826, 55.1\%)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  10-14 Years  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (3.5\%)  \\ 
         &  15-19 Years  &  115 (42.8\%)  &  154 (57.2\%)  &  269 (7\%)  \\ 
         &  20-24 Years  &  146 (53.1\%)  &  129 (46.9\%)  &  275 (7.2\%)  \\ 
         &  25-29 Years  &  159 (45.2\%)  &  193 (54.8\%)  &  352 (9.2\%)  \\ 
@@ -573,51 +619,15 @@ The 6939 physician agreed records were relatively evenly distributed (approximat
         &  55-59 Years  &  96 (37.6\%)  &  159 (62.4\%)  &  255 (6.7\%)  \\ 
         &  60-64 Years  &  128 (40.8\%)  &  186 (59.2\%)  &  314 (8.2\%)  \\ 
         &  65-69 Years  &  243 (42.3\%)  &  332 (57.7\%)  &  575 (15\%)  \\ 
-        \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  1-5 Months  &  146 (47.4\%)  &  162 (52.6\%)  &  308 (11.7\%)  \\ 
+        \makecell[l]{\\Child (n=2636, 38\%)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  1-5 Months  &  146 (47.4\%)  &  162 (52.6\%)  &  308 (11.7\%)  \\ 
         &  6-11 Months  &  160 (50.8\%)  &  155 (49.2\%)  &  315 (11.9\%)  \\ 
         &  1-5 Years  &  822 (50.3\%)  &  811 (49.7\%)  &  1633 (61.9\%)  \\ 
         &  6-11 Years  &  162 (42.6\%)  &  218 (57.4\%)  &  380 (14.4\%)  \\ 
-        \makecell[l]{\\Neonate (n=477, 6.9\%, 7 CODs)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  0-6 Days  &  184 (46.6\%)  &  211 (53.4\%)  &  395 (82.8\%)  \\ 
+        \makecell[l]{\\Neonate (n=477, 6.9\%)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  0-6 Days  &  184 (46.6\%)  &  211 (53.4\%)  &  395 (82.8\%)  \\ 
         &  7-27 Days  &  43 (52.4\%)  &  39 (47.6\%)  &  82 (17.2\%)  \\
     \botrule
 \end{tabular}
 \end{table}
-
-\section{Details on Methods}\label{app-methods}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{fig-methods.pdf}
-\caption{Case study methods.}\label{fig-methods}
-\end{figure}
-
-\subsection{Cause Specific Mortality Fraction (CSMF) Accuracy}\label{methods-eval-csmfa}
-
-CSMF accuracy measures the performance of models at the population level, comparing distributions of CODs between the physicians and the models \citep{murrayRobustMetricsAssessing2011}. To calculate CSMF accuracy, we first calculate $CSMF_j$ as is the fraction of physician or model records for cause $j$, given by dividing the number of records for cause $j$ with the total number of records as seen in Equation \ref{eq-csmf}. Then, the $CSMFMaximumError$, representing the worst possible model, is calculated using Equation \ref{eq-csmferr}. Finally, the CSMF accuracy is given by Equation \ref{eq-csmfa}, where $k$ is the number of causes, $j$ is a cause, $CSMF^{true}_j$ is the true physician CSMF for cause $j$, and $CSMF^{pred}_j$ is the prediction model CSMF for cause $j$. CSMF accuracy ranges from 0 to 1, where 1 means that the model completely matched the physician COD distribution and 0 means that it did not match the distribution at all.
-
-\begin{equation}\label{eq-csmf}
-    CSMF_j = Records_j / Records
-\end{equation}
-
-\begin{equation}\label{eq-csmferr}
-    CSMFMaximumError = 2(1 - Min(CSMF^{true}_j)
-\end{equation}
-
-\begin{equation}\label{eq-csmfa}
-    CSMFAccuracy = 1 - \frac{\sum^{k}_{j=1}|CSMF^{true}_j - CSMF^{pred}_j|}{CSMFMaximumError}
-\end{equation}
-
-\subsection{Partial Chance Corrected Concordance (PCCC)}\label{methods-eval-pccc}
-
-PCCC measures the performance of models at the individual level, comparing COD assignments between the physicians and models on a record by record basis, correcting for COD assignments made purely by chance \citep{murrayRobustMetricsAssessing2011}. PCCC is given by Equation \ref{eq-pccc}, where $k$ is the number of top COD assignments from the model to consider, $N$ is number of causes, and $C$ is fraction of records where the physician COD assignment is one of the top COD assignments from the model. For this study, we set $k$ to 1, making $C$ equivalent to the fraction of true positives $TP$ or records where the physician COD assignment is equal to the model COD assignment as shown in Equation \ref{eq-pccc-c}. Higher PCCC values closer to 1 indicate that model COD assignments are similar to physician COD assignments, while values closer to 0 indicate that model COD assignments are not similar to physicians.
-
-\begin{equation}\label{eq-pccc-c}
-    C = \frac{TP}{Records}
-\end{equation}
-
-\begin{equation}\label{eq-pccc}
-    PCCC(k) = \frac{C - \frac{k}{N}}{1 - \frac{k}{N}}
-\end{equation}
 
 \section{Experiment on Repeated Runs of GPT-3.5}\label{app-reprod}
 
