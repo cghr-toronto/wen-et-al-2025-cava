@@ -33,7 +33,7 @@
 %%\documentclass[sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
 %%\documentclass[sn-mathphys,Numbered]{sn-jnl}% Math and Physical Sciences Reference Style
 %%\documentclass[sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
-\documentclass[sn-vancouver,Numbered,referee]{sn-jnl}% Vancouver Reference Style
+\documentclass[lineno,sn-vancouver,Numbered,referee]{sn-jnl}% Vancouver Reference Style
 %%\documentclass[sn-apa]{sn-jnl}% APA Reference Style 
 %%\documentclass[sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
 %%\documentclass[default]{sn-jnl}% Default
@@ -149,13 +149,13 @@
 %% sample for unstructured abstract %%
 %%==================================%%
 
-\abstract{\textbf{Background:} Verbal Autopsies (VAs) collect data on deaths and their causes outside of traditional hospital settings to provide more representative counts and Causes of Death (CODs) for reducing premature mortality. Current computer models for COD assignment in VAs perform similar to physicians at the population level, but poorly at the individual level, due to a focus on structured questionnaire data and neglecting free text from the open narratives. Recently, a Generative Pre-trained Transformer (GPT) model called ChatGPT-4 has demonstrated human-level performance on professional and academic exams using free text input. ChatGPT-4 shows promise in mimicking physician behavior for assigning CODs, but to the best of our knowledge, has yet to be tested for assigning CODs using open narratives from VAs.
+\abstract{\textbf{Background:} Verbal Autopsies (VAs) collect data on deaths and their causes outside of traditional hospital settings to provide representative Causes of Death (CODs). Current computer models for COD assignment in VAs perform similar to physicians at the population level, but poorly at the individual level, due to focuses on questionnaire data and neglecting free text from narratives. Recently, a large language model called ChatGPT-4 demonstrated human-level performance on professional and academic exams. ChatGPT-4 shows promise in assigning CODs similar to physicians, but has yet been examined for assigning CODs using VA narratives.
 
-\textbf{Methods:} 6939 records collected from VA in Sierra Leone from 2019 to 2022 were used to compare four computer models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physicians for assigning CODs at the population and individual level. Open narratives were used for GPT-3.5/4 input, while structured questionnaires were used for InterVA-5/InSilicoVA input. All COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at the population and individual level respectively. Comparisons in CSMF and PCCC to physicians among models were evaluated overall and by COD, age group, and age ranges.
+\textbf{Methods:} 6939 VA records in Sierra Leone from 2019 to 2022 were used to compare four computer models, GPT-3.5, GPT-4, InterVA-5, and InSilicoVA, to physician COD assignment at population and individual levels. Narratives were used for GPT-3.5/4, while questionnaires were used for InterVA-5/InSilicoVA. COD assignments were grouped into general COD categories consisting of 19, 10, and 7 categories for adult, child, and neonatal age groups. Cause Specific Mortality Fraction (CSMF) accuracy and Partial Corrected Concordance (PCCC) were used to compare models to physicians at population and individual levels respectively. CSMF and PCCC were evaluated overall and by COD, age group, and age ranges.
 
 \textbf{Results:} GPT-4 had the best performance overall (0.61 PCCC), followed by GPT-3.5 (0.56 PCCC), and InSilicoVA/InterVA-5 (0.44 PCCC). GPT-4 had the best performance for adult and neonatal records (0.64 and 0.58 PCCC), with GPT-3.5 for child records (0.54 PCCC). All models' performances trended upwards from 1 month to 14 years ($\sim$0.1-0.75 PCCC) and downwards from 15-69 years ($\sim$0.7-0.35) of age. GPT-4, GPT-3.5, and InSilicoVA had the highest performances for 17, 9, and 4 of all 30 CODs respectively. At the population level, all models had CSMF accuracies between 0.74-0.79.
 
-\textbf{Conclusion:} All models performed well at the population level, while GPT-3.5/4 and InSilicoVA performed well for some CODs. GPT models have yet to replace physician coding, but have made improvements over InSilicoVA and InterVA-5. Thus, our research lays the foundation for future opportunities in computer assisted VA, where physicians are presented with alternative COD assignments from computer models to help reduce ill-defined codes and physician disagreement.
+\textbf{Conclusion:} All models performed well at the population level, while GPT-3.5/4 and InSilicoVA performed well at the individual level for some CODs. GPT models have yet to replace physician coding, but made improvements over InSilicoVA and InterVA-5. Our research lays the foundation for future work in computer assisted VA, where physicians utilize alternative COD assignments from computer models to help reduce ill-defined codes and physician disagreement.
 }
 
 %%================================%%
@@ -500,13 +500,13 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
 \caption{Case study data sampling areas.}\label{fig-map}
 \end{figure}
 
-\begin{sidewaystable}
+\begin{table}
 \caption{Case study data by cause of death.}\label{tab-data-cod}
-\begin{tabular*}{\textheight}{@{\extracolsep\fill}lllll}
+\begin{tabular}{@{}lllll@{}}
     \toprule%
     Age Group  &  CGHR-10 Cause of Death (COD)  &  Female  &  Male  &  Total  \\
     \midrule
-    \makecell[l]{\\Adult (n=3826, 55.1\%, 18 CODs)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  Acute Respiratory Infections  &  48 (45.7\%)  &  57 (54.3\%)  &  105 (2.7\%)  \\ 
+    \multirow{18}{*}{\makecell[l]{Adult\\(n=3826, 55.1\%, 18 CODs)\\Adult Female\\(n=1681, 43.9\%)\\Adult Male\\(n=2145, 56.1\%)}}  &  Acute Respiratory Infections  &  48 (45.7\%)  &  57 (54.3\%)  &  105 (2.7\%)  \\ 
         &  Cancers  &  32 (65.3\%)  &  17 (34.7\%)  &  49 (1.3\%)  \\ 
         &  Chronic Respiratory Diseases  &  29 (38.7\%)  &  46 (61.3\%)  &  75 (2\%)  \\ 
         &  Diabetes Mellitus  &  14 (51.9\%)  &  13 (48.1\%)  &  27 (0.7\%)  \\ 
@@ -523,8 +523,9 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
         &  Stroke  &  147 (44.4\%)  &  184 (55.6\%)  &  331 (8.7\%)  \\ 
         &  Suicide  &  N/A  &  3 (100\%)  &  3 (0.1\%)  \\ 
         &  Tuberculosis  &  54 (31.6\%)  &  117 (68.4\%)  &  171 (4.5\%)  \\ 
-        &  Unspecified Infections  &  175 (45\%)  &  214 (55\%)  &  389 (10.2\%)  \\ 
-    \makecell[l]{\\Child (n=2636, 38\%, 9 CODs)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  Congenital Anomalies  &  1 (100\%)  &  N/A  &  1 (0\%)  \\ 
+        &  Unspecified Infections  &  175 (45\%)  &  214 (55\%)  &  389 (10.2\%)  \\
+    \midrule
+    \multirow{9}{*}{\makecell[l]{Child\\(n=2636, 38\%, 9 CODs)\\Child Female\\(n=1290, 48.9\%)\\Child Male\\(n=1346, 51.1\%)}}  &  Congenital Anomalies  &  1 (100\%)  &  N/A  &  1 (0\%)  \\ 
         &  Diarrhoeal Diseases  &  79 (45.1\%)  &  96 (54.9\%)  &  175 (6.6\%)  \\ 
         &  \makecell[l]{Epilepsy, Leukaemia, And\\Other Noncommunicable Diseases}  &  61 (53.5\%)  &  53 (46.5\%)  &  114 (4.3\%)  \\ 
         &  Ill-Defined  &  34 (48.6\%)  &  36 (51.4\%)  &  70 (2.7\%)  \\ 
@@ -532,8 +533,9 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
         &  Malaria  &  680 (49.2\%)  &  702 (50.8\%)  &  1382 (52.4\%)  \\ 
         &  Nutritional Deficiencies  &  7 (63.6\%)  &  4 (36.4\%)  &  11 (0.4\%)  \\ 
         &  Other Infections  &  338 (50.7\%)  &  329 (49.3\%)  &  667 (25.3\%)  \\ 
-        &  Pneumonia  &  39 (48.1\%)  &  42 (51.9\%)  &  81 (3.1\%)  \\ 
-    \makecell[l]{\\Neonate (n=477, 6.9\%, 7 CODs)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  Birth Asphyxia And Birth Trauma  &  38 (36.9\%)  &  65 (63.1\%)  &  103 (21.6\%)  \\ 
+        &  Pneumonia  &  39 (48.1\%)  &  42 (51.9\%)  &  81 (3.1\%)  \\
+    \midrule
+    \multirow{7}{*}{\makecell[l]{Neonate\\(n=477, 6.9\%, 7 CODs)\\Neonate Female\\(n=227, 47.6\%)\\Neonate Male\\(n=250, 52.4\%)}}  &  Birth Asphyxia And Birth Trauma  &  38 (36.9\%)  &  65 (63.1\%)  &  103 (21.6\%)  \\ 
         &  Congenital Anomalies  &  2 (100\%)  &  N/A  &  2 (0.4\%)  \\ 
         &  Ill-Defined  &  11 (47.8\%)  &  12 (52.2\%)  &  23 (4.8\%)  \\ 
         &  Neonatal Infections  &  49 (49.5\%)  &  50 (50.5\%)  &  99 (20.8\%)  \\ 
@@ -541,8 +543,8 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
         &  Prematurity And Low Birthweight  &  39 (53.4\%)  &  34 (46.6\%)  &  73 (15.3\%)  \\ 
         &  Stillbirth  &  86 (50\%)  &  86 (50\%)  &  172 (36.1\%)  \\
     \botrule
-\end{tabular*}
-\end{sidewaystable}
+\end{tabular}
+\end{table}
 
 \begin{table}
 \caption{Case study data by age range.}\label{tab-data-age}
@@ -550,7 +552,7 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
 \toprule%
     Age Group  &  Age Range  &  Female  &  Male  &  Total  \\
     \midrule
-        \makecell[l]{\\Adult (n=3826, 55.1\%)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}  &  10-14 Years  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (3.5\%)  \\ 
+        \multirow{12}{*}{\makecell[l]{Adult (n=3826, 55.1\%)\\Adult Female (n=1681, 43.9\%)\\Adult Male (n=2145, 56.1\%)}}  &  10-14 Years  &  51 (37.8\%)  &  84 (62.2\%)  &  135 (3.5\%)  \\ 
         &  15-19 Years  &  115 (42.8\%)  &  154 (57.2\%)  &  269 (7\%)  \\ 
         &  20-24 Years  &  146 (53.1\%)  &  129 (46.9\%)  &  275 (7.2\%)  \\ 
         &  25-29 Years  &  159 (45.2\%)  &  193 (54.8\%)  &  352 (9.2\%)  \\ 
@@ -561,13 +563,15 @@ The 6939 physician agreed records were collected using VA from the HEAL-SL study
         &  50-54 Years  &  134 (39.6\%)  &  204 (60.4\%)  &  338 (8.8\%)  \\ 
         &  55-59 Years  &  96 (37.6\%)  &  159 (62.4\%)  &  255 (6.7\%)  \\ 
         &  60-64 Years  &  128 (40.8\%)  &  186 (59.2\%)  &  314 (8.2\%)  \\ 
-        &  65-69 Years  &  243 (42.3\%)  &  332 (57.7\%)  &  575 (15\%)  \\ 
-        \makecell[l]{\\Child (n=2636, 38\%)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}  &  1-5 Months  &  146 (47.4\%)  &  162 (52.6\%)  &  308 (11.7\%)  \\ 
+        &  65-69 Years  &  243 (42.3\%)  &  332 (57.7\%)  &  575 (15\%)  \\
+        \midrule
+        \multirow{4}{*}{\makecell[l]{Child (n=2636, 38\%)\\Child Female (n=1290, 48.9\%)\\Child Male (n=1346, 51.1\%)}}  &  1-5 Months  &  146 (47.4\%)  &  162 (52.6\%)  &  308 (11.7\%)  \\ 
         &  6-11 Months  &  160 (50.8\%)  &  155 (49.2\%)  &  315 (11.9\%)  \\ 
         &  1-5 Years  &  822 (50.3\%)  &  811 (49.7\%)  &  1633 (61.9\%)  \\ 
-        &  6-11 Years  &  162 (42.6\%)  &  218 (57.4\%)  &  380 (14.4\%)  \\ 
-        \makecell[l]{\\Neonate (n=477, 6.9\%)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}  &  0-6 Days  &  184 (46.6\%)  &  211 (53.4\%)  &  395 (82.8\%)  \\ 
-        &  7-27 Days  &  43 (52.4\%)  &  39 (47.6\%)  &  82 (17.2\%)  \\
+        &  6-11 Years  &  162 (42.6\%)  &  218 (57.4\%)  &  380 (14.4\%)  \\
+        \midrule
+        \multirow{4}{*}{\makecell[l]{Neonate (n=477, 6.9\%)\\Neonate Female (n=227, 47.6\%)\\Neonate Male (n=250, 52.4\%)}}  &  0-6 Days  &  184 (46.6\%)  &  211 (53.4\%)  &  395 (82.8\%)  \\ 
+        &  7-27 Days  &  43 (52.4\%)  &  39 (47.6\%)  &  82 (17.2\%)  \\\\\\
     \botrule
 \end{tabular}
 \end{table}
