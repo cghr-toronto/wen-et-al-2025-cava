@@ -19,6 +19,7 @@ options(readr.show_col_types = FALSE)
 #install.packages("ggrepel")
 #install.packages("patchwork")
 #install.packages("glue")
+#install.packages("kableExtra)
 ```
 
 # Libraries
@@ -29,6 +30,7 @@ library(dplyr)
 library(ggrepel)
 library(patchwork)
 library(glue)
+library(kableExtra)
 ```
 
 ```{r, echo=FALSE}
@@ -151,6 +153,7 @@ plot_perf <- function(
         df_long,
         f = calc_pccc,
         group = "cod_name",
+        color = "model_name",
         text_scale = 1,
         title = NULL,
         title_size = 10,
@@ -162,7 +165,7 @@ plot_perf <- function(
         text_hjust = 0.1,
         add_min_points = F,
         add_max_points = F,
-        mid_points_size = 1.5,
+        mid_points_size = 2.5,
         min_points_size = 2,
         max_points_size,
         x_limits = c(0, 1),
@@ -173,6 +176,9 @@ plot_perf <- function(
         x_text_size = 8 * text_scale,
         y_text_size = 9 * text_scale,
         sort_group = T,
+        legend_position = "bottom",
+        legend_title = element_blank(),
+        legend_margin = margin(c(-8, -2, -2, -2)),
         ...
     ) {
     
@@ -223,10 +229,6 @@ plot_perf <- function(
     
     # Plot metric for each model
     out <- ggplot(df_plot, aes(x = metric, y = .data[[group]])) +
-        geom_point( # mid points
-            data = df_mids,
-            size = mid_points_size
-        ) +
         geom_segment( # min max lines
             data = df_ends,
             aes(
@@ -236,6 +238,10 @@ plot_perf <- function(
                 yend = .data[[group]]
             ),
             linewidth = 0.75
+        ) +
+        geom_point( # mid points
+            aes(color = .data[[color]]),
+            size = mid_points_size
         ) +
         geom_text( # min model text
             data = df_ends,
@@ -284,7 +290,9 @@ plot_perf <- function(
                 fill = NA,
                 linewidth = 0.75
             ),
-            legend.position = "none",
+            legend.position = legend_position,
+            legend.title = legend_title,
+            legend.margin = legend_margin,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank(),
             plot.title = element_text(size = title_size),
@@ -867,10 +875,6 @@ fig_pccc_csmf <- ggplot(
         label.r = unit(0, "pt"),
         vjust = 1.5
     ) +
-    scale_fill_manual(
-        values = c("black", "gray"),
-        guide = guide_legend(reverse = TRUE)
-    ) +
     scale_x_continuous(
         limits = c(0, 1),
         breaks = seq(0, 1, 0.1)
@@ -938,6 +942,7 @@ fig_pccc <- plot_perf(
     text_mid_vjust = 3,
     sort_group = F,
     x_limits = c(0.2, 0.8),
+    legend_margin = margin(-8, -2, -2, -2),
     x_expand = waiver()
 )
 
