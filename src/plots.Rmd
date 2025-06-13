@@ -161,7 +161,8 @@ plot_perf <- function(
         y_title = NULL,
         text_mid_size = 2 * text_scale,
         text_mid_vjust = 2.5,
-        text_end_size = 3 * text_scale,
+        text_start_size = 3 * text_scale,
+        text_end_size = 4 * text_scale,
         text_hjust = 0.1,
         add_min_points = F,
         add_max_points = F,
@@ -239,8 +240,10 @@ plot_perf <- function(
             ),
             linewidth = 0.75
         ) +
-        geom_point( # mid points
-            aes(color = .data[[color]]),
+        geom_point( # points
+            shape = 21,
+            color = "black",
+            aes(fill = .data[[color]]),
             size = mid_points_size
         ) +
         geom_text( # min model text
@@ -252,7 +255,7 @@ plot_perf <- function(
             ),
             hjust = 1 + text_hjust,
             vjust = 0.5,
-            size = text_end_size
+            size = text_start_size
         ) +
         geom_text( # max model text
             data = df_ends,
@@ -285,11 +288,6 @@ plot_perf <- function(
         ) +
         theme_minimal() +
         theme(
-            panel.border = element_rect(
-                color = "black",
-                fill = NA,
-                linewidth = 0.75
-            ),
             legend.position = legend_position,
             legend.title = legend_title,
             legend.margin = legend_margin,
@@ -386,11 +384,6 @@ plot_perf_trend <- function(
         ) +
         theme_minimal() +
         theme(
-            panel.border = element_rect(
-                color = "black",
-                fill = NA,
-                linewidth = 0.75
-            ),
             legend.title = element_blank(),
             legend.text = element_text(size = legend_text_size),
             legend.position = legend_position, 
@@ -607,6 +600,33 @@ df <- df %>% filter(is_agreed == TRUE)
 
 ```
 
+## Rename COD Names
+
+Rename COD names into simpler names.
+
+```{r}
+
+# Rename COD names
+df <- df %>%
+    mutate(across(
+        c(
+            physician_cghr10,
+            gpt3_cghr10,
+            gpt4_cghr10,
+            insilicova_cghr10,
+            interva5_cghr10
+        ),
+        ~ case_when(
+            .x == "Maternal conditions" ~ "Maternal",
+            .x == "Acute respiratory infections" ~ "Pneumonia",
+            .x == "Neonatal infections" ~ "Infections",
+            .default = .x
+        ) %>%
+            str_replace_all(" diseases| disease", "")
+    ))
+
+```
+
 ## Shorten COD Names
 
 Shorten long names into new lines.
@@ -663,6 +683,7 @@ ages_adult <- df %>%
     filter(age == "adult") %>%
     pull(age_range) %>%
     unique %>%
+    str_replace(., "10-14 years", "12-14 years") %>%
     order_arange
 
 # Get age ranges for child
@@ -683,7 +704,8 @@ ages_neo <- df %>%
 df <- df %>%
     mutate(
         age_range = factor(
-            age_range,
+            age_range %>%
+                str_replace(., "10-14 years", "12-14 years"),
             levels = c(ages_neo, ages_child, ages_adult)
         )
     )
@@ -851,29 +873,18 @@ fig_pccc_csmf <- ggplot(
         color = "black",
         width = 0.7
     ) +
-    geom_label(
-        data = df_plot %>% filter(metric == "PCCC"),
+    geom_text(
+        data = df_plot,
         aes(
-            label = metric_label,
-            x = 0.085
+            label = round(metric_value, 2)
         ),
+        position = position_dodge(width = 0.7),
         color = "black",
         fill = "white",
         size = 3,
         label.r = unit(0, "pt"),
-        vjust = -0.5
-    ) +
-    geom_label(
-        data = df_plot %>% filter(metric == "CSMF Accuracy"),
-        aes(
-            label = metric_label,
-            x = 0.085
-        ),
-        color = "black",
-        fill = "white",
-        size = 3,
-        label.r = unit(0, "pt"),
-        vjust = 1.5
+        vjust = 0.5,
+        hjust = -0.25
     ) +
     scale_x_continuous(
         limits = c(0, 1),
@@ -886,11 +897,11 @@ fig_pccc_csmf <- ggplot(
     ) +
     theme_minimal() +
     theme(
-        panel.border = element_rect(
-            color = "black",
-            fill = NA,
-            linewidth = 0.75
-        ),
+        # panel.border = element_rect(
+        #     color = "black",
+        #     fill = NA,
+        #     linewidth = 0.75
+        # ),
         legend.position = c(.875, .5),
         legend.title = element_blank(),
         panel.grid.major = element_blank(),
@@ -927,18 +938,18 @@ fig_pccc <- plot_perf(
         mutate(
             age_label = case_when(
                 age_name == "Adult"
-                    ~ paste0(age_name, "\n12+ Years\n(n=", n_adult, ", ", round(perc_adult), "%)"),
+                    ~ paste0(age_name, "\n12+ Years\n(n=", n_adult, ")"),
                 age_name == "Child"
-                    ~ paste0(age_name, "\n28 Days to 11 Years\n(n=", n_child, ", ", round(perc_child), "%)"),
+                    ~ paste0(age_name, "\n28 Days to 11 Years\n(n=", n_child, ")"),
                 age_name == "Neonate"
-                    ~ paste0(age_name, "\n<28 Days\n(n=", n_neo, ", ", round(perc_neo), "%)"),
+                    ~ paste0(age_name, "\n<28 Days\n(n=", n_neo, ")"),
                 .default = age_name
             ) %>%
                 factor(., levels = unique(.) %>% sort %>% rev)
         ),
     calc_pccc,
     group = "age_label",
-    x_title = "PCCC",
+    x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 3,
     sort_group = F,
     x_limits = c(0.2, 0.8),
@@ -973,7 +984,7 @@ fig_pccc_cod_adult <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
-    x_title =  "PCCC",
+    x_title =  "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = -1,
     text_scale = 0.8
 )
@@ -1003,7 +1014,7 @@ fig_pccc_cod_child <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
-    x_title = "PCCC",
+    x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_scale = 0.95
 )
 
@@ -1032,7 +1043,7 @@ fig_pccc_cod_neo <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
-    x_title = "PCCC",
+    x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 3,
     text_end_size = 2.25,
     text_scale = 0.95
@@ -1068,7 +1079,7 @@ fig_pccc_age <- plot_perf_trend(
             age_range = str_replace(age_range, " ", "\n") %>%
                 factor(., levels = age_levels)
         ),
-    title = "PCCC",
+    title = "Partial Chance Corrected Concordance (PCCC)",
     text_scale = 0.9
 )
 

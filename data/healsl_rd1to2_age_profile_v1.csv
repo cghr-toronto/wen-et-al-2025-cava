@@ -1,7 +1,7 @@
 age,age_range,n_age,n,n_cod_uniq,n_female,n_male,n_age_female,n_age_male,n_perc,n_male_perc,n_female_perc,n_age_perc,n_age_male_perc,n_age_female_perc,Age Group,Age Range,Female,Male,Total
-Adult,10-14 years,135,3826,18,1681,2145,51,84,55.1,56.1,43.9,3.5,62.2,37.8,"Adult (n=3826, 55.1%, 18 CODs)
+Adult,12-14 years,135,3826,18,1681,2145,51,84,55.1,56.1,43.9,3.5,62.2,37.8,"Adult (n=3826, 55.1%, 18 CODs)
 Adult Female (n=1681, 43.9%)
-Adult Male (n=2145, 56.1%)",10-14 Years,51 (37.8%),84 (62.2%),135 (3.5%)
+Adult Male (n=2145, 56.1%)",12-14 Years,51 (37.8%),84 (62.2%),135 (3.5%)
 Adult,15-19 years,269,3826,18,1681,2145,115,154,55.1,56.1,43.9,7,57.2,42.8,"Adult (n=3826, 55.1%, 18 CODs)
 Adult Female (n=1681, 43.9%)
 Adult Male (n=2145, 56.1%)",15-19 Years,115 (42.8%),154 (57.2%),269 (7%)
