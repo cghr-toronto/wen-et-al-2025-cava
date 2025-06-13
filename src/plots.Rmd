@@ -389,6 +389,8 @@ plot_perf_trend <- function(
             legend.position = legend_position, 
             legend.direction = legend_direction,
             legend.box.spacing = legend_spacing,
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
             plot.title = element_text(size = title_size),
             axis.title.x = element_text(size = x_title_size),
             axis.title.y = element_text(size = y_title_size),
