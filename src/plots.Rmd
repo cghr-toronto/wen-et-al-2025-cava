@@ -159,19 +159,25 @@ plot_perf <- function(
         title_size = 10,
         x_title = NULL,
         y_title = NULL,
-        text_mid_size = 2 * text_scale,
+        text_mid_size = 2.25 * text_scale,
         text_mid_vjust = 2.5,
         text_start_size = 3 * text_scale,
         text_end_size = 4 * text_scale,
-        text_hjust = 0.1,
+        text_hjust = 0.2,
         add_min_points = F,
         add_max_points = F,
         mid_points_size = 2.5,
         min_points_size = 2,
-        max_points_size,
+        max_points_size = 3,
         x_limits = c(0, 1),
         x_breaks = seq(0, 1, by = 0.1),
         x_expand = expansion(add = 0.2),
+        x_color_labels = c(
+            "G3" = "GPT-3.5 (G3)",
+            "G4" = "GPT-4 (G4)",
+            "ISV" = "InSilicoVA (ISV)",
+            "I5" = "InterVA-5 (I5)"
+        ),
         x_title_size = 9 * text_scale,
         y_title_size = 9 * text_scale,
         x_text_size = 8 * text_scale,
@@ -203,7 +209,7 @@ plot_perf <- function(
     # Add metric value to model name
     df_plot <- df_plot %>%
         mutate( 
-            model_label = paste0(model_name, " (", round(metric, 2), ")")
+            model_label = paste0(model_name, ": ", round(metric, 2))
         )
     
     # Add min and max values for each group
@@ -251,7 +257,7 @@ plot_perf <- function(
             aes(
                 x = min_metric,
                 y = .data[[group]],
-                label = paste0(model_min, " (", round(min_metric, 2), ")")
+                label = paste0(model_min, ": ", round(min_metric, 2))
             ),
             hjust = 1 + text_hjust,
             vjust = 0.5,
@@ -262,7 +268,7 @@ plot_perf <- function(
             aes(
                 x = max_metric,
                 y = .data[[group]],
-                label = paste0(model_max, " (", round(max_metric, 2), ")")
+                label = paste0(model_max, ": ", round(max_metric, 2))
             ),
             hjust = 0 - text_hjust,
             vjust = 0.5,
@@ -275,6 +281,9 @@ plot_perf <- function(
             vjust = text_mid_vjust,
             max.overlaps = Inf,
             size = text_mid_size
+        ) +
+        scale_fill_discrete(
+            labels = x_color_labels
         ) +
         scale_x_continuous(
             limits = x_limits,
@@ -335,7 +344,13 @@ plot_perf_trend <- function(
         legend_text_size = 9 * text_scale,
         legend_position = "bottom",
         legend_direction = "horizontal",
-        legend_spacing = unit(0, "pt")
+        legend_spacing = unit(0, "pt"),
+        x_color_labels = c(
+            "G3" = "GPT-3.5",
+            "G4" = "GPT-4",
+            "ISV" = "InSilicoVA",
+            "I5" = "InterVA-5"
+        )
     ) {
     
     # Calc metric
@@ -376,7 +391,7 @@ plot_perf_trend <- function(
             se = F,
             linewidth = 1.25
         ) +
-        scale_color_manual(values = default_colors) +
+        scale_color_manual(values = default_colors, labels = x_color_labels) +
         labs(
             title = title,
             x = x_title,
@@ -752,10 +767,10 @@ ncod_neo <- 7
 ncod_all <- ncod_adult + ncod_child + ncod_neo
 
 # Model full name
-gpt3_name <- "GPT-3.5"
-gpt4_name <- "GPT-4"
-isva_name <- "InSilicoVA"
-iva5_name <- "InterVA-5"
+gpt3_name <- "G3"
+gpt4_name <- "G4"
+isva_name <- "ISV"
+iva5_name <- "I5"
 
 # Pivot data into long format for calc
 df_long <- df %>%
@@ -845,7 +860,15 @@ df_plot <- df_long %>%
     ) %>%
     arrange(pccc) %>%
     mutate(
-        model_name = factor(model_name, levels = model_name)
+        model_name = model_name %>%
+            case_when(
+                . == "G3" ~ "GPT-3.5",
+                . == "G4" ~ "GPT-4",
+                . == "ISV" ~ "InSilicoVA",
+                . == "I5" ~ "InterVA-5",
+                .default = .
+            ) %>%
+            factor(., levels = .)
     ) %>%
     pivot_longer(
         c(pccc, csmf),
@@ -952,11 +975,12 @@ fig_pccc <- plot_perf(
     calc_pccc,
     group = "age_label",
     x_title = "Partial Chance Corrected Concordance (PCCC)",
-    text_mid_vjust = 3,
+    text_mid_vjust = 2,
     sort_group = F,
     x_limits = c(0.2, 0.8),
     legend_margin = margin(-8, -2, -2, -2),
-    x_expand = waiver()
+    x_expand = waiver(),
+    text_scale = 1.25
 )
 
 # Save plot
@@ -964,7 +988,7 @@ ggsave(
     "../manuscript/fig-pccc.pdf",
     fig_pccc,
     width = 170,
-    height = 60,
+    height = 75,
     units = "mm",
     dpi = 300
 )
@@ -988,7 +1012,7 @@ fig_pccc_cod_adult <- plot_perf(
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
     x_title =  "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = -1,
-    text_scale = 0.8
+    text_scale = 1
 )
     
 # Save plot
@@ -1017,7 +1041,8 @@ fig_pccc_cod_child <- plot_perf(
     group = "cod_name",
     title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
-    text_scale = 0.95
+    text_mid_vjust = 4,
+    text_scale = 1.15
 )
 
 # Save plot
@@ -1047,8 +1072,7 @@ fig_pccc_cod_neo <- plot_perf(
     title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 3,
-    text_end_size = 2.25,
-    text_scale = 0.95
+    text_scale = 1.25
 )
 
 # Save plot
