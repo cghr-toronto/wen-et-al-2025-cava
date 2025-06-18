@@ -166,9 +166,9 @@ plot_perf <- function(
         text_hjust = 0.2,
         add_min_points = F,
         add_max_points = F,
-        mid_points_size = 2.5,
-        min_points_size = 2,
-        max_points_size = 3,
+        mid_points_size = 4,
+        min_points_size = 4,
+        max_points_size = 4,
         x_limits = c(0, 1),
         x_breaks = seq(0, 1, by = 0.1),
         x_expand = expansion(add = 0.2),
@@ -379,7 +379,7 @@ plot_perf_trend <- function(
             group = model_name
         )
     ) +
-        geom_line(linewidth = 0.75, alpha = 0.4) + 
+        geom_line(linewidth = 1.15, alpha = 0.5) + 
         geom_line(
             data = df_plot %>%
                 group_by(.data[[group]]) %>%
@@ -389,7 +389,7 @@ plot_perf_trend <- function(
                 ),
             aes(color = model_name),
             se = F,
-            linewidth = 1.25
+            linewidth = 1.5
         ) +
         scale_color_manual(values = default_colors, labels = x_color_labels) +
         labs(
@@ -906,7 +906,7 @@ fig_pccc_csmf <- ggplot(
         position = position_dodge(width = 0.7),
         color = "black",
         fill = "white",
-        size = 3,
+        size = 4.5,
         label.r = unit(0, "pt"),
         vjust = 0.5,
         hjust = -0.25
@@ -927,15 +927,16 @@ fig_pccc_csmf <- ggplot(
         #     fill = NA,
         #     linewidth = 0.75
         # ),
-        legend.position = c(.875, .5),
+        legend.position = c(.875, .45),
         legend.title = element_blank(),
+        legend.text = element_text(size = 12),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.title = element_text(size = 10),
         axis.title.x = element_text(size = 9),
         axis.title.y = element_text(size = 9),
-        axis.text.x = element_text(size = 8),
-        axis.text.y = element_text(size = 8)
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12)
     )
 
 # Save plot
@@ -1011,8 +1012,8 @@ fig_pccc_cod_adult <- plot_perf(
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
     x_title =  "Partial Chance Corrected Concordance (PCCC)",
-    text_mid_vjust = -1,
-    text_scale = 1
+    text_mid_vjust = 2,
+    text_scale = 1.25
 )
     
 # Save plot
@@ -1020,7 +1021,7 @@ ggsave(
     "../manuscript/fig-pccc-cod-adult.pdf",
     fig_pccc_cod_adult,
     width = 170,
-    height = 225,
+    height = 250,
     units = "mm",
     dpi = 300
 )
