@@ -157,19 +157,19 @@ plot_perf <- function(
         text_scale = 1,
         title = NULL,
         title_size = 10,
-        x_title = NULL,
+        x_title = "Partial Chance Corrected Concordance (PCCC) / R = PCCC Range",
         y_title = NULL,
         text_mid_size = 2.25 * text_scale,
         text_mid_vjust = 2.5,
-        text_start_size = 3 * text_scale,
-        text_end_size = 4 * text_scale,
+        text_start_size = 2.75 * text_scale,
+        text_end_size = 3.5 * text_scale,
         text_hjust = 0.2,
         add_min_points = F,
         add_max_points = F,
         mid_points_size = 4,
         min_points_size = 4,
         max_points_size = 4,
-        x_limits = c(0, 1),
+        x_limits = c(0, 1.15),
         x_breaks = seq(0, 1, by = 0.1),
         x_expand = expansion(add = 0.2),
         x_color_labels = c(
@@ -219,7 +219,8 @@ plot_perf <- function(
             min_metric = min(metric),
             max_metric = max(metric),
             model_min = model_name[which.min(metric)],
-            model_max = model_name[which.max(metric)]
+            model_max = model_name[which.max(metric)],
+            group_range = diff(range(metric))
         ) %>%
         arrange(max_metric)
     
@@ -268,7 +269,10 @@ plot_perf <- function(
             aes(
                 x = max_metric,
                 y = .data[[group]],
-                label = paste0(model_max, ": ", round(max_metric, 2))
+                label = paste0(
+                    model_max, ": ", round(max_metric, 2),
+                    " (R=", round(group_range, 2), ")"
+                )
             ),
             hjust = 0 - text_hjust,
             vjust = 0.5,
@@ -637,6 +641,9 @@ df <- df %>%
             .x == "Maternal conditions" ~ "Maternal",
             .x == "Acute respiratory infections" ~ "Pneumonia",
             .x == "Neonatal infections" ~ "Infections",
+            .x == "Road and transport injuries" ~ "Road/transport injuries",
+            .x == "Liver and alcohol related diseases" ~ "Liver/alcohol",
+            .x == "Birth asphyxia and trauma" ~ "Birth asphyxia/trauma",
             .default = .x
         ) %>%
             str_replace_all(" diseases| disease", "")
@@ -920,13 +927,11 @@ fig_pccc_csmf <- ggplot(
         x = NULL,
         y = NULL
     ) +
+    guides(
+        fill = guide_legend(reverse = TRUE)
+    ) +
     theme_minimal() +
     theme(
-        # panel.border = element_rect(
-        #     color = "black",
-        #     fill = NA,
-        #     linewidth = 0.75
-        # ),
         legend.position = c(.875, .45),
         legend.title = element_blank(),
         legend.text = element_text(size = 12),
@@ -975,10 +980,9 @@ fig_pccc <- plot_perf(
         ),
     calc_pccc,
     group = "age_label",
-    x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 2,
     sort_group = F,
-    x_limits = c(0.2, 0.8),
+    x_limits = c(0.2, 0.9),
     legend_margin = margin(-8, -2, -2, -2),
     x_expand = waiver(),
     text_scale = 1.25
@@ -1011,17 +1015,16 @@ fig_pccc_cod_adult <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
-    x_title =  "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 2,
-    text_scale = 1.25
+    text_scale = 1
 )
     
 # Save plot
 ggsave(
     "../manuscript/fig-pccc-cod-adult.pdf",
     fig_pccc_cod_adult,
-    width = 170,
-    height = 250,
+    width = 170, # min 170 mm full / 85 mm half
+    height = 225, # max 225 mm
     units = "mm",
     dpi = 300
 )
@@ -1041,9 +1044,8 @@ fig_pccc_cod_child <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
-    x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_mid_vjust = 4,
-    text_scale = 1.15
+    text_scale = 1
 )
 
 # Save plot
