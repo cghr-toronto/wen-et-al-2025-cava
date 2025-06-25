@@ -946,7 +946,7 @@ fig_pccc_csmf <- ggplot(
 
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc-csmf.pdf",
+    "../manuscript/figures/fig-pccc-csmf.pdf",
     fig_pccc_csmf,
     width = 170,
     height = 100,
@@ -990,7 +990,7 @@ fig_pccc <- plot_perf(
 
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc.pdf",
+    "../manuscript/figures/fig-pccc.pdf",
     fig_pccc,
     width = 170,
     height = 75,
@@ -1021,7 +1021,7 @@ fig_pccc_cod_adult <- plot_perf(
     
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc-cod-adult.pdf",
+    "../manuscript/figures/fig-pccc-cod-adult.pdf",
     fig_pccc_cod_adult,
     width = 170, # min 170 mm full / 85 mm half
     height = 225, # max 225 mm
@@ -1050,7 +1050,7 @@ fig_pccc_cod_child <- plot_perf(
 
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc-cod-child.pdf",
+    "../manuscript/figures/fig-pccc-cod-child.pdf",
     fig_pccc_cod_child,
     width = 170,
     height = 150,
@@ -1080,7 +1080,7 @@ fig_pccc_cod_neo <- plot_perf(
 
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc-cod-neo.pdf",
+    "../manuscript/figures/fig-pccc-cod-neo.pdf",
     fig_pccc_cod_neo,
     width = 170,
     height = 100,
@@ -1114,7 +1114,7 @@ fig_pccc_age <- plot_perf_trend(
 
 # Save plot
 ggsave(
-    "../manuscript/fig-pccc-age.pdf",
+    "../manuscript/figures/fig-pccc-age.pdf",
     fig_pccc_age,
     width = 170,
     height = 100,
