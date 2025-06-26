@@ -201,9 +201,9 @@ This study outlines the methodology used to compare cause of death (COD) assignm
 
 \subsection{Verbal Autopsy (VA) Data}\label{methods-data}
 
-A total of 11,920 verbal autopsy (VA) records were obtained from the HEAL-SL study \citep{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}, which employed dual-coded Electronic Verbal Autopsy (EVA). Each record was independently reviewed by two randomly selected physicians, who assigned COD codes based on the International Classification of Diseases, 10th Revision (ICD-10) \citep{worldhealthorganizationICD10InternationalStatistical2011}. Agreement between physician-assigned CODs was evaluated using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which group related ICD-10 codes into broader, clinically similar categories \citep{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 2). If both codes fell within the same CMEA-10 group, the record was considered in agreement. Disagreements entered a reconciliation phase, where each physician was shown both the assigned codes and the reasoning from the other physician. Physicians could then (1) retain their original code, (2) adopt the other physician’s code, or (3) assign a new code. Records that remained unresolved proceeded to adjudication, where a senior physician reviewed all reasoning and assignments and issued a final COD.
+A total of 11,920 verbal autopsy (VA) records were obtained from the HEAL-SL study \citep{njalauniversityHealthySierraLeone2023,carshon-marshChildMaternalAdult2022}, which employed dual-coded Electronic Verbal Autopsy (EVA). Each record was independently reviewed by two randomly selected physicians, who assigned COD codes based on the International Classification of Diseases, 10th Revision (ICD-10) \citep{worldhealthorganizationICD10InternationalStatistical2011}. Agreement between physician-assigned CODs was evaluated using Central Medical Evaluation Agreement 10 (CMEA-10) codes, which group related ICD-10 codes into broader, clinically similar categories \citep{aleksandrowiczPerformanceCriteriaVerbal2014} (see Additional File 1). If both codes fell within the same CMEA-10 group, the record was considered in agreement. Disagreements entered a reconciliation phase, where each physician was shown both the assigned codes and the reasoning from the other physician. Physicians could then (1) retain their original code, (2) adopt the other physician’s code, or (3) assign a new code. Records that remained unresolved proceeded to adjudication, where a senior physician reviewed all reasoning and assignments and issued a final COD.
 
-To ensure comparability with physician coding, only records with physician agreement were used in this study, as such cases provide higher confidence in the COD assignment \citep{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. From the original dataset, 6,942 records met this criterion. All ICD-10 codes were then standardized to CGHR-10 categories (see Additional File 1), which group causes into 19, 10, and 7 categories for adults (12–69 years), children (28 days to 11 years), and neonates (under 28 days), respectively. After excluding three records without a valid CGHR-10 category, a total of 6,939 physician-agreed records (3,826 adult, 2,636 child, and 477 neonatal) were used for model comparison and performance evaluation. Further details on data preprocessing are provided in Appendix \ref{app-methods-data}, with COD and age group distributions summarized in Tables \ref{tab-data-cod} and \ref{tab-data-age}.
+To ensure comparability with physician coding, only records with physician agreement were used in this study, as such cases provide higher confidence in the COD assignment \citep{barnettComparativeAccuracyDiagnosis2019,morrisFactorsAssociatedPhysician2010,hsiaoFactorsAssociatedPhysician2012}. From the original dataset, 6,942 records met this criterion. All ICD-10 codes were then standardized to CGHR-10 categories (see Appendix \ref{app-cghr10}), which group causes into 19, 10, and 7 categories for adults (12–69 years), children (28 days to 11 years), and neonates (under 28 days), respectively. After excluding three records without a valid CGHR-10 category, a total of 6,939 physician-agreed records (3,826 adult, 2,636 child, and 477 neonatal) were used for model comparison and performance evaluation. Further details on data preprocessing are provided in Appendix \ref{app-methods-data}, with COD and age group distributions summarized in Tables \ref{tab-data-cod} and \ref{tab-data-age}.
 
 \subsection{Modelling}\label{methods-models}
 
@@ -226,7 +226,6 @@ Given that model performance can vary by age and different CODs \citep{benaraEva
 \section{Results}\label{results}
 
 This section presents the performance of GPT-3.5, GPT-4, InterVA-5, and InSilicoVA in assigning CGHR-10 CODs, based on the methodology described in Section \ref{methods}. GPT-4 achieved the highest overall individual-level concordance, with a PCCC of 0.61, followed by GPT-3.5 (0.56). GPT-4 also demonstrated the highest PCCC across most age groups and CODs within the adult (12–69 years), child (28 days–11 years), and neonatal (under 28 days) categories. In contrast, GPT-3.5, InterVA-5, and InSilicoVA showed higher PCCC values for a limited subset of age groups and CODs. Summary results are presented in Section \ref{results-overall}, with stratified results by age group detailed in Sections \ref{results-adult}, \ref{results-child}, and \ref{results-neo}.
-
 
 \subsection{Overall Performance}\label{results-overall}
 
@@ -401,12 +400,7 @@ This study evaluated the performance of GPT-3.5, GPT-4, InterVA-5, and InSilicoV
 
 % Please refer to Journal-level guidance for any specific requirements.
 
-Additional files were used to supplement this paper:
-
-\begin{itemize}
-    \item Additional file 1: Centre for Global Health Research 10 (CGHR-10) codes. Codes grouping ICD-10 code ranges into generalized categories. (.csv)
-    \item Additional file 2: Central Medical Evaluation Agreement 10 (CMEA-10) codes. ICD-10 code ranges considered in physician agreement. (.csv)
-\end{itemize}
+Additional file 1 (.csv) titled "Central Medical Evaluation Agreement 10 (CMEA-10) codes" with description "ICD-10 code ranges considered in physician agreement" was used to supplement this study.
 
 \bmhead{Acknowledgments}
 
@@ -452,7 +446,7 @@ Not applicable.
 
 \subsection*{Availability of data and materials}
 
-The datasets supporting the conclusions of this article are included within the article (and its additional files), at \url{https://openmortality.org} (available upon request). Verbal Autopsy (VA) and narrative data by age group and survey rounds 1 and 2 available at \url{https://openmortality.org/dataset/heal-sl}. Cause of death code mappings to convert between ICD-10, WVA-2016, and CGHR-10 codes available at \url{https://openmortality.org/dataset/icd}.
+The datasets supporting the conclusions of this article are included within the article (and its additional files), at \url{https://openmortality.org} (available upon request). Verbal Autopsy (VA) narrative and questionnaire data by age group and survey rounds available at \url{https://openmortality.org/dataset/heal-sl}. Cause of death code mappings to convert between ICD-10, WVA-2016, and CGHR-10 codes available at \url{https://openmortality.org/dataset/icd}.
 
 \subsection*{Code availability}
 
@@ -460,7 +454,7 @@ All code for this paper is available at \url{https://github.com/cghr-toronto/hea
 
 \subsection*{Authors' contributions}
 
-PJ and PB are the study Principal Investigators. ATA and RK implemented the data collection procedures. RW, and TKSN processed, documented, and prepared the data. RW, ASL, and RK ran the models. RW wrote the paper and conducted the analysis. AB and RCM provided medical domain guidance and feedback. All authors reviewed the results and contributed to the report. All authors read and approved the final manuscript.
+PJ and PB are the study Principal Investigators. ATA and RK implemented the data collection procedures. RW, TKSN, and CM processed, documented, and prepared the data. RW, ASL, and RK ran the models. RW wrote the paper and conducted the analysis. AB and RCM provided medical domain guidance and feedback. All authors reviewed the results and contributed to the report. All authors read and approved the final manuscript.
 
 \begin{appendices}
 
@@ -487,11 +481,90 @@ PJ and PB are the study Principal Investigators. ATA and RK implemented the data
 %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
 %% tables and equations etc.
 
+\section{Centre for Global Health Research 10 (CGHR-10) Codes}\label{app-cghr10}
+
+Tables \ref{tab-codes-cghr10-adult} to \ref{tab-codes-cghr10-neo} provide grouped ICD-10 ranges in each CGHR-10 code by age group.
+
+\begin{table}[!h]
+    \caption{CGHR-10 codes for adults (12-69 years).}\label{tab-codes-cghr10-adult}%
+    \begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
+    \toprule
+    Adult CGHR-10 Code & ICD-10 Range\\
+
+    \midrule
+    
+    Acute respiratory infections & H65-H68, H70-H71, J00-J22, J32, J36, J85-J86, P23 \\ 
+    Tuberculosis & A15-A16, B90, J65 \\ 
+    Diarrhoeal & A00-A09 \\ 
+    Unspecified infections & A17-A33, A35-A99, B00-B17, B19-B49, B55-B89, B91-B99, C46, D64, D84, G00-G09, H10, H60, I30, I32-I33, K02, K04-K05, K61, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, N70-N74, P35-P39, R50, R75, ZZ21 \\ 
+    Malaria & B50-B54 \\ 
+    Maternal conditions & A34, F53, O00-O08, O10-O16, O20-O99 \\ 
+    Nutritional deficiencies & D50-D53, E00-E02, E40-E46, E50-E64, X53-X54 \\ 
+    Chronic respiratory & J30-J31, J33-J35, J37-J64, J66-J84, J90-J99, R04-R06, R84, R91 \\ 
+    Cancers & C00-C26, C30-C45, C47-C58, C60-C97, D00-D48, D91, N60, N62-N64, N87, R59 \\ 
+    Ischemic heart & I20-I25, R55 \\ 
+    Stroke & G45-G46, G81-G83, I60-I69 \\ 
+    Diabetes mellitus & E10-E14 \\ 
+    Other cardiovascular & I00-I03, I05-I15, I26-I28, I31, I34-I52, I70-I99, R00-R01, R03, ZZ23 \\ 
+    Liver and alcohol related & B18, F10, K70-K77, R16-R18, X45, Y15, Y90-91 \\ 
+    Other noncommunicable & D55-D63, D65-D83, D86, D89, E03-E07, E15-E35, E65-E68, E70-E90, F00-F09, F11-F52, F54-F99, G10-G37, G40-G41, G43-G44, G50-G80, G84-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, K00-K01, K03, K06-K14, K20-K31, K35-K38, K40-K60, K62-K64, K66, K78-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N59, N75-N86, N88-N99, Q00-Q99, R10-R15, R19-R23, R26-R27, R29-R49, R56, R63, R70-R74, R76-R77, R80-R82, R85-R87, R90, ZZ25 \\ 
+    Road and transport injuries & V01-V99, Y85 \\ 
+    Suicide & X60-X84 \\ 
+    Other injuries & S00-S99, T00-T99, W00-W99, X00-X44, X46-X52, X55-X59, X85-X99, Y00-Y14, Y16-Y84, Y86-Y89, Y92-Y98, ZZ27 \\ 
+    Ill-defined & R02, R07-R09, R25, R51-R54, R57-R58, R60-R62, R64-R69, R78-R79, R83, R89, R92-R94, R96, R98-R99 \\ 
+
+    \botrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+    \caption{CGHR-10 codes for children (28 days to 11 years).}\label{tab-codes-cghr10-child}%
+    \begin{tabular}{p{0.25\textwidth}p{0.7\textwidth}}
+    \toprule
+    Child CGHR-10 Code & ICD-10 Range\\
+
+    \midrule
+    
+    Pneumonia & A37, H65-H68, H70-H71, J00-J22, J32, J36, J85-J86, P23, U04 \\ 
+    Diarrhoeal & A00-A09 \\ 
+    Malaria & B50-B54 \\ 
+    Other infections & A15-A28, A30-A36, A38-A44, A46, A48-A71, A74-A75, A77-A99, B00-B09, B15-B27, B30, B33-B49, B55-B60, B64-B83, B85-B92, B94-B97, B99, G00-G09, H10, H60, I30, I32-I33, I39-I41, J65, K02, K04-K05, K61, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, N70-N74, P35-P39, R50, R75, U00, Y95, ZZ11 \\ 
+    Congenital anomalies & P01, P05, P07, P21, Q00-Q99 \\ 
+    Epilepsy, leukaemia, and other noncommunicable & C00-C97, D01-D48, D55-D89, E03-E35, E65-E90, F00-F02, F73, G10-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, I00-I28, I31, I34-I38, I42-I99, J30-J31, J33-J35, J37-J47, J60, J64, J66-J70, J80-J82, J84, J90-J99, K00-K01, K03, K06-K60, K62-K63, K70-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N51, N60, N62-N64, N75-N99, P04, P08, P27, P51, P53-P60, P70-P72, P74-P76, P78, P80-P83, P92-P94, R00-R01, R03-R06, R11-R23, R26-R27, R29-R49, R55-R56, R59, R63, R70-R74, R76-R77, R80-R82, R84-R87, R90-R91, ZZ12-ZZ13, ZZ15 \\ 
+    Injuries & S00-S99, T00-T98, V01-V99, W00-W99, X00-X52, X57-X99, Y00-Y91, Y97-Y98 \\ 
+    Nutritional deficiencies & D50-D53, E00-E02, E40-E46, E50-E56, E59-E61, E63-E64, X53-X54 \\ 
+    Other & D00, F03-F72, F74-F99, P00, P02-P03, P10-P15, P20, P22, P24-P26, P28-P29, P50, P52, P61, P77, P90-P91 \\ 
+    Ill-defined & P96, R02, R07, R09-R10, R25, R51-R54, R57-R58, R60-R62, R64, R68-R69, R78-R79, R83, R89, R92-R99 \\ 
+
+    \botrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+    \caption{CGHR-10 codes for neonates (less than 28 days).}\label{tab-codes-cghr10-neo}%
+    \begin{tabular}{p{0.35\textwidth}p{0.6\textwidth}}
+    \toprule
+    Neonate CGHR-10 Code & ICD-10 Range\\
+
+    \midrule
+    
+    Prematurity \& low birthweight & D64, O60, P01, P05, P07, P22, P25-P28, P52, P61, P77, P80, P92, R04 \\ 
+    Neonatal infections & A00-A09, A20-A28, A32-A35, A37-A44, A46, A48-A49, A68-A70, A74-A75, A77-A79, A81-A90, B54, B95-B96, G00-G09, H10, H60, H65-H68, H70-H71, I30, I32-I33, I39-I41, J00-J22, J32, J36, J85-J86, K65, K67, K81, L00-L04, L08, M00-M01, M60, M86, N10, N30, N34, N41, N49, N61, O85, P23, P35-P39, P58-P59, P63, U04 \\ 
+    Birth asphyxia and birth trauma & G40, P00, P02-P03, P10-P15, P20-P21, P24, P29, P50-P51, P90-P91, R06, W79, Z37 \\ 
+    Stillbirth & P95 \\ 
+    Congenital anomalies & C76, Q00-Q99 \\ 
+    Other & A15-A19, A30-A31, A36, A50-A67, A71, A80, A91-A99, B00-B09, B15-B27, B30, B33-B53, B55-B60, B64-B83, B85-B92, B94, B97, B99, C00-C75, C77-C97, D00-D48, D50-D53, D55-D63, D65-D89, E00-E35, E40-E46, E50-E56, E59-E61, E63-E90, F00-F99, G10-G39, G41-G99, H00-H06, H11-H59, H61-H62, H69, H72-H95, I00-I28, I31, I34-I38, I42-I99, J30, J31, J33-J35, J37-J47, J60, J64-J70, J80-J82, J84, J90-J99, K00-K63, K70-K80, K82-K93, L05, L10-L99, M02-M54, M61-M85, M87-M99, N00-N08, N11-N29, N31-N33, N35-N40, N42-N48, N50-N51, N60, N62-N64, N70-N99, P04, P08, P53-P57, P60,P70-P72, P74-P76, P78, P81-P83, P93-P94, R00-R01, R03-R05, R11-R23, R26-R27, R29-R36, R39-R50, R55-R56, R59, R63, R70-R77, R80-R82, R84-R87, R90-R91, S00-S99, T00-T98, U00, V01-V99, W00-W78, W80-W99, X00-X54, X57-X99, Y00-Y91, Y95, Y97-Y98 \\ 
+    Ill-defined & P96, R02, R07, R09-R10, R25, R51-R54, R57-R58, R60-R62, R64, R68-R69, R78-R79, R83, R89, R92-R99 \\
+
+    \botrule
+    \end{tabular}
+\end{table}
+
 \section{Details on Methods}\label{app-methods}
 
 This section provides additional details on the methods described in Section \ref{methods}. An overview of the methods used in this study is seen in Figure \ref{fig-methods} as a five-step process. Section \ref{app-methods-data} provides details on the preprocessed data used for modelling. Section \ref{app-methods-model} describes the data and parameter inputs and outputs for each model, while Section \ref{app-methods-eval} details the evaluation of model outputs at the individual and population level across different CODs, age groups, and ages.
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \centering
 \includegraphics[width=.7\textwidth]{../figures/fig-methods.pdf}
 \caption{Detailed study methods.}\label{fig-methods}
@@ -499,7 +572,7 @@ This section provides additional details on the methods described in Section \re
 
 \subsection{CGHR-10 Physician Agreed Records}\label{app-methods-data}
 
-Initially, 11,920 records were collected from dual-coded EVA in the HEAL-SL study. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records (based on comparisons using CMEA-10 codes, see Additional File 2). The 6942 records were converted into CGHR-10 codes (see Additional File 1) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups. After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
+Initially, 11,920 records were collected from dual-coded EVA in the HEAL-SL study. Physicians were able to assign CODs for 11,820 of the 11,920 records, where 100 of these records could not be assigned a COD due to missing or inadequate information (e.g. low quality narrative, data loss). The 11,820 physician coded records were further filtered for records where both physicians agreed on the assigned codes (records that were not reconciled or adjudicated) resulting in 6942 physician agreed records (based on comparisons using CMEA-10 codes, see Additional File 1). The 6942 records were converted into CGHR-10 codes (see Appendix \ref{app-cghr10}) that generalized ICD-10 codes into 19, 10, and 7 categories for the adult (12 to 69 years), child (28 days to 11 years), and neonatal (under 28 days) age groups. After conversion, a final total of 6939 physician agreed records (3826 adult, 2636 child, and 477 neonatal) were used for modelling and performance evaluation, where three records were removed as their ICD-10 codes did not have a matching CGHR-10 code.
 
 The 6939 physician agreed records were collected using VA from the HEAL-SL study between 2019-2022, where records were collected using nation wide samples across Sierra Leone provinces seen in Figure \ref{fig-map}. More populous areas (e.g. southern and north east provinces with $\sim$197,000 and $\sim$135,000 population respectively) had more sampling areas versus less populous areas (e.g. north west and eastern provinces with $\sim$50,000 and $\sim$69,000 people respectively). The distribution of the study data are shown by CGHR-10 causes of death in Table \ref{tab-data-cod}. All age groups had relatively evenly distributed female and male records (44-55\% of 6939 records each). Across CODs, there were noticeably more female records for cancers (65\%), and maternal conditions (100\%), while more male records for chronic respiratory diseases (61\%), other noncommunicable diseases (61\%), other injuries (77\%), road and transport injuries (71\%), and tuberculosis (68\%). Most records were coded by physicians as malaria for adults (20\%) and children (52\%), and stillbirth (36\%) and neonatal infections (21\%) for neonates. Suicide, congenital anomalies, nutritional deficiencies, and other had low sample sizes for each age group (\textless 1\% of total records for each age group). Table \ref{tab-data-age} shows the distribution of the study data by age. Across ages, there were more male records for 50-59 years (60-62\%), while all other records had between 49-59\% female and male records. Most records were in the 65-69 years age range for adults (15\%), 1-5 years for children (62\%), and 0-6 days for neonates (83\%).
 
@@ -717,6 +790,5 @@ In most misclassified records, there is mention of infections, but the misclassi
 \bibliography{bibliography}% common bib file
 %% if required, the content of .bbl file can be included here once bbl is generated
 %%\input sn-article.bbl
-
 
 \end{document}
