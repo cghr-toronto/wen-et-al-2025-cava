@@ -28,6 +28,7 @@ options(readr.show_col_types = FALSE)
 library(tidyverse)
 library(dplyr)
 library(ggrepel)
+library(ggpattern)
 library(patchwork)
 library(glue)
 library(kableExtra)
@@ -157,7 +158,7 @@ plot_perf <- function(
         text_scale = 1,
         title = NULL,
         title_size = 10,
-        x_title = "Partial Chance Corrected Concordance (PCCC) / R = PCCC Range",
+        x_title = "Partial Chance Corrected Concordance (PCCC)",
         y_title = NULL,
         text_mid_size = 2.25 * text_scale,
         text_mid_vjust = 2.5,
@@ -178,6 +179,7 @@ plot_perf <- function(
             "ISV" = "InSilicoVA (ISV)",
             "I5" = "InterVA-5 (I5)"
         ),
+        x_shapes = 21:25,
         x_title_size = 9 * text_scale,
         y_title_size = 9 * text_scale,
         x_text_size = 8 * text_scale,
@@ -185,7 +187,8 @@ plot_perf <- function(
         sort_group = T,
         legend_position = "bottom",
         legend_title = element_blank(),
-        legend_margin = margin(c(-8, -2, -2, -2)),
+        legend_margin = margin(c(-8, -2, -2, -50)),
+        legend_add = c("R = Range"),
         ...
     ) {
     
@@ -235,6 +238,21 @@ plot_perf <- function(
         left_join(df_ends, by = group) %>%
         filter(model_name != model_max & model_name != model_min)
     
+    # Add blank legend items
+    if (!is.null(legend_add)) {
+        
+        # Add to manual color labels
+        for (i in legend_add) {
+            x_color_labels[i] <- i
+        }
+        
+        # Add to factor levels
+        df_plot[[color]] <- factor(
+            df_plot[[color]],
+            levels = c(levels(df_plot[[color]]), legend_add)
+        )
+    }
+    
     # Plot metric for each model
     out <- ggplot(df_plot, aes(x = metric, y = .data[[group]])) +
         geom_segment( # min max lines
@@ -248,9 +266,11 @@ plot_perf <- function(
             linewidth = 0.75
         ) +
         geom_point( # points
-            shape = 21,
             color = "black",
-            aes(fill = .data[[color]]),
+            aes(
+                shape = .data[[color]],
+                fill = .data[[color]]
+            ),
             size = mid_points_size
         ) +
         geom_text( # min model text
@@ -286,8 +306,14 @@ plot_perf <- function(
             max.overlaps = Inf,
             size = text_mid_size
         ) +
+        scale_shape_manual(
+            values = x_shapes,
+            labels = x_color_labels,
+            drop = ifelse(is.null(legend_add), T, F)
+        ) +
         scale_fill_discrete(
-            labels = x_color_labels
+            labels = x_color_labels,
+            drop = ifelse(is.null(legend_add), T, F)
         ) +
         scale_x_continuous(
             limits = x_limits,
@@ -887,7 +913,11 @@ df_plot <- df_long %>%
             str_replace(., "CSMF", "CSMF Accuracy") %>%
             factor(., levels = rev(c("PCCC", "CSMF Accuracy"))),
         metric_label = paste0(metric, "=", round(metric_value, 2)) %>%
-            str_replace(., " Accuracy", "")
+            str_replace(., " Accuracy", ""),
+        metric_pattern = case_when(
+            metric == "PCCC" ~ "stripe",
+            metric == "CSMF Accuracy" ~ "none"
+        )
     )
 
 # Plot data
@@ -899,11 +929,16 @@ fig_pccc_csmf <- ggplot(
         fill = metric
     )
 ) +
-    geom_bar(
+    geom_bar_pattern(
+        aes(pattern = metric_pattern),
         stat = "identity",
         position = position_dodge(),
         color = "black",
-        width = 0.7
+        width = 0.7,
+        pattern_fill = "black",
+        pattern_angle = 45,
+        pattern_spacing = 0.05,
+        pattern_colour = "black"
     ) +
     geom_text(
         data = df_plot,
@@ -922,19 +957,30 @@ fig_pccc_csmf <- ggplot(
         limits = c(0, 1),
         breaks = seq(0, 1, 0.1)
     ) +
+    scale_pattern_manual(values = c(
+        "stripe" = "stripe",
+        "none" = "none"
+    )) +
     labs(
         title = NULL,
         x = NULL,
         y = NULL
     ) +
     guides(
-        fill = guide_legend(reverse = TRUE)
+        pattern = "none",
+        fill = guide_legend(
+            reverse = TRUE,
+            override.aes = list(
+                pattern = c("stripe", "none")
+            )
+        )
     ) +
     theme_minimal() +
     theme(
-        legend.position = c(.875, .45),
+        legend.position = "bottom",
+        legend.margin = margin(c(-8, -2, -2, -2)),
         legend.title = element_blank(),
-        legend.text = element_text(size = 12),
+        legend.text = element_text(size = 9),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.title = element_text(size = 10),
@@ -983,7 +1029,6 @@ fig_pccc <- plot_perf(
     text_mid_vjust = 2,
     sort_group = F,
     x_limits = c(0.2, 0.9),
-    legend_margin = margin(-8, -2, -2, -2),
     x_expand = waiver(),
     text_scale = 1.25
 )
