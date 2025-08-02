@@ -296,7 +296,8 @@ plot_perf <- function(
             ),
             hjust = 0 - text_hjust,
             vjust = 0.5,
-            size = text_end_size
+            size = text_end_size,
+            fontface = "bold"
         ) +
         geom_text_repel( # mid model text
             data = df_mids,
