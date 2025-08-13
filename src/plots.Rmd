@@ -1092,7 +1092,7 @@ fig_pccc_cod_adult <- plot_perf(
     calc_pccc,
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
-    text_mid_vjust = 2,
+    text_mid_vjust = 2.5,
     text_scale = 1
 )
     
@@ -1151,7 +1151,7 @@ fig_pccc_cod_neo <- plot_perf(
     group = "cod_name",
     title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
-    text_mid_vjust = 3,
+    text_mid_vjust = 3.5,
     text_scale = 1.25
 )
 
@@ -1185,7 +1185,7 @@ fig_pccc_age <- plot_perf_trend(
             age_range = str_replace(age_range, " ", "\n") %>%
                 factor(., levels = age_levels)
         ),
-    title = "Partial Chance Corrected Concordance (PCCC)",
+    y_title = "Partial Chance Corrected Concordance (PCCC)",
     text_scale = 0.9
 )
 
