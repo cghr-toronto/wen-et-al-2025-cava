@@ -381,7 +381,14 @@ plot_perf_trend <- function(
             "G4" = "GPT-4",
             "ISV" = "InSilicoVA",
             "I5" = "InterVA-5"
-        )
+        ),
+        x_linetypes = c(
+            "solid",
+            "solid",
+            "dashed",
+            "dotted"
+        ),
+        plot_mean = F
     ) {
     
     # Calc metric
@@ -410,19 +417,25 @@ plot_perf_trend <- function(
             group = model_name
         )
     ) +
-        geom_line(linewidth = 1.15, alpha = 0.5) + 
         geom_line(
-            data = df_plot %>%
-                group_by(.data[[group]]) %>%
-                summarize(
-                    metric = mean(metric),
-                    model_name = "Mean Across Models"
-                ),
-            aes(color = model_name),
-            se = F,
-            linewidth = 1.5
+            aes(
+                linetype = model_name,
+                alpha = model_name
+            ),
+            linewidth = 1.15
+        ) + 
+        scale_color_manual(
+            values = default_colors,
+            labels = x_color_labels
         ) +
-        scale_color_manual(values = default_colors, labels = x_color_labels) +
+        scale_linetype_manual(
+            values = x_linetypes,
+            labels = x_color_labels
+        ) +
+        scale_alpha_manual(
+            values = c(1, 0.35, 0.9, 0.9),
+            labels = x_color_labels
+        ) +
         labs(
             title = title,
             x = x_title,
@@ -430,6 +443,7 @@ plot_perf_trend <- function(
         ) +
         theme_minimal() +
         theme(
+            legend.key.width = unit(32, "pt"),
             legend.title = element_blank(),
             legend.text = element_text(size = legend_text_size),
             legend.position = legend_position, 
@@ -443,6 +457,22 @@ plot_perf_trend <- function(
             axis.text.x = element_text(size = x_text_size),
             axis.text.y = element_text(size = y_text_size)
         )
+    
+    # Add mean line
+    if (plot_mean) {
+        out <- out +
+            geom_line(
+                data = df_plot %>%
+                    group_by(.data[[group]]) %>%
+                    summarize(
+                        metric = mean(metric),
+                        model_name = "Mean Across Models"
+                    ),
+                aes(color = model_name),
+                se = F,
+                linewidth = 1.5
+            )
+    }
     return(out)
     
 }
@@ -911,13 +941,14 @@ df_plot <- df_long %>%
     ) %>%
     mutate(
         metric = str_to_upper(metric) %>%
-            str_replace(., "CSMF", "CSMF Accuracy") %>%
-            factor(., levels = rev(c("PCCC", "CSMF Accuracy"))),
+            str_replace(., "CSMF", "Cause Specific Mortality Fraction (CSMF) Accuracy") %>%
+            str_replace(., "PCCC", "Partial Chance Corrected Concordance (PCCC)") %>%
+            factor(., levels = rev(c("Partial Chance Corrected Concordance (PCCC)", "Cause Specific Mortality Fraction (CSMF) Accuracy"))),
         metric_label = paste0(metric, "=", round(metric_value, 2)) %>%
             str_replace(., " Accuracy", ""),
         metric_pattern = case_when(
-            metric == "PCCC" ~ "stripe",
-            metric == "CSMF Accuracy" ~ "none"
+            metric == "Partial Chance Corrected Concordance (PCCC)" ~ "stripe",
+            metric == "Cause Specific Mortality Fraction (CSMF) Accuracy" ~ "none"
         )
     )
 
@@ -979,7 +1010,7 @@ fig_pccc_csmf <- ggplot(
     theme_minimal() +
     theme(
         legend.position = "bottom",
-        legend.margin = margin(c(-8, -2, -2, -2)),
+        legend.margin = margin(c(-8, -2, -2, -60)),
         legend.title = element_blank(),
         legend.text = element_text(size = 9),
         panel.grid.major = element_blank(),
