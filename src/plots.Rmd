@@ -1031,6 +1031,14 @@ ggsave(
     units = "mm",
     dpi = 300
 )
+ggsave(
+    "../manuscript/figures/png/fig-pccc-csmf.png",
+    fig_pccc_csmf,
+    width = 170,
+    height = 100,
+    units = "mm",
+    dpi = 300
+)
 
 # Display plot
 fig_pccc_csmf
@@ -1074,6 +1082,14 @@ ggsave(
     units = "mm",
     dpi = 300
 )
+ggsave(
+    "../manuscript/figures/png/fig-pccc.png",
+    fig_pccc,
+    width = 170,
+    height = 75,
+    units = "mm",
+    dpi = 300
+)
 
 # Display plot
 fig_pccc
@@ -1105,6 +1121,14 @@ ggsave(
     units = "mm",
     dpi = 300
 )
+ggsave(
+    "../manuscript/figures/png/fig-pccc-cod-adult.png",
+    fig_pccc_cod_adult,
+    width = 170, # min 170 mm full / 85 mm half
+    height = 225, # max 225 mm
+    units = "mm",
+    dpi = 300
+)
 
 # Display plot
 fig_pccc_cod_adult
@@ -1128,6 +1152,14 @@ fig_pccc_cod_child <- plot_perf(
 # Save plot
 ggsave(
     "../manuscript/figures/fig-pccc-cod-child.pdf",
+    fig_pccc_cod_child,
+    width = 170,
+    height = 150,
+    units = "mm",
+    dpi = 300
+)
+ggsave(
+    "../manuscript/figures/png/fig-pccc-cod-child.png",
     fig_pccc_cod_child,
     width = 170,
     height = 150,
@@ -1164,6 +1196,14 @@ ggsave(
     units = "mm",
     dpi = 300
 )
+ggsave(
+    "../manuscript/figures/png/fig-pccc-cod-neo.png",
+    fig_pccc_cod_neo,
+    width = 170,
+    height = 100,
+    units = "mm",
+    dpi = 300
+)
 
 # Display plot
 fig_pccc_cod_neo
@@ -1192,6 +1232,14 @@ fig_pccc_age <- plot_perf_trend(
 # Save plot
 ggsave(
     "../manuscript/figures/fig-pccc-age.pdf",
+    fig_pccc_age,
+    width = 170,
+    height = 100,
+    units = "mm",
+    dpi = 300
+)
+ggsave(
+    "../manuscript/figures/png/fig-pccc-age.png",
     fig_pccc_age,
     width = 170,
     height = 100,
