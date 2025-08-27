@@ -253,6 +253,11 @@ plot_perf <- function(
         )
     }
     
+    # Get custom colors for models
+    default_colors <- scales::hue_pal()(length(unique(df_plot[[color]])))
+    default_colors <- c(default_colors, rep(NA, length(legend_add)))
+    names(default_colors) <- c(unique(as.character(df_plot[[color]])), legend_add)
+    
     # Plot metric for each model
     out <- ggplot(df_plot, aes(x = metric, y = .data[[group]])) +
         geom_segment( # min max lines
@@ -307,12 +312,13 @@ plot_perf <- function(
             max.overlaps = Inf,
             size = text_mid_size
         ) +
-        scale_shape_manual(
-            values = x_shapes,
+        scale_fill_manual(
+            values = default_colors,
             labels = x_color_labels,
             drop = ifelse(is.null(legend_add), T, F)
         ) +
-        scale_fill_discrete(
+        scale_shape_manual(
+            values = x_shapes,
             labels = x_color_labels,
             drop = ifelse(is.null(legend_add), T, F)
         ) +
