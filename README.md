@@ -67,36 +67,36 @@ Files of interest:
     * `healsl_rd2_neo_narrative_v1.csv`
 2. Put all the files above into the `tmp` folder
 3. Run InterVA-5 and InSilicoVA:
-    a. Open a command line interface and activate python:
+    1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
-    b. Run [pycrossva](https://github.com/verbal-autopsy-software/pyCrossVA) to prepare input data `python src/models/pycrossva.py`
+    2. Run [pycrossva](https://github.com/verbal-autopsy-software/pyCrossVA) to prepare input data `python src/models/pycrossva.py`
         * This creates output files `tmp/healsl_rd1to2_ova_interva5_v1.csv` and `tmp/healsl_rd1to2_ova_insilicova_v1.csv`
-    c. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
-    d. In RStudio, run [InterVA-5](https://CRAN.R-project.org/package=InterVA5) in the R terminal `source src/models/interva5.R`
+    3. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
+    4. In RStudio, run [InterVA-5](https://CRAN.R-project.org/package=InterVA5) in the R terminal `source src/models/interva5.R`
         * This creates InterVA-5 outputs with `_interva5_` in the file name
-    e. In RStudio, run [InSilicoVA](https://CRAN.R-project.org/package=InSilicoVA) in the R terminal `source src/models/insilicova.R`
+    5. In RStudio, run [InSilicoVA](https://CRAN.R-project.org/package=InSilicoVA) in the R terminal `source src/models/insilicova.R`
         * This creates InSilicoVA outputs with `_insilicova_` in the file name
-    f. Both model outputs should now be available in the `tmp` folder
+    6. Both model outputs should now be available in the `tmp` folder
 4. Run GPT-3.5 and GPT-4:
-    a. Open a command line interface and activate python:
+    1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
-    b. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
+    2. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
         * This creates GPT-3.5 outputs and intermediate files with `_gpt3_` in the file name
-    c. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt4.py`
+    3. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt4.py`
         * This creates GPT-4 outputs and intermediate files with `_gpt4_` in the file name
-    f. Both model outputs should now be available in the `tmp` folder
+    4. Both model outputs should now be available in the `tmp` folder
 5. Gather all model outputs:
-    a. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
-    b. In RStudio, open [src/data.Rmd](src/data.Rmd)
-    c. Combine all outputs by running this file using the `Run` button drop down and selecting `Run All`
-    d. This produces the final anonymous output data for plotting under [data/healsl_rd1to2_cod_v1.csv](data/healsl_rd1to2_cod_v1.csv)
+    1. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
+    2. In RStudio, open [src/data.Rmd](src/data.Rmd)
+    3. Combine all outputs by running this file using the `Run` button drop down and selecting `Run All`
+    4. This produces the final anonymous output data for plotting under [data/healsl_rd1to2_cod_v1.csv](data/healsl_rd1to2_cod_v1.csv)
 6. Produce plots:
-    a. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
-    b. In RStudio, open [src/plots.Rmd](src/plots.Rmd)
-    c. Generate all plots using the `Run` button drop down and selecting `Run All`
-    d. This produces several supplementary tables in the [data folder](data/) and the plots under [manuscript/figures](manuscript/figures)
+    1. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
+    2. In RStudio, open [src/plots.Rmd](src/plots.Rmd)
+    3. Generate all plots using the `Run` button drop down and selecting `Run All`
+    4. This produces several supplementary tables in the [data folder](data/) and the plots under [manuscript/figures](manuscript/figures)
 
 ## Contact
 
