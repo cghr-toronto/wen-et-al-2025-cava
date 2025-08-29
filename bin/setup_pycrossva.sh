@@ -1,0 +1,1 @@
+pip install -e ./bin/pycrossva-v0.97

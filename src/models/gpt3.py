@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 from openai import OpenAI
+from dotenv import load_dotenv
 import datetime
 import pytz
 import logging
@@ -9,6 +10,9 @@ import logging
 import textwrap
 import json
 import re
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Global Variables
 TIMEZONE = pytz.timezone('America/Toronto')

@@ -38,9 +38,12 @@ Files of interest:
     * The python environment also exists under `tmp/venv`
 9. Setup the python environment using scripts in the [bin folder](bin/) with the following command:
     * MacOS/Linux: `source bin/setup_python.sh`
-    * Windows: `bin\install`
-10. Open RStudio, and install the required R packages with the [src/install.R script](src/install.R) in the R terminal: `source("src/install.R")`
-11. All required software should now be installed
+    * Windows: `bin\setup_python`
+10. Install [pycrossva](https://github.com/verbal-autopsy-software/pyCrossVA) v0.97 in Python with the following commands:
+    * MacOS/Linux: `source bin/activate` then `source bin/setup_pycrossva.sh`
+    * Windows: `bin\activate` then `bin\setup_pycrossva`
+11. Open RStudio, and install the required R packages with the [src/install.R script](src/install.R) in the R terminal: `source("src/install.R")`
+12. All required software should now be installed
 
 ## Reproducing Study Results
 
@@ -71,7 +74,7 @@ Files of interest:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
     2. Run [pycrossva](https://github.com/verbal-autopsy-software/pyCrossVA) to prepare input data `python src/models/pycrossva.py`
-        * This creates output files `tmp/healsl_rd1to2_ova_interva5_v1.csv` and `tmp/healsl_rd1to2_ova_insilicova_v1.csv`
+        * This creates prepared model input data for both InSilicoVA and InterVA-5 in the `tmp` folder
     3. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
     4. In RStudio, run [InterVA-5](https://CRAN.R-project.org/package=InterVA5) in the R terminal `source src/models/interva5.R`
         * This creates InterVA-5 outputs with `_interva5_` in the file name
@@ -82,11 +85,14 @@ Files of interest:
     1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
-    2. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
+    2. Create a `.env` file and add a line `OPEN_API_KEY=<your_secret_api_key>`
+        * Replace `<your_secret_api_key>` with your [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
+        * **CAUTION**: Do not share this file or your key with anyone else, keep it safe from public access
+    3. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
         * This creates GPT-3.5 outputs and intermediate files with `_gpt3_` in the file name
-    3. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt4.py`
+    4. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt4.py`
         * This creates GPT-4 outputs and intermediate files with `_gpt4_` in the file name
-    4. Both model outputs should now be available in the `tmp` folder
+    5. Both model outputs should now be available in the `tmp` folder
 5. Gather all model outputs:
     1. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
     2. In RStudio, open [src/data.Rmd](src/data.Rmd)
