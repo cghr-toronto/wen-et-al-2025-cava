@@ -10,7 +10,7 @@ Folders in this repository are organized in the following manner:
 
 - [archive](archive/): past versions of files with large differences
 - [bin](bin/): scripts meant to be run on the command line
-- [data](data/): public and anonymized datasets, and their data dictionaries if available
+- [data](data/): anonymized public datasets, and their data dictionaries if available
 - [src](src/): code and files for models, plots, and diagrams
     - [figures](src/figures): draw.io files for diagrams
     - [models](src/models): code to run each model
@@ -85,7 +85,7 @@ Files of interest:
     1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
-    2. Create a `.env` file and add a line `OPEN_API_KEY=<your_secret_api_key>`
+    2. Create a `.env` file at `healsl-gpt-paper/.env` and add a line `OPEN_API_KEY=<your_secret_api_key>`
         * Replace `<your_secret_api_key>` with your [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
         * **CAUTION**: Do not share this file or your key with anyone else, keep it safe from public access
     3. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
