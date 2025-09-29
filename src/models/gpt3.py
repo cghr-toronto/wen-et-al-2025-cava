@@ -16,9 +16,9 @@ load_dotenv()
 
 # Global Variables
 TIMEZONE = pytz.timezone('America/Toronto')
-TEMP_DIR = "tmp\gpt"
-DATA_DIR = "tmp"
-OUTPUT_DIR = "tmp\output"
+TEMP_DIR = "../../tmp"
+DATA_DIR = "../../tmp"
+OUTPUT_DIR = "../../tmp"
 INCLUDE_SAMPLING = True
 script_dir = os.path.dirname(__file__)
 
