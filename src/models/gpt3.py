@@ -44,9 +44,9 @@ N_REPEAT_RESPONSES = 10
 # #############################################################################################
 
 # Demo mode artificially limits the number of rows from the import dataset for testing/demo purposes
-DEMO_MODE = False
+DEMO_MODE = True
 DEMO_RANDOM = False
-DEMO_SIZE_LIMIT = 5
+DEMO_SIZE_LIMIT = 100
 
 # Discard columns not recognized by the script before saving output file.
 # Set to True to retain only essential columns in the output file.
@@ -55,6 +55,9 @@ DROP_EXCESS_COLUMNS = False
 
 # Number of API calls between saving the output file
 SAVE_FREQ = 3
+
+# Random seed for reproducibility
+SEED = 1234
 
 # Models Settings
 models = {
@@ -554,6 +557,7 @@ def stage_2_generate_gpt_responses(
         tools=None,
         logprobs=None,
         top_logprobs=None,
+        seed=1234
     ) -> str:
         """
         Generates a completion using the OpenAI Chat API.
@@ -578,6 +582,7 @@ def stage_2_generate_gpt_responses(
             "temperature": temperature,
             "logprobs": logprobs,
             "top_logprobs": top_logprobs,
+            "seed": seed
         }
         if tools:
             params["tools"] = tools
@@ -655,7 +660,8 @@ def stage_2_generate_gpt_responses(
                 model=MODEL_NAME,
                 logprobs=LOGPROBS,
                 temperature=TEMPERATURE,
-                max_tokens=MAX_TOKENS
+                max_tokens=MAX_TOKENS,
+                seed=SEED
             )
             
  
@@ -670,7 +676,8 @@ def stage_2_generate_gpt_responses(
                 'param_max_tokens': MAX_TOKENS,
                 'param_system_prompt': SYS_PROMPT,
                 'param_user_prompt': prompt,
-                'timestamp': current_time,
+                'param_seed': SEED,
+                'timestamp': current_time,                
                 'output': recursive_dict(completion),
             }
 
