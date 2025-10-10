@@ -44,9 +44,9 @@ N_REPEAT_RESPONSES = 10
 # #############################################################################################
 
 # Demo mode artificially limits the number of rows from the import dataset for testing/demo purposes
-DEMO_MODE = True
+DEMO_MODE = False
 DEMO_RANDOM = False
-DEMO_SIZE_LIMIT = 100
+DEMO_SIZE_LIMIT = 5
 
 # Discard columns not recognized by the script before saving output file.
 # Set to True to retain only essential columns in the output file.
@@ -570,6 +570,7 @@ def stage_2_generate_gpt_responses(
             tools (str, optional): Additional tools to use for generating the completion. Defaults to None.
             logprobs (int, optional): Include log probabilities in the response. Defaults to None.
             top_logprobs (int, optional): Include top log probabilities in the response. Defaults to None.
+            seed (int, optional): Random seed to improve reproducibility.
 
         Returns:
             str: The generated completion.

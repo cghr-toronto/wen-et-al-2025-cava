@@ -56,6 +56,9 @@ DROP_EXCESS_COLUMNS = False
 # Number of API calls between saving the output file
 SAVE_FREQ = 3
 
+# Random seed for reproducibility
+SEED = 1234
+
 # Models Settings
 models = {
     "gpt4": "gpt-4-0613",
@@ -555,6 +558,7 @@ def stage_2_generate_gpt_responses(
         tools=None,
         logprobs=None,
         top_logprobs=None,
+        seed=1234
     ) -> str:
         """
         Generates a completion using the OpenAI Chat API.
@@ -567,6 +571,7 @@ def stage_2_generate_gpt_responses(
             tools (str, optional): Additional tools to use for generating the completion. Defaults to None.
             logprobs (int, optional): Include log probabilities in the response. Defaults to None.
             top_logprobs (int, optional): Include top log probabilities in the response. Defaults to None.
+            seed (int, optional): Random seed to improve reproducibility.
 
         Returns:
             str: The generated completion.
@@ -579,6 +584,7 @@ def stage_2_generate_gpt_responses(
             "temperature": temperature,
             "logprobs": logprobs,
             "top_logprobs": top_logprobs,
+            "seed": seed
         }
         if tools:
             params["tools"] = tools
