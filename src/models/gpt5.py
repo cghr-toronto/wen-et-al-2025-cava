@@ -19,7 +19,7 @@ TIMEZONE = pytz.timezone('America/Toronto')
 TEMP_DIR = "../../tmp"
 DATA_DIR = "../../tmp"
 OUTPUT_DIR = "../../tmp"
-INCLUDE_SAMPLING = True
+INCLUDE_SAMPLING = False
 script_dir = os.path.dirname(__file__)
 
 # #############################################################################################
@@ -46,7 +46,7 @@ N_REPEAT_RESPONSES = 10
 # Demo mode artificially limits the number of rows from the import dataset for testing/demo purposes
 DEMO_MODE = False
 DEMO_RANDOM = False
-DEMO_SIZE_LIMIT = 5
+DEMO_SIZE_LIMIT = 10
 
 # Discard columns not recognized by the script before saving output file.
 # Set to True to retain only essential columns in the output file.
@@ -58,12 +58,13 @@ SAVE_FREQ = 3
 
 # Models Settings
 models = {
+    "gpt5": "gpt-5-2025-08-07",
     "gpt4": "gpt-4-0613",
     "gpt3": "gpt-3.5-turbo-0125"
 }
-SELECTED_MODEL = "gpt4"
+SELECTED_MODEL = "gpt5"
 MODEL_NAME = models[SELECTED_MODEL]
-TEMPERATURE = 0
+TEMPERATURE = 1 #Only the default (1) value is supported.
 LOGPROBS = True
 MAX_TOKENS = 30
 
@@ -111,12 +112,11 @@ s4a_out_filename_template = "healsl_ROUND_rapid_MODELNAME_VERSION.csv"
 # STAGE 4b Parameters
 # #############################################################################################
 
-
 s4b_in_smpl_csv_filepath = s3_out_smpl_csv
 # smpl_analysis_in_csv_path = os.path.join(script_dir, OUTPUT_DIR, PROCESS_FILE)
 
-# Path to export file after sample analysis
-s4b_out_csv_filename = "healsl_rd1to2_rapid_gpt3_sample100_v1.csv"
+# Path to export file after sample analysis - updated filename
+s4b_out_csv_filename = "healsl_rd1to2_rapid_gpt5_sample100_v1.csv"
 s4b_out_csv_filepath = os.path.join(script_dir, OUTPUT_DIR, s4b_out_csv_filename)
 # analyzed_out_csv_filename = PROCESS_FILE.replace(".csv", "_aggregated.csv")
 
@@ -350,14 +350,13 @@ def stage_1_prepare_data(
                 raise ValueError(f"KeyError: {e}")
             
             merged_df = narrative_only.merge(sex_only, on='rowid').merge(age_only, on='rowid')
-
+            
             # Fill in missing values with empty string
             merged_df['sex_cod'] = merged_df['sex_cod'].fillna('')
             
             # Add extra columns age_group and round for clarify
             merged_df['age_group'] = a
-            merged_df['round'] = r
-            
+            merged_df['round'] = r                       
 
             assert not merged_df.isnull().values.any(), "Execution halted: NaN values found in merged_df"
 
@@ -547,17 +546,18 @@ def stage_2_generate_gpt_responses(
         with open(filename, 'w') as file:
             json.dump(data, file)
         
-    def get_completion(
-        messages: list[dict[str, str]],
+    #def get_completion(
+    def get_response( #Update function to get_response for GPT-5        
+        instructions: str,
+        input: str,
         model: str = "gpt-3.5-turbo-0125",
-        max_tokens=30,
-        temperature=0,        
-        tools=None,
-        logprobs=None,
-        top_logprobs=None,
+        max_tokens = 30,        
+        reasoning_effort = "minimal",
+        text_verbosity = "low",
+        tools = None
     ) -> str:
         """
-        Generates a completion using the OpenAI Chat API.
+        2025-Oct-02 updated: create a model response using the Responses API.
 
         Args:
             messages (list[dict[str, str]]): A list of messages in the conversation.
@@ -573,18 +573,19 @@ def stage_2_generate_gpt_responses(
 
         """
         params = {
-            "model": model,
-            "messages": messages,
-            "max_tokens": max_tokens,
-            "temperature": temperature,
-            "logprobs": logprobs,
-            "top_logprobs": top_logprobs,
+            "model": model,            
+            "instructions": instructions,
+            "input": input,            
+            "reasoning" : { "effort" : reasoning_effort },
+            "text": { "verbosity": text_verbosity },            
+            "max_output_tokens": max_tokens             
         }
         if tools:
             params["tools"] = tools
-
-        completion = client.chat.completions.create(**params)
-        return completion
+        
+        response = client.responses.create(**params) #Update to client.responses.create for GPT-5
+        
+        return response
     
     def get_api_response(
         input_df: pd.DataFrame, 
@@ -648,17 +649,14 @@ def stage_2_generate_gpt_responses(
             prompt = prompt.replace('SEX_COD', str(sex_cod).lower())
             prompt = prompt.format(open_narrative=narrative)
                         
-            completion = get_completion(
-                [
-                    {"role": "system", "content": SYS_PROMPT},
-                    {"role": "user", "content": prompt}
-                ] ,
-                model=MODEL_NAME,
-                logprobs=LOGPROBS,
-                temperature=TEMPERATURE,
-                max_tokens=MAX_TOKENS
-            )
-            
+            response = get_response(
+                instructions=SYS_PROMPT,
+                input=prompt,
+                model=MODEL_NAME,                
+                max_tokens=MAX_TOKENS,                
+                reasoning_effort="minimal",
+                text_verbosity="low"                
+            )            
  
             current_time = datetime.datetime.now(tz=TIMEZONE).isoformat()
             
@@ -672,7 +670,7 @@ def stage_2_generate_gpt_responses(
                 'param_system_prompt': SYS_PROMPT,
                 'param_user_prompt': prompt,
                 'timestamp': current_time,
-                'output': recursive_dict(completion),
+                'output': recursive_dict(response),
             }
 
             if not DROP_EXCESS_COLUMNS:
@@ -805,7 +803,6 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
     Returns:
         None
     """
-
 
     def load_response_data(filename):
         """
@@ -1021,31 +1018,51 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
     # Get unrecognized colnames
     required_colnames = ['uid', 'rowid', 'param_model', 'param_max_tokens', 'param_temperature',
                         'param_logprobs', 'param_system_prompt', 'param_user_prompt',
-                        'timestamp', 'output']
+                        'timestamp', 'output']    
 
     # Get columns names that are not required
     extra_colnames = [colname for colname in df.columns if colname not in required_colnames]
 
     # Extract 4 new columns from 'output'
     app_logger.info("Extracting columns from 'output'...")
+    # simple token split for fake logprobs (whitespace tokens)
+    _token_re = re.compile(r'\S+')
+
+    def _get_gpt5_text(cell):
+        """Direct extraction from the canonical GPT-5 response path (no checks)."""
+        #print(cell['output'][1]['content'][0]['text'])        
+        return str(cell['output'][1]['content'][0]['text'])
+
+    def _make_fake_logprobs_from_text(text):
+        """Return list of (token, 0.0) tuples to mimic original format."""
+        tokens = _token_re.findall(text)
+        return [(t, 0.0) for t in tokens]
+    
     df = df.assign(
-        output_msg = df.output.apply(lambda x: x['choices'][0]['message']['content']),
-        output_logprobs = df.output.apply(lambda x: [(token['token'], float(token['logprob'])) for token in x['choices'][0]['logprobs']['content']]),
-        output_usage_completion_tokens = df.output.apply(lambda x: x['usage']['completion_tokens']),
-        output_usage_prompt_tokens = df.output.apply(lambda x: x['usage']['prompt_tokens'])
-        
+        output_msg = df['output'].apply(lambda cell: _get_gpt5_text(cell)),
+        # output_logprobs: fake tuple list (token, 0.0) to keep pipeline compatible
+        output_logprobs = df['output'].apply(lambda cell: _make_fake_logprobs_from_text(_get_gpt5_text(cell))),        
+        #output_usage_completion_tokens = df.output.apply(lambda x: x['usage']['completion_tokens']),
+        output_usage_completion_tokens = df.output.apply(lambda x: x['usage']['total_tokens']),
+        #Add 3 columns to store token usage for GPT-5
+        gpt5_input_tokens = df.output.apply(lambda x: x['usage']['input_tokens']),
+        gpt5_output_tokens = df.output.apply(lambda x: x['usage']['output_tokens']),
+        gpt5_total_tokens = df.output.apply(lambda x: x['usage']['total_tokens']),
+        #output_usage_prompt_tokens = df.output.apply(lambda x: x['usage']['prompt_tokens'])
+        output_usage_prompt_tokens = df.output.apply(lambda x: x['usage']['input_tokens'])        
     )
 
     # Extract ICD-10 codes and their associated probabilities to a new column
-    app_logger.info("Extracting ICD-10 codes and probabilities...")
-    df = df.assign(output_probs=df['output_logprobs'].apply(extract_icd_probabilities))
-
-    # Count the number of ICD-10 codes in each response
+    app_logger.info("Extracting ICD-10 codes and probabilities... (Not available in GPT-5 / fake logprobs)")
+            
+    df = df.assign(output_probs = df['output_logprobs'].apply(extract_icd_probabilities))
+    
+    # Count the number of ICD-10 codes in each response    
     df['icd10_count'] = df['output_probs'].apply(len)
 
     # Generate column names for the exploded ICDs in cause{n}_icd10 and cause{n}_icd10_prob format
     icd_column_names_mapping = {i: f"cause{i + 1}_icd10" for i in range(PAIRS)}
-
+    
     app_logger.info("Parsing ICD-10 codes to columns...")
     parsed_first_icd10_df = df.output_probs.apply(
         lambda x: output_icds_to_cols(x, sort_probs=False)
@@ -1056,7 +1073,9 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
         left_index=True, 
         right_index=True
     )
-
+    
+    df = df.assign(cause1_icd10=df['output'][0]['output'][1]['content'][0]['text'])
+    
     # Define the mapping variable
     app_logger.info("Renaming columns...")
     column_mapping = {
@@ -1074,7 +1093,7 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
     app_logger.info("Organizing columns...")
     export_columns = []
     export_columns += ['rowid']
-    export_columns += list(icd_column_names_mapping.values())
+    #export_columns += list(icd_column_names_mapping.values())
     export_columns += [
                         'param_model',
                         'param_system_prompt' , 
@@ -1087,6 +1106,14 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
                         'output_msg',
                         'icd10_count',
                         'output_probs',
+                        "cause1_icd10",
+                        "cause2_icd10",
+                        "cause3_icd10",
+                        "cause4_icd10",
+                        "cause5_icd10",
+                        "gpt5_input_tokens",
+                        "gpt5_output_tokens",
+                        "gpt5_total_tokens"
                     ]
 
     # Append extra columns if DROP_EXCESS_COLUMNS is False
@@ -1097,11 +1124,10 @@ def stage_3_extract_info(response_data_file: str, return_data_file: str):
     if not DROP_RAW:
         export_columns += ['output']
 
-
     # Show only relevant columns in the final dataframe
     export_parsed_first_icd10_df = parsed_first_icd10_df[export_columns]
 
-    app_logger.info(f"Parsing finished. DataFrame shape: {COLOUR.cyan}{export_parsed_first_icd10_df.shape}{COLOUR.end}")
+    #app_logger.info(f"Parsing finished. DataFrame shape: {COLOUR.cyan}{export_parsed_first_icd10_df.shape}{COLOUR.end}")
     app_logger.info(f"Export path: {COLOUR.yellow}{return_data_file}{COLOUR.end}")
     
     # Export the parsed DataFrame to a CSV file
@@ -1119,11 +1145,12 @@ def stage_4a_split_by_rounds(import_full_path: str, output_template: str = s4a_o
         model_name = "gpt3"
     elif "gpt4" in import_full_path:
         model_name = "gpt4"
+    elif "gpt5" in import_full_path:
+        model_name = "gpt5"
     
     filename = output_template.replace("VERSION", VERSION)
     filename = filename.replace("MODELNAME", model_name) 
-        
-
+    
     df = pd.read_csv(import_full_path)
     
     split_unique_val_list = df[SPLIT_COLNAME].unique()
@@ -1132,23 +1159,19 @@ def stage_4a_split_by_rounds(import_full_path: str, output_template: str = s4a_o
     app_logger.info(f"Directory: {OUTPUT_DIR}")
     app_logger.info(f"Model: {model_name}")
     app_logger.info(f"Version: {VERSION}")
-    app_logger.info(f"Split by {SPLIT_COLNAME}: {split_unique_val_list}")
-    
+    app_logger.info(f"Split by {SPLIT_COLNAME}: {split_unique_val_list}")    
     
     for curr_split in split_unique_val_list:
         split_df = df[df[SPLIT_COLNAME] == curr_split]
         
         app_logger.info(f"Preparing round: {curr_split} Shape: {COLOUR.cyan}{split_df.shape}{COLOUR.end}")
         
-        
-        
         split_filename = filename.replace("ROUND", curr_split)
         split_filename = os.path.join(script_dir, OUTPUT_DIR, split_filename)
         app_logger.info(f"Export to: {COLOUR.yellow}{split_filename}{COLOUR.end}")
         split_df.to_csv(split_filename, index=False)
 
-def stage_4b_sample_analysis(input_data:str, output_data:str):
-    
+def stage_4b_sample_analysis(input_data:str, output_data:str):    
 
     def same_cause_icd10(input_data) -> pd.DataFrame:
         """
@@ -1166,10 +1189,13 @@ def stage_4b_sample_analysis(input_data:str, output_data:str):
         # Read the input data
         app_logger.info(f"Reading input data...")
         df = pd.read_csv(input_data)
+
+        print(df.columns)
         
         # Remove any ICDs with decimals
         app_logger.info(f"Same cause ICD10 analysis")
         app_logger.info(f"Removing decimals from ICD10 codes...")
+        
         df[['cause1_icd10', 'cause2_icd10', 'cause3_icd10', 'cause4_icd10', 'cause5_icd10']] = df[['cause1_icd10', 'cause2_icd10', 'cause3_icd10', 'cause4_icd10', 'cause5_icd10']].map(lambda x: x.split('.')[0] if pd.notnull(x) else x)
 
         # Group similar rowids and count the frequency of ICD10 codes
@@ -1222,8 +1248,7 @@ def stage_4b_sample_analysis(input_data:str, output_data:str):
     def same_cause_cghr10(input_data):
         
         app_logger.info(f"{COLOUR.green}[TOOLS] Analysis by Aggregating {COLOUR.bold}CGHR10 titles{COLOUR.end}")
-        
-        
+                
         try:
             app_logger.info(f"Reading ICD10 to CGHR10 mapping file...")
             icd10_to_cghr_mapping = pd.read_csv(icd10_cghr10_map_file)
@@ -1296,8 +1321,7 @@ def stage_4b_sample_analysis(input_data:str, output_data:str):
         final_cghr_df = same_cause_count_cghr_df.merge(combined_cghr10_df, left_index=True, right_index=True)
         
         # print(final_cghr_df)
-        return final_cghr_df
-        
+        return final_cghr_df        
 
     # main program
     # Aggregate ICD10 codes
