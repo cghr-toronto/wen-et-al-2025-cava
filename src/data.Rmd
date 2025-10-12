@@ -185,6 +185,14 @@ df <- list(
             round = 2
         )
     ) %>% rename(gpt4_icd10 = cause1_icd10),
+    model_gpt5 =
+        read_csv(
+            "../tmp/healsl_rd1to2_rapid_gpt5_v1.csv",
+            col_select = c("rowid", "cause1_icd10", "round")
+        ) %>% mutate(
+            cause1_icd10 = str_sub(cause1_icd10, 1, 3),
+            round = as.integer(substr(round, 3, 3))
+        ) %>% rename(gpt5_icd10 = cause1_icd10),
     model_insilicova = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_insilicova_v1.csv",
@@ -636,6 +644,67 @@ cat(paste0(
 ))
 ```
 
+### ChatGPT-5 Counts
+
+Check ChatGPT-5 Counts:
+
+```{r}
+
+# Get phy coded icd10 records only
+out_coded <- out %>% filter(
+    !is.na(physician_icd10) & !is.null(physician_icd10)
+)
+out_coded_agree <- out_coded %>% filter(is_agreed == TRUE)
+
+# Get phy coded cghr10 records only
+out_coded_cghr10 <- out_coded %>% filter(
+    !is.na(physician_cghr10) & !is.null(physician_cghr10)
+)
+out_coded_cghr10_agree <- out_coded_cghr10 %>% filter(is_agreed == TRUE)
+
+# Get gpt5 coded records
+out_cgpt5 <- out_coded %>% filter(
+    !is.na(gpt5_icd10) & !is.null(gpt5_icd10)
+)
+out_cgpt5_agree <- out_coded_agree %>% filter(
+    !is.na(gpt5_icd10) & !is.null(gpt5_icd10)
+)
+out_cgpt5_cghr10 <- out_coded_cghr10 %>% filter(
+    !is.na(gpt5_icd10) & !is.null(gpt5_icd10)
+)
+out_cgpt5_cghr10_agree <- out_coded_cghr10_agree %>% filter(
+    !is.na(gpt5_icd10) & !is.null(gpt5_icd10)
+)
+
+# Get gpt5 coded records converted to cghr10
+out_cgpt5_xcghr10 <- out_cgpt5 %>% filter(
+    !is.na(gpt5_cghr10) & !is.null(gpt5_cghr10)
+)
+out_cgpt5_xcghr10_agree <- out_cgpt5_agree %>% filter(
+    !is.na(gpt5_cghr10) & !is.null(gpt5_cghr10)
+)
+out_cgpt5_xcghr10_cghr10 <- out_cgpt5_cghr10 %>% filter(
+    !is.na(gpt5_cghr10) & !is.null(gpt5_cghr10)
+)
+out_cgpt5_xcghr10_cghr10_agree <- out_cgpt5_cghr10_agree %>% filter(
+    !is.na(gpt5_cghr10) & !is.null(gpt5_cghr10)
+)
+
+# Print results
+cat(paste0(
+    "ICD-10 Output\n-------------",
+    "\nChatGPT-5 ICD-10 Coded (Phy. ICD-10 Coded): ", out_cgpt5 %>% nrow,
+    "\nChatGPT-5 ICD-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt5_agree %>% nrow,
+    "\nChatGPT-5 ICD-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt5_cghr10 %>% nrow,
+    "\nChatGPT-5 ICD-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt5_cghr10_agree %>% nrow,
+    "\n\nAfter Conversion to CGHR-10\n---------------------------",
+    "\nChatGPT-5 CGHR-10 Coded (Phy. ICD-10 Coded): ", out_cgpt5_xcghr10 %>% nrow,
+    "\nChatGPT-5 CGHR-10 Coded (Agree, Phy. ICD-10 Coded): ", out_cgpt5_xcghr10_agree %>% nrow,
+    "\nChatGPT-5 CGHR-10 Coded (Phy. CGHR-10 Coded): ", out_cgpt5_xcghr10_cghr10 %>% nrow,
+    "\nChatGPT-5 CGHR-10 Coded (Agree, Phy. CGHR-10 Coded): ", out_cgpt5_xcghr10_cghr10_agree %>% nrow
+))
+```
+
 ### InterVA-5 Counts
 
 Check InterVA-5 Counts:
@@ -885,5 +954,5 @@ cat(paste0(
 Save pre-processed data to `data` folder.
 
 ```{r}
-write_csv(out, "../data/healsl_rd1to2_cod_v1.csv")
+write_csv(out, "../data/healsl_rd1to2_cod_v2.csv")
 ```

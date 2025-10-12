@@ -49,24 +49,29 @@ Files of interest:
 
 1. Email the authors for access to the following files:
     * `icd10_cghr10_v1.csv`
-    * `healsl_rd1to2_who151_v1.csv`
-    * `healsl_rd1_adult_v1.csv`
-    * `healsl_rd1_adult_age_v1.csv`
+    * `healsl_rd1_adult_v2.csv`
+    * `healsl_rd1_adult_age_v2.csv`
+    * `healsl_rd1_who_adult_v1.csv`
     * `healsl_rd1_adult_narrative_v1.csv`
     * `healsl_rd2_adult_v1.csv`
     * `healsl_rd2_adult_age_v1.csv`
+    * `healsl_rd2_who_adult_v1.csv`
     * `healsl_rd2_adult_narrative_v1.csv`
     * `healsl_rd1_child_v1.csv`
     * `healsl_rd1_child_age_v1.csv`
+    * `healsl_rd1_who_child_v1.csv`
     * `healsl_rd1_child_narrative_v1.csv`
     * `healsl_rd2_child_v1.csv`
     * `healsl_rd2_child_age_v1.csv`
+    * `healsl_rd2_who_child_v1.csv`
     * `healsl_rd2_child_narrative_v1.csv`
     * `healsl_rd1_neo_v1.csv`
     * `healsl_rd1_neo_age_v1.csv`
+    * `healsl_rd1_who_neo_v1.csv`
     * `healsl_rd1_neo_narrative_v1.csv`
     * `healsl_rd2_neo_v1.csv`
     * `healsl_rd2_neo_age_v1.csv`
+    * `healsl_rd2_who_neo_v1.csv`
     * `healsl_rd2_neo_narrative_v1.csv`
 2. Put all the files above into the `tmp` folder
 3. Run InterVA-5 and InSilicoVA:
