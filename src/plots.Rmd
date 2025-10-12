@@ -176,10 +176,11 @@ plot_perf <- function(
         x_color_labels = c(
             "G3" = "GPT-3.5 (G3)",
             "G4" = "GPT-4 (G4)",
+            "G5" = "GPT-5 (G5)",
             "ISV" = "InSilicoVA (ISV)",
             "I5" = "InterVA-5 (I5)"
         ),
-        x_shapes = 21:25,
+        x_shapes = 21:26,
         x_title_size = 9 * text_scale,
         y_title_size = 9 * text_scale,
         x_text_size = 8 * text_scale,
@@ -385,6 +386,7 @@ plot_perf_trend <- function(
         x_color_labels = c(
             "G3" = "GPT-3.5",
             "G4" = "GPT-4",
+            "G5" = "GPT-5",
             "ISV" = "InSilicoVA",
             "I5" = "InterVA-5"
         ),
@@ -392,6 +394,7 @@ plot_perf_trend <- function(
             "solid",
             "solid",
             "dashed",
+            "dotted",
             "dotted"
         ),
         plot_mean = F
@@ -494,7 +497,7 @@ Load data from `data` folder.
 ```{r}
 
 # Read preds
-df_raw <- read_csv("../data/healsl_rd1to2_cod_v1.csv")
+df_raw <- read_csv("../data/healsl_rd1to2_cod_v2.csv")
 
 # Display preds
 cat("Cases: ", nrow(df_raw), "\n")
@@ -516,67 +519,6 @@ df <- df_raw %>%
 cat("Non-coded Cases: ", nrow(df_raw) - nrow(df))
 cat("\nPhysician Coded Cases: ", nrow(df))
 df
-
-```
-
-## Combined Models
-
-Create model combinations where if any of the models have the physician code, then set the combined model's output for the case to be the physician code. 
-
-```{r}
-
-# Calc combine preds
-df <- df %>%
-    mutate(
-        "gpt3_insilicova_cghr10" = if_else(
-            gpt3_cghr10 == physician_cghr10 | 
-                insilicova_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt3_cghr10
-        ),
-        "gpt4_insilicova_cghr10" = if_else(
-            gpt4_cghr10 == physician_cghr10 | 
-                insilicova_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt4_cghr10
-        ),
-        "gpt3_interva5_cghr10" = if_else(
-            gpt3_cghr10 == physician_cghr10 | 
-                interva5_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt3_cghr10
-        ),
-        "gpt4_interva5_cghr10" = if_else(
-            gpt4_cghr10 == physician_cghr10 | 
-                interva5_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt4_cghr10
-        ),
-        "gpt3_insilicova_interva5_cghr10" = if_else(
-            gpt3_cghr10 == physician_cghr10 | 
-                insilicova_cghr10 == physician_cghr10 |
-                interva5_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt3_cghr10
-        ),
-        "gpt4_insilicova_interva5_cghr10" = if_else(
-            gpt4_cghr10 == physician_cghr10 | 
-                insilicova_cghr10 == physician_cghr10 |
-                interva5_cghr10 == physician_cghr10,
-            physician_cghr10,
-            gpt4_cghr10
-        )
-    )
-
-# Display combine preds
-print(head(df %>% select(
-    gpt3_insilicova_cghr10,
-    gpt4_insilicova_cghr10,
-    gpt3_interva5_cghr10,
-    gpt4_interva5_cghr10,
-    gpt3_insilicova_interva5_cghr10,
-    gpt4_insilicova_interva5_cghr10
-)))
 
 ```
 
@@ -697,6 +639,7 @@ df <- df %>%
             physician_cghr10,
             gpt3_cghr10,
             gpt4_cghr10,
+            gpt5_cghr10,
             insilicova_cghr10,
             interva5_cghr10
         ),
@@ -727,6 +670,7 @@ df <- df %>%
             physician_cghr10,
             gpt3_cghr10,
             gpt4_cghr10,
+            gpt5_cghr10,
             insilicova_cghr10,
             interva5_cghr10
         ),
@@ -839,6 +783,7 @@ ncod_all <- ncod_adult + ncod_child + ncod_neo
 # Model full name
 gpt3_name <- "G3"
 gpt4_name <- "G4"
+gpt5_name <- "G5"
 isva_name <- "ISV"
 iva5_name <- "I5"
 
@@ -861,9 +806,11 @@ df_long <- df %>%
         model_name = str_replace_all(model, "_", " or ") %>% # use full model names
             str_replace(., "gpt3", gpt3_name) %>%
             str_replace(., "gpt4", gpt4_name) %>%
+            str_replace(., "gpt5", gpt5_name) %>%
             str_replace(., "insilicova", isva_name) %>%
             str_replace(., "interva5", iva5_name) %>%
             factor(., levels = c(
+                gpt5_name,
                 gpt4_name,
                 gpt3_name,
                 isva_name,
@@ -934,6 +881,7 @@ df_plot <- df_long %>%
             case_when(
                 . == "G3" ~ "GPT-3.5",
                 . == "G4" ~ "GPT-4",
+                . == "G5" ~ "GPT-5",
                 . == "ISV" ~ "InSilicoVA",
                 . == "I5" ~ "InterVA-5",
                 .default = .
