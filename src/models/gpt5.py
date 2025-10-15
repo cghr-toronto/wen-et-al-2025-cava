@@ -557,16 +557,18 @@ def stage_2_generate_gpt_responses(
         tools = None
     ) -> str:
         """
-        2025-Oct-02 updated: create a model response using the Responses API.
+        Creates an OpenAI model response using the Responses API (updated October 2, 2025).
 
         Args:
             messages (list[dict[str, str]]): A list of messages in the conversation.
             model (str, optional): The model to use for generating the completion. Defaults to "gpt-3.5-turbo-0125".
-            max_tokens (int, optional): The maximum number of tokens in the generated completion. Defaults to 30.
+            max_output_tokens (int, optional): The maximum number of tokens in the generated completion. Defaults to 30.
             temperature (float, optional): Controls the randomness of the generated completion. Defaults to 0.
             tools (str, optional): Additional tools to use for generating the completion. Defaults to None.
             logprobs (int, optional): Include log probabilities in the response. Defaults to None.
             top_logprobs (int, optional): Include top log probabilities in the response. Defaults to None.
+            reasoning (str, optional): ability for model to reason with thinking steps. Defaults to minimal reasoning.
+            text (dict[str], optional): additional parameters related to text. Defaults to low verbosity.
 
         Returns:
             str: The generated completion.
