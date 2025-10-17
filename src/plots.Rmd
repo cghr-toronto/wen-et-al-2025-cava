@@ -172,7 +172,7 @@ plot_perf <- function(
         max_points_size = 4,
         x_limits = c(0, 1.15),
         x_breaks = seq(0, 1, by = 0.1),
-        x_expand = expansion(add = 0.2),
+        x_expand = expansion(add = 0.1),
         x_color_labels = c(
             "G3" = "GPT-3.5 (G3)",
             "G4" = "GPT-4 (G4)",
@@ -364,6 +364,182 @@ plot_perf <- function(
     }
     return(out)
 }
+
+# Plot performance of models using grouped bars
+plot_perf_bar <- function(
+        df_long,
+        f = calc_pccc,
+        group = "cod_name",
+        color = "model_name",
+        text_scale = 1,
+        title = NULL,
+        title_size = 10,
+        x_title = "Partial Chance Corrected Concordance (PCCC)",
+        y_title = NULL,
+        x_hpos = -0.23 * text_scale,
+        x_limits = c(0, 1),
+        x_breaks = seq(0, 1, by = 0.1),
+        x_expand = expansion(add = ((x_hpos * -1) + 0.02) * text_scale),
+        x_shapes = 21:26,
+        x_title_size = 9 * text_scale,
+        y_title_size = 9 * text_scale,
+        x_text_size = 8 * text_scale,
+        x_color_size = 3 * text_scale,
+        y_text_size = 9 * text_scale,
+        legend_position = "bottom",
+        legend_title = element_blank(),
+        legend_margin = margin(c(-8, -2, -2, -50)),
+        legend_key_size = 0.5,
+        ...
+    ) {
+    
+    #  Group data
+    df_plot <- df_long %>%
+        group_by(.data[[group]], model_name, .drop = F)
+    
+    # Calc metric
+    if (identical(f, calc_pccc)) {
+        df_plot <- df_plot %>%
+            summarize(
+                metric = f(cod, model_cghr10, N = unique(ncod)[1], ...)
+            )
+    } else {
+        df_plot <- df_plot %>%
+            summarize(
+                metric = f(cod, model_cghr10, ...)
+            )
+    }
+        
+    # Add metric value to model name
+    df_plot <- df_plot %>%
+        mutate( 
+            model_label = paste0(model_name, ": ", round(metric, 2))
+        )
+    
+    # Get custom colors for models
+    default_colors <- scales::hue_pal()(length(unique(df_plot[[color]])))
+    names(default_colors) <- c(unique(as.character(df_plot[[color]])))
+    
+    # Format plot data
+    df_plot <- df_plot %>%
+        mutate(
+            x = metric,
+            y = .data[[group]],
+            color = .data[[color]]
+        )
+
+    # Sort bars within groups (ascending)
+    df_pos <- df_plot %>%
+        group_by(y) %>%
+        arrange(x, .by_group = TRUE) %>%  
+        mutate(
+            rank_in_group = row_number(),
+            n_colors = n()
+        ) %>%
+        ungroup()
+    
+    # Reverse sort groups by highest-performing bar
+    group_levels_order <- df_pos %>%
+        group_by(y) %>%
+        summarize(max_x = max(x)) %>%
+        arrange(max_x) %>%
+        pull(y)
+    
+    df_pos <- df_pos %>%
+        mutate(
+            y = factor(y, levels = group_levels_order),
+            group_center = as.numeric(y)
+        )
+    
+    # Bar width and offset
+    group_width <- 0.8
+    max_items <- max(df_pos$n_colors)
+    bar_width <- group_width / max_items
+    
+    df_pos <- df_pos %>%
+        mutate(
+            offset = (rank_in_group - (n_colors + 1)/2) * bar_width,
+            x_pos = group_center + offset,
+            label_text = paste0(color, ": ", format(round(x, 2), nsmall = 2)),
+            label_x = x_pos
+        )
+    
+    # Identify top-performing model in each group
+    df_pos <- df_pos %>%
+        group_by(y) %>%
+        mutate(
+            top_model = x == max(x),
+            fontface = ifelse(top_model, "bold", "plain"),
+            alpha_val = ifelse(top_model, 1, 0.35),       # transparency for non-top bars
+            outline_color = ifelse(top_model, "black", NA) # black outline for top bars
+        ) %>%
+        ungroup()
+    
+    # Compute range and modify group labels using square brackets
+    group_labels <- df_pos %>%
+        group_by(y) %>%
+        summarize(range_x = max(x) - min(x)) %>%
+        mutate(label = paste0(as.character(y), "\n[Range=", format(round(range_x, 2), nsmall = 2), "]")) %>%
+        arrange(match(y, levels(df_pos$y)))
+    
+    # Replace factor levels with new labels including range
+    levels(df_pos$y) <- group_labels$label
+
+    # Plot metric for each model
+    out <- ggplot(df_pos, aes(x = x_pos, y = x, fill = color)) +
+        geom_col(
+            width = bar_width * 0.9,
+            position = "identity",
+            color = df_pos$outline_color,
+            alpha = df_pos$alpha_val
+        ) +
+        geom_text(
+            aes(
+                x = label_x,
+                label = label_text,
+                fontface = fontface
+            ),
+            y = x_hpos,
+            hjust = 0,
+            vjust = 0.5,
+            size = x_color_size
+        ) +
+        coord_flip() +
+        scale_fill_manual(
+            values = default_colors
+        ) +
+        scale_x_continuous(
+            breaks = seq_along(levels(df_pos$y)),
+            labels = levels(df_pos$y),
+            expand = c(0, 0)
+        ) +
+        scale_y_continuous(
+            expand = x_expand,
+            breaks = x_breaks,
+            limits = x_limits
+        ) +
+        labs(
+            title = title,
+            x = y_title,
+            y = x_title
+        ) +
+        theme_minimal() +
+        theme(
+            legend.position = legend_position,
+            legend.title = legend_title,
+            legend.margin = legend_margin,
+            legend.key.size = unit(legend_key_size, "lines"),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            plot.title = element_text(size = title_size),
+            axis.title.x = element_text(size = x_title_size),
+            axis.title.y = element_text(size = y_title_size),
+            axis.text.x = element_text(size = x_text_size),
+            axis.text.y = element_text(size = y_text_size)
+        )
+    return(out)
+}
+
 
 # Plot perf of models using trend lines
 plot_perf_trend <- function(
@@ -781,11 +957,11 @@ ncod_neo <- 7
 ncod_all <- ncod_adult + ncod_child + ncod_neo
 
 # Model full name
-gpt3_name <- "G3"
-gpt4_name <- "G4"
-gpt5_name <- "G5"
-isva_name <- "ISV"
-iva5_name <- "I5"
+gpt3_name <- "GPT-3.5"
+gpt4_name <- "GPT-4"
+gpt5_name <- "GPT-5"
+isva_name <- "InSilicoVA"
+iva5_name <- "InterVA-5"
 
 # Pivot data into long format for calc
 df_long <- df %>%
@@ -1004,7 +1180,7 @@ fig_pccc_csmf
 ```{r}
 
 # Plot perf for pccc by age groups
-fig_pccc <- plot_perf(
+fig_pccc <- plot_perf_bar(
     df_long %>%
         mutate(
             age_label = case_when(
@@ -1020,11 +1196,9 @@ fig_pccc <- plot_perf(
         ),
     calc_pccc,
     group = "age_label",
-    text_mid_vjust = 2,
-    sort_group = F,
-    x_limits = c(0.2, 0.9),
-    x_expand = waiver(),
-    text_scale = 1.25
+    x_hpos = -0.24,
+    x_expand = expansion(add = 0.25),
+    text_scale = 0.95
 )
 
 # Save plot
@@ -1057,13 +1231,14 @@ fig_pccc
 ```{r}
 
 # Plot adult perf for pccc by cod
-fig_pccc_cod_adult <- plot_perf(
+fig_pccc_cod_adult <- plot_perf_bar(
     df_long %>% filter(age == "adult"),
     calc_pccc,
     group = "cod_name",
     title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
-    text_mid_vjust = 2.5,
-    text_scale = 1
+    text_scale = 0.7,
+    x_hpos = -0.15,
+    x_expand = expansion(add = 0.15)
 )
     
 # Save plot
@@ -1094,13 +1269,14 @@ fig_pccc_cod_adult
 ```{r}
 
 # Plot child perf for pccc by cod
-fig_pccc_cod_child <- plot_perf(
+fig_pccc_cod_child <- plot_perf_bar(
     df_long %>% filter(age == "child"),
     calc_pccc,
     group = "cod_name",
     title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
-    text_mid_vjust = 4,
-    text_scale = 1
+    text_scale = 0.92,
+    x_hpos = -0.24,
+    x_expand = expansion(add = 0.25)
 )
 
 # Save plot
@@ -1131,14 +1307,15 @@ fig_pccc_cod_child
 ```{r}
 
 # Plot neo perf for pccc by cod
-fig_pccc_cod_neo <- plot_perf(
+fig_pccc_cod_neo <- plot_perf_bar(
     df_long %>% filter(age == "neo"),
     calc_pccc,
     group = "cod_name",
     title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
-    text_mid_vjust = 3.5,
-    text_scale = 1.25
+    text_scale = 0.92,
+    x_hpos = -0.24,
+    x_expand = expansion(add = 0.25)
 )
 
 # Save plot

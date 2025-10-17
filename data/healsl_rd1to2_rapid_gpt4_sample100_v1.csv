@@ -1,0 +1,101 @@
+rowid,same_cause1_icd10_1x,same_cause1_icd10_2x,same_cause1_icd10_3x,same_cause1_icd10_4x,same_cause1_icd10_5x,same_cause1_icd10_6x,same_cause1_icd10_7x,same_cause1_icd10_8x,same_cause1_icd10_9x,same_cause1_icd10_10x,cause_icd10,same_cause1_cghr10_1x,same_cause1_cghr10_2x,same_cause1_cghr10_3x,same_cause1_cghr10_4x,same_cause1_cghr10_5x,same_cause1_cghr10_6x,same_cause1_cghr10_7x,same_cause1_cghr10_8x,same_cause1_cghr10_9x,same_cause1_cghr10_10x,cause_cghr10,age_group,round
+14000252,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd1
+14000286,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14000296,1,0,0,1,1,0,0,0,0,0,"{'K35': 5, 'K92': 4, 'K29': 1}",0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd1
+14000405,0,0,0,0,2,0,0,0,0,0,"{'I21': 5, 'I12': 5}",0,0,0,0,2,0,0,0,0,0,"{'Ischemic heart disease': 5, 'Other cardiovascular diseases': 5}",adult,rd1
+14000435,0,0,0,0,0,0,0,0,0,1,{'A95': 10},0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd1
+14000463,0,0,0,0,0,0,0,0,0,1,{'K65': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd1
+14000603,0,0,1,0,0,0,1,0,0,0,"{'E11': 7, 'B15': 3}",0,0,1,0,0,0,1,0,0,0,"{'Diabetes mellitus': 7, 'Unspecified infections': 3}",adult,rd1
+14000645,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14001008,0,0,0,0,0,0,0,0,0,1,{'R51': 10},0,0,0,0,0,0,0,0,0,1,{'Ill-defined': 10},adult,rd1
+14001093,1,0,0,0,0,0,0,0,1,0,"{'I10': 9, 'I50': 1}",0,0,0,0,0,0,0,0,0,1,{'Other cardiovascular diseases': 10},adult,rd1
+14001619,0,0,0,0,0,0,0,0,0,1,{'Q04': 10},0,0,0,0,0,0,0,0,0,1,{'Congenital anomalies': 10},child,rd1
+14001627,0,0,1,0,0,0,1,0,0,0,"{'P36': 7, 'P23': 3}",0,0,1,0,0,0,1,0,0,0,"{'Other infections': 7, 'Pneumonia': 3}",child,rd1
+14001663,0,0,0,0,2,0,0,0,0,0,"{'P03': 5, 'P95': 5}",0,0,0,0,2,0,0,0,0,0,"{'Birth asphyxia and birth trauma': 5, 'Stillbirth': 5}",neo,rd1
+14001749,0,0,0,0,0,0,0,0,0,1,{'I63': 10},0,0,0,0,0,0,0,0,0,1,{'Stroke': 10},adult,rd1
+14001752,0,0,0,0,0,0,0,0,0,1,{'I63': 10},0,0,0,0,0,0,0,0,0,1,{'Stroke': 10},adult,rd1
+14001816,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14001933,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14002298,0,0,0,0,0,0,0,0,0,1,{'K25': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd1
+14002498,0,0,0,0,0,0,0,0,0,1,{'I63': 10},0,0,0,0,0,0,0,0,0,1,{'Stroke': 10},adult,rd1
+14002600,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},child,rd1
+14002623,0,0,0,0,0,0,0,0,0,1,{'B18': 10},0,0,0,0,0,0,0,0,0,1,{'Liver and alcohol related diseases': 10},adult,rd1
+14003051,0,0,0,0,0,0,0,0,0,1,{'A49': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd1
+14003152,0,0,0,0,0,0,0,0,0,1,{'A15': 10},0,0,0,0,0,0,0,0,0,1,{'Tuberculosis': 10},adult,rd1
+14003458,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14003559,0,0,0,0,0,0,0,0,0,1,{'P28': 10},0,0,0,0,0,0,0,0,0,1,{'Prematurity and low birthweight': 10},neo,rd1
+14003609,2,1,0,0,0,1,0,0,0,0,"{'A39': 6, 'G00': 2, 'S06': 1, 'G06': 1}",1,0,0,0,0,0,0,0,1,0,"{'Unspecified infections': 9, 'Other injuries': 1}",adult,rd1
+14003764,0,0,0,0,2,0,0,0,0,0,"{'I12': 5, 'N18': 5}",0,0,0,0,2,0,0,0,0,0,"{'Other cardiovascular diseases': 5, 'Other noncommunicable diseases': 5}",adult,rd1
+14003789,0,0,0,0,2,0,0,0,0,0,"{'J06': 5, 'J20': 5}",0,0,0,0,0,0,0,0,0,1,{'Pneumonia': 10},child,rd1
+14003875,0,0,0,0,0,0,0,0,0,1,{'W74': 10},0,0,0,0,0,0,0,0,0,1,{'Other injuries': 10},adult,rd1
+14003890,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd1
+14004035,0,0,0,0,0,0,0,0,0,1,{'I10': 10},0,0,0,0,0,0,0,0,0,1,{'Other cardiovascular diseases': 10},adult,rd1
+14004044,0,1,0,0,0,0,0,1,0,0,"{'P80': 8, 'P36': 2}",0,1,0,0,0,0,0,1,0,0,"{'Epilepsy, leukaemia, and other noncommunicable diseases': 8, 'Other infections': 2}",child,rd1
+14004090,1,0,0,0,0,0,0,0,1,0,"{'A09': 9, 'A99': 1}",1,0,0,0,0,0,0,0,1,0,"{'Diarrhoeal diseases': 9, 'Other infections': 1}",child,rd1
+14004298,0,0,0,0,0,0,0,0,0,1,{'I10': 10},0,0,0,0,0,0,0,0,0,1,{'Other cardiovascular diseases': 10},adult,rd1
+14004789,0,0,0,0,0,0,0,0,0,1,{'V89': 10},0,0,0,0,0,0,0,0,0,1,{'Road and transport injuries': 10},adult,rd1
+14004839,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},child,rd1
+14004844,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14004885,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd1
+14004919,0,1,0,0,0,0,0,1,0,0,"{'A09': 8, 'R50': 2}",0,1,0,0,0,0,0,1,0,0,"{'Diarrhoeal diseases': 8, 'Other infections': 2}",child,rd1
+14004923,0,0,0,0,2,0,0,0,0,0,"{'P21': 5, 'P22': 5}",0,0,0,0,2,0,0,0,0,0,"{'Birth asphyxia and birth trauma': 5, 'Prematurity and low birthweight': 5}",neo,rd1
+14005124,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14005200,0,0,0,0,0,0,0,0,0,1,{'R56': 10},0,0,0,0,0,0,0,0,0,1,"{'Epilepsy, leukaemia, and other noncommunicable diseases': 10}",child,rd1
+14005376,0,0,0,0,0,0,0,0,0,1,{'O99': 10},0,0,0,0,0,0,0,0,0,1,{'Maternal conditions': 10},adult,rd1
+14005510,0,0,0,0,0,0,0,0,0,1,{'I63': 10},0,0,0,0,0,0,0,0,0,1,{'Stroke': 10},adult,rd1
+14005530,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14005850,0,0,0,0,0,0,0,0,0,1,{'I63': 10},0,0,0,0,0,0,0,0,0,1,{'Stroke': 10},adult,rd1
+14005861,0,0,0,0,0,0,0,0,0,1,{'B20': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd1
+14006015,0,0,0,0,0,0,0,0,0,1,{'C10': 10},0,0,0,0,0,0,0,0,0,1,{'Cancers': 10},adult,rd1
+14006133,1,0,1,0,0,1,0,0,0,0,"{'P36': 6, 'A40': 3, 'A39': 1}",0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd1
+14006155,0,0,0,1,0,1,0,0,0,0,"{'B19': 6, 'B50': 4}",0,0,0,1,0,1,0,0,0,0,"{'Unspecified infections': 6, 'Malaria': 4}",adult,rd1
+14006169,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14006430,0,0,1,0,0,0,1,0,0,0,"{'A09': 7, 'A95': 3}",0,0,1,0,0,0,1,0,0,0,"{'Diarrhoeal diseases': 7, 'Other infections': 3}",child,rd1
+14006553,0,0,0,0,0,0,0,0,0,1,{'P37': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd1
+14006628,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14006834,0,0,0,0,0,0,0,0,0,1,{'V89': 10},0,0,0,0,0,0,0,0,0,1,{'Injuries': 10},child,rd1
+14006882,0,0,0,0,0,0,0,0,0,1,{'P95': 10},0,0,0,0,0,0,0,0,0,1,{'Stillbirth': 10},neo,rd1
+14006898,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14006998,0,0,0,0,0,0,0,0,0,1,{'I10': 10},0,0,0,0,0,0,0,0,0,1,{'Other cardiovascular diseases': 10},adult,rd1
+14007070,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd1
+14007330,1,0,0,0,0,0,0,0,1,0,"{'I20': 9, 'I21': 1}",0,0,0,0,0,0,0,0,0,1,{'Ischemic heart disease': 10},adult,rd1
+14007427,0,1,1,0,1,0,0,0,0,0,"{'P36': 5, 'P23': 3, 'P22': 2}",0,1,1,0,1,0,0,0,0,0,"{'Other infections': 5, 'Pneumonia': 3, 'Other': 2}",child,rd1
+14007866,0,0,0,0,0,0,0,0,0,1,{'A16': 10},0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd1
+14008167,0,0,0,0,0,0,0,0,0,1,{'A39': 10},0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd1
+14008346,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd1
+14008356,0,0,0,0,0,0,0,0,0,1,{'A18': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd1
+14008445,0,0,0,0,0,0,0,0,0,1,{'G44': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd1
+14008748,0,0,0,0,0,0,0,0,0,1,{'K40': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd1
+14008761,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},child,rd1
+14009082,0,0,1,0,0,0,1,0,0,0,"{'N17': 7, 'N39': 3}",0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd1
+14009087,0,0,0,0,0,0,0,0,0,1,{'J21': 10},0,0,0,0,0,0,0,0,0,1,{'Pneumonia': 10},child,rd1
+14009118,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd1
+14009139,0,0,0,0,0,0,0,0,0,1,{'P95': 10},0,0,0,0,0,0,0,0,0,1,{'Stillbirth': 10},neo,rd1
+24000105,1,0,0,1,1,0,0,0,0,0,"{'I50': 5, 'J81': 4, 'J18': 1}",1,0,0,1,1,0,0,0,0,0,"{'Other cardiovascular diseases': 5, 'Chronic respiratory diseases': 4, 'Acute respiratory infections': 1}",adult,rd2
+24000133,1,0,0,0,0,0,0,0,1,0,"{'P55': 9, 'P35': 1}",1,0,0,0,0,0,0,0,1,0,"{'Other': 9, 'Neonatal infections': 1}",neo,rd2
+24000191,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},adult,rd2
+24000569,0,0,0,0,0,0,0,0,0,1,{'A87': 10},0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd2
+24000608,0,0,0,0,0,0,0,0,0,1,{'J45': 10},0,0,0,0,0,0,0,0,0,1,{'Chronic respiratory diseases': 10},adult,rd2
+24000625,0,0,0,0,0,0,0,0,0,1,{'B15': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd2
+24000664,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},child,rd2
+24000750,1,0,0,0,0,0,0,0,1,0,"{'I12': 9, 'I85': 1}",0,0,0,0,0,0,0,0,0,1,{'Other cardiovascular diseases': 10},adult,rd2
+24000856,0,0,0,0,0,0,0,0,0,1,{'A41': 10},0,0,0,0,0,0,0,0,0,1,{'Unspecified infections': 10},adult,rd2
+24001012,0,0,0,0,0,0,0,0,0,1,{'G40': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd2
+24001023,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd2
+24001098,0,0,0,0,0,0,0,0,0,1,{'K25': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd2
+24001260,1,0,0,0,0,0,0,0,1,0,"{'J18': 9, 'P23': 1}",0,0,0,0,0,0,0,0,0,1,{'Pneumonia': 10},child,rd2
+24001346,0,0,0,0,0,0,0,0,0,1,{'C22': 10},0,0,0,0,0,0,0,0,0,1,{'Cancers': 10},adult,rd2
+24001661,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd2
+24001766,0,0,0,0,0,0,0,0,0,1,{'R50': 10},0,0,0,0,0,0,0,0,0,1,{'Other infections': 10},child,rd2
+24001844,0,1,0,0,0,0,0,1,0,0,"{'A06': 8, 'A09': 2}",0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd2
+24002309,0,0,0,0,0,0,0,0,0,1,{'O90': 10},0,0,0,0,0,0,0,0,0,1,{'Maternal conditions': 10},adult,rd2
+24002406,0,0,0,0,0,0,0,0,0,1,{'J45': 10},0,0,0,0,0,0,0,0,0,1,{'Chronic respiratory diseases': 10},adult,rd2
+24002420,0,0,0,0,0,0,0,0,0,1,{'K25': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd2
+24002421,0,0,0,0,0,0,0,0,0,1,{'P22': 10},0,0,0,0,0,0,0,0,0,1,{'Prematurity and low birthweight': 10},neo,rd2
+24002481,0,0,0,0,0,0,0,0,0,1,{'A01': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},adult,rd2
+24002603,0,0,0,0,0,0,0,0,0,1,{'G91': 10},0,0,0,0,0,0,0,0,0,1,"{'Epilepsy, leukaemia, and other noncommunicable diseases': 10}",child,rd2
+24002738,0,0,0,0,0,0,0,0,0,1,{'B50': 10},0,0,0,0,0,0,0,0,0,1,{'Malaria': 10},child,rd2
+24002795,0,0,0,0,0,0,0,0,0,1,{'A09': 10},0,0,0,0,0,0,0,0,0,1,{'Diarrhoeal diseases': 10},child,rd2
+24002976,0,0,0,0,0,0,0,0,0,1,{'S32': 10},0,0,0,0,0,0,0,0,0,1,{'Other injuries': 10},adult,rd2
+24003163,0,0,0,0,0,0,0,0,0,1,{'G40': 10},0,0,0,0,0,0,0,0,0,1,{'Other noncommunicable diseases': 10},adult,rd2
+24003496,0,0,1,0,0,0,1,0,0,0,"{'R50': 7, 'J18': 3}",0,0,1,0,0,0,1,0,0,0,"{'Unspecified infections': 7, 'Acute respiratory infections': 3}",adult,rd2
