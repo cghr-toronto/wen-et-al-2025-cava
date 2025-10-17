@@ -44,9 +44,9 @@ N_REPEAT_RESPONSES = 10
 # #############################################################################################
 
 # Demo mode artificially limits the number of rows from the import dataset for testing/demo purposes
-DEMO_MODE = False
+DEMO_MODE = True
 DEMO_RANDOM = False
-DEMO_SIZE_LIMIT = 5
+DEMO_SIZE_LIMIT = 1000
 
 # Discard columns not recognized by the script before saving output file.
 # Set to True to retain only essential columns in the output file.
@@ -119,7 +119,7 @@ s4b_in_smpl_csv_filepath = s3_out_smpl_csv
 # smpl_analysis_in_csv_path = os.path.join(script_dir, OUTPUT_DIR, PROCESS_FILE)
 
 # Path to export file after sample analysis
-s4b_out_csv_filename = "healsl_rd1to2_rapid_gpt3_sample100_v1.csv"
+s4b_out_csv_filename = "healsl_rd1to2_rapid_gpt4_sample100_v1.csv"
 s4b_out_csv_filepath = os.path.join(script_dir, OUTPUT_DIR, s4b_out_csv_filename)
 # analyzed_out_csv_filename = PROCESS_FILE.replace(".csv", "_aggregated.csv")
 
