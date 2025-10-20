@@ -559,6 +559,8 @@ plot_perf_trend <- function(
         legend_position = "bottom",
         legend_direction = "horizontal",
         legend_spacing = unit(0, "pt"),
+        y_limits = c(0, 1.15),
+        y_breaks = seq(0, 1, by = 0.1),
         x_color_labels = c(
             "G3" = "GPT-3.5",
             "G4" = "GPT-4",
@@ -572,6 +574,20 @@ plot_perf_trend <- function(
             "dashed",
             "dotted",
             "dotted"
+        ),
+        x_linealpha = c(
+            1,
+            0.5,
+            0.9,
+            0.9,
+            0.7
+        ),
+        x_linewidths = c(
+            2,
+            1,
+            1.15,
+            2,
+            1.15
         ),
         plot_mean = F
     ) {
@@ -605,10 +621,14 @@ plot_perf_trend <- function(
         geom_line(
             aes(
                 linetype = model_name,
-                alpha = model_name
-            ),
-            linewidth = 1.15
+                alpha = model_name,
+                linewidth = model_name
+            )
         ) + 
+        scale_y_continuous(
+            limits = y_limits,
+            breaks = y_breaks
+        ) +
         scale_color_manual(
             values = default_colors,
             labels = x_color_labels
@@ -617,8 +637,12 @@ plot_perf_trend <- function(
             values = x_linetypes,
             labels = x_color_labels
         ) +
+        scale_linewidth_manual(
+           values = x_linewidths,
+           labels = x_color_labels
+        ) +
         scale_alpha_manual(
-            values = c(1, 0.35, 0.9, 0.9),
+            values = x_linealpha,
             labels = x_color_labels
         ) +
         labs(
@@ -1235,7 +1259,7 @@ fig_pccc_cod_adult <- plot_perf_bar(
     df_long %>% filter(age == "adult"),
     calc_pccc,
     group = "cod_name",
-    title = paste0("Adult, 12+ Years (n=", n_adult, ")"),
+    title = paste0("Adult Causes of Death, 12+ Years (n=", n_adult, ")"),
     text_scale = 0.7,
     x_hpos = -0.15,
     x_expand = expansion(add = 0.15)
@@ -1273,7 +1297,7 @@ fig_pccc_cod_child <- plot_perf_bar(
     df_long %>% filter(age == "child"),
     calc_pccc,
     group = "cod_name",
-    title = paste0("Child, 28 Days to 11 Years (n=", n_child, ")"),
+    title = paste0("Child Causes of Death, 28 Days to 11 Years (n=", n_child, ")"),
     text_scale = 0.92,
     x_hpos = -0.24,
     x_expand = expansion(add = 0.25)
@@ -1311,7 +1335,7 @@ fig_pccc_cod_neo <- plot_perf_bar(
     df_long %>% filter(age == "neo"),
     calc_pccc,
     group = "cod_name",
-    title = paste0("Neonatal, <28 Days (n=", n_neo, ")"),
+    title = paste0("Neonatal Causes of Death, <28 Days (n=", n_neo, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_scale = 0.92,
     x_hpos = -0.24,
@@ -1357,7 +1381,9 @@ fig_pccc_age <- plot_perf_trend(
                 factor(., levels = age_levels)
         ),
     y_title = "Partial Chance Corrected Concordance (PCCC)",
-    text_scale = 0.9
+    text_scale = 0.9,
+    y_limits = c(0.2, 0.9),
+    y_breaks = seq(0, 1, by = 0.05),
 )
 
 # Save plot
