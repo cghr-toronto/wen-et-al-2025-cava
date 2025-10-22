@@ -19,7 +19,7 @@ TIMEZONE = pytz.timezone('America/Toronto')
 TEMP_DIR = "../../tmp"
 DATA_DIR = "../../tmp"
 OUTPUT_DIR = "../../tmp"
-INCLUDE_SAMPLING = False
+INCLUDE_SAMPLING = True
 script_dir = os.path.dirname(__file__)
 
 # #############################################################################################
@@ -554,8 +554,7 @@ def stage_2_generate_gpt_responses(
         max_tokens = 30,        
         reasoning_effort = "minimal",
         text_verbosity = "low",
-        state = False,
-        include = ['reasoning.encrypted_content'],
+        store = False,
         tools = None
     ) -> str:
         """
@@ -571,8 +570,7 @@ def stage_2_generate_gpt_responses(
             top_logprobs (int, optional): Include top log probabilities in the response. Defaults to None.
             reasoning (str, optional): ability for model to reason with thinking steps. Defaults to minimal reasoning.
             text_verbosity (str, optional): amount of detail for model to output. Defaults to low verbosity.
-            state (boolean, optional): whether to save the state for future calls or not. Defaults to stateless (false).
-            include (array, optional): used to do stateless calls.
+            store (boolean, optional): whether to save the state for future calls or not. Defaults to stateless (false).
             text (dict[str], optional): additional parameters related to text. Defaults to low verbosity.
 
         Returns:
@@ -585,8 +583,7 @@ def stage_2_generate_gpt_responses(
             "input": input,            
             "reasoning" : { "effort" : reasoning_effort },
             "text": { "verbosity": text_verbosity },
-            "state": state,
-            "include" include,
+            "store": store,
             "max_output_tokens": max_tokens             
         }
         if tools:

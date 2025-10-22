@@ -1,7 +1,7 @@
 ---
 title: "Preprocess"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-author: "Richard Wen <richard.wen@unityhealth.to>"
+author: "Richard Wen <rrwen.dev@gmail.com>"
 ---
 
 ```{r, echo=FALSE}
@@ -185,14 +185,22 @@ df <- list(
             round = 2
         )
     ) %>% rename(gpt4_icd10 = cause1_icd10),
-    model_gpt5 =
+    model_gpt5 = bind_rows(
         read_csv(
-            "../tmp/healsl_rd1to2_rapid_gpt5_v1.csv",
-            col_select = c("rowid", "cause1_icd10", "round")
+            "../tmp/healsl_rd1_rapid_gpt5_v2.csv",
+            col_select = c("rowid", "cause1_icd10")
         ) %>% mutate(
             cause1_icd10 = str_sub(cause1_icd10, 1, 3),
-            round = as.integer(substr(round, 3, 3))
-        ) %>% rename(gpt5_icd10 = cause1_icd10),
+            round = 1
+        ),
+        read_csv(
+            "../tmp/healsl_rd2_rapid_gpt5_v2.csv",
+            col_select = c("rowid", "cause1_icd10")
+        ) %>% mutate(
+            cause1_icd10 = str_sub(cause1_icd10, 1, 3),
+            round = 2
+        )
+    ) %>% rename(gpt5_icd10 = cause1_icd10),
     model_insilicova = bind_rows(
         read_csv(
             "../tmp/healsl_rd1_rapid_insilicova_v1.csv",

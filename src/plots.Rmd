@@ -1,7 +1,7 @@
 ---
 title: "Plots"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
-author: "Richard Wen <richard.wen@unityhealth.to>"
+author: "Richard Wen <rrwen.dev@gmail.com>"
 ---
 
 ```{r, echo=FALSE}

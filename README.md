@@ -49,8 +49,8 @@ Files of interest:
 
 1. Email the authors for access to the following files:
     * `icd10_cghr10_v1.csv`
-    * `healsl_rd1_adult_v2.csv`
-    * `healsl_rd1_adult_age_v2.csv`
+    * `healsl_rd1_adult_v1.csv`
+    * `healsl_rd1_adult_age_v1.csv`
     * `healsl_rd1_who_adult_v1.csv`
     * `healsl_rd1_adult_narrative_v1.csv`
     * `healsl_rd2_adult_v1.csv`
@@ -73,6 +73,7 @@ Files of interest:
     * `healsl_rd2_neo_age_v1.csv`
     * `healsl_rd2_who_neo_v1.csv`
     * `healsl_rd2_neo_narrative_v1.csv`
+    * `icd10_cghr10_v1.csv`
 2. Put all the files above into the `tmp` folder
 3. Run InterVA-5 and InSilicoVA:
     1. Open a command line interface and activate python:
@@ -86,18 +87,24 @@ Files of interest:
     5. In RStudio, run [InSilicoVA](https://CRAN.R-project.org/package=InSilicoVA) in the R terminal `source src/models/insilicova.R`
         * This creates InSilicoVA outputs with `_insilicova_` in the file name
     6. Both model outputs should now be available in the `tmp` folder
-4. Run GPT-3.5 and GPT-4:
+4. Run GPT-3.5, GPT-4, and GPT-5:
     1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
     2. Create a `.env` file at `healsl-gpt-paper/.env` and add a line `OPEN_API_KEY=<your_secret_api_key>`
         * Replace `<your_secret_api_key>` with your [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
         * **CAUTION**: Do not share this file or your key with anyone else, keep it safe from public access
-    3. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt3.py`
+    3. Run [GPT-3.5](https://platform.openai.com/docs/models/gpt-3.5-turbo) in Python `python src/models/gpt3.py`
         * This creates GPT-3.5 outputs and intermediate files with `_gpt3_` in the file name
-    4. Run [GPT-3.5](https://pypi.org/project/openai/) in Python `python src/models/gpt4.py`
+    4. Run [GPT-4](https://platform.openai.com/docs/models/gpt-4) in Python `python src/models/gpt4.py`
         * This creates GPT-4 outputs and intermediate files with `_gpt4_` in the file name
-    5. Both model outputs should now be available in the `tmp` folder
+    5. Run [GPT-5](https://platform.openai.com/docs/models/gpt-5) in Python `python src/models/gpt5.py`
+        * This creates GPT-4 outputs and intermediate files with `_gpt5_` in the file name
+    6. All model outputs should now be available in the `tmp` folder
+    7. **Note**: If you encounter an error, try re-installing the `openai` library in the Python virtual environment:
+        * Make sure the environment is activated: `source bin/activate` (MacOS/Linux) or `bin\activate`
+        * Then uninstall the `openai` library: `pip uninstall openai`
+        * Install it again: `pip install openai`
 5. Gather all model outputs:
     1. Double click the file [src/src.Rproj](src/src.Rproj) to open RStudio
     2. In RStudio, open [src/data.Rmd](src/data.Rmd)
