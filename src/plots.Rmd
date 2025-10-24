@@ -20,6 +20,7 @@ options(readr.show_col_types = FALSE)
 #install.packages("patchwork")
 #install.packages("glue")
 #install.packages("kableExtra)
+#install.packages("boot")
 ```
 
 # Libraries
@@ -32,6 +33,7 @@ library(ggpattern)
 library(patchwork)
 library(glue)
 library(kableExtra)
+library(boot)
 ```
 
 ```{r, echo=FALSE}
@@ -103,7 +105,11 @@ calc_pccc <- function(actual, pred, k = 1, N = NULL, assume_zero = T) {
     C <- sum(TP) / length(actual)
     
     # Calc PCCC
-    out <- (C - (k/N)) / (1 - (k/N))
+    if (!all(TP)) {
+        out <- (C - (k/N)) / (1 - (k/N))
+    } else { # avoid division by 0 when max pccc
+        out <- 1
+    }
     
     # Scale negative numbers to 0 for easier plotting
     out <- if (assume_zero & out < 0) 0 else out
@@ -138,6 +144,33 @@ calc_csmf_acc <- function(actual, pred) {
     
     # Calc csmf acc
     out <- 1 - (sum(abs(csmf_true - csmf_pred)) / csmf_max_error)
+    return(out)
+}
+
+# Calc bootstrapped cis for a metric
+calc_ci <- function(
+        x,
+        f = calc_pccc,
+        n_boot = 1000,
+        conf_level = 0.95,
+        col_actual = "cod",
+        col_pred = "model_cghr10",
+        ...
+    ) {
+    
+    # Function to compute metric on a bootstrap sample
+    f_boot <- function(df, i) {
+        f(df[[col_actual]][i], df[[col_pred]][i], ...)
+    }
+    
+    # Run bootstrap using the 'boot' package
+    boot_res <- boot(data = x, statistic = f_boot, R = n_boot)
+    
+    # Compute percentile-based confidence interval
+    ci <- boot.ci(boot_res, type = "perc", conf = conf_level)$percent[4:5]
+    
+    # Return named vector with metric and CI
+    out <- c(ci_mean = mean(boot_res$t), ci_low = ci[1], ci_hi = ci[2])
     return(out)
 }
 
@@ -376,21 +409,27 @@ plot_perf_bar <- function(
         title_size = 10,
         x_title = "Partial Chance Corrected Concordance (PCCC)",
         y_title = NULL,
-        x_hpos = -0.23 * text_scale,
+        x_hpos = -0.47 * text_scale,
         x_limits = c(0, 1),
         x_breaks = seq(0, 1, by = 0.1),
-        x_expand = expansion(add = ((x_hpos * -1) + 0.02) * text_scale),
+        x_expand = expansion(add = ((x_hpos * -1) + 0.03)),
         x_shapes = 21:26,
-        x_title_size = 9 * text_scale,
-        y_title_size = 9 * text_scale,
-        x_text_size = 8 * text_scale,
-        x_color_size = 3 * text_scale,
-        y_text_size = 9 * text_scale,
+        x_title_size = 8 * text_scale,
+        y_title_size = 8 * text_scale,
+        x_text_size = 7 * text_scale,
+        x_color_size = 2.5 * text_scale,
+        y_text_size = 8 * text_scale,
         legend_position = "bottom",
         legend_title = element_blank(),
         legend_margin = margin(c(-8, -2, -2, -50)),
         legend_key_size = 0.5,
-        ...
+        legend_text_size = 7 * text_scale,
+        legend_spacing_x = unit(58, "pt"),
+        n_boot = 1000,
+        error_bar = T,
+        error_bar_width = 0.05,
+        error_bar_size = 0.3,
+        error_bar_label = "95% Confidence Interval (Bootstrap, 1000 Resamples)"
     ) {
     
     #  Group data
@@ -400,21 +439,40 @@ plot_perf_bar <- function(
     # Calc metric
     if (identical(f, calc_pccc)) {
         df_plot <- df_plot %>%
-            summarize(
-                metric = f(cod, model_cghr10, N = unique(ncod)[1], ...)
-            )
+            group_map(~{
+                
+                # Calc metric
+                out <- c(
+                    metric = f(.x$cod, .x$model_cghr10, N = unique(.x$ncod)[1])
+                )
+                
+                # Include ci if error bar
+                if (error_bar) {
+                    out <- c(.y, out, calc_ci(.x, n_boot = n_boot))
+                }
+                return(out)
+                
+            }, .keep = T) %>%
+            bind_rows
+        
     } else {
         df_plot <- df_plot %>%
-            summarize(
-                metric = f(cod, model_cghr10, ...)
-            )
+            group_map(~{
+                
+                # Calc metric
+                out <- c(
+                    metric = f(.x$cod, .x$model_cghr10)
+                )
+                
+                # Include ci if error bar
+                if (error_bar) {
+                    out <- c(.y, out, calc_ci(.x, n_boot = n_boot))
+                }
+                return(out)
+                
+            }, .keep = T) %>%
+            bind_rows
     }
-        
-    # Add metric value to model name
-    df_plot <- df_plot %>%
-        mutate( 
-            model_label = paste0(model_name, ": ", round(metric, 2))
-        )
     
     # Get custom colors for models
     default_colors <- scales::hue_pal()(length(unique(df_plot[[color]])))
@@ -444,7 +502,6 @@ plot_perf_bar <- function(
         summarize(max_x = max(x)) %>%
         arrange(max_x) %>%
         pull(y)
-    
     df_pos <- df_pos %>%
         mutate(
             y = factor(y, levels = group_levels_order),
@@ -455,7 +512,6 @@ plot_perf_bar <- function(
     group_width <- 0.8
     max_items <- max(df_pos$n_colors)
     bar_width <- group_width / max_items
-    
     df_pos <- df_pos %>%
         mutate(
             offset = (rank_in_group - (n_colors + 1)/2) * bar_width,
@@ -463,6 +519,14 @@ plot_perf_bar <- function(
             label_text = paste0(color, ": ", format(round(x, 2), nsmall = 2)),
             label_x = x_pos
         )
+    
+    # Add ci to model label
+    if (error_bar) {
+        df_pos <- df_pos %>%
+            mutate(
+                label_text = paste0(label_text, " (", round(ci_low, 2), ",", round(ci_hi, 2), ")")
+            )
+    }
     
     # Identify top-performing model in each group
     df_pos <- df_pos %>%
@@ -486,6 +550,7 @@ plot_perf_bar <- function(
     levels(df_pos$y) <- group_labels$label
 
     # Plot metric for each model
+    df_pos$ci_label <- error_bar_label # dummy label for legend
     out <- ggplot(df_pos, aes(x = x_pos, y = x, fill = color)) +
         geom_col(
             width = bar_width * 0.9,
@@ -529,6 +594,8 @@ plot_perf_bar <- function(
             legend.title = legend_title,
             legend.margin = legend_margin,
             legend.key.size = unit(legend_key_size, "lines"),
+            legend.text = element_text(size = legend_text_size),
+            legend.spacing.x = legend_spacing_x,
             panel.grid.major = element_blank(),
             panel.grid.minor = element_blank(),
             plot.title = element_text(size = title_size),
@@ -537,6 +604,21 @@ plot_perf_bar <- function(
             axis.text.x = element_text(size = x_text_size),
             axis.text.y = element_text(size = y_text_size)
         )
+    
+    # Show error bars
+    if (error_bar) {
+        out <- out +
+            geom_errorbar(
+                aes(ymin = ci_low, ymax = ci_hi, color = ci_label),
+                width = error_bar_width,
+                size = error_bar_size
+            ) +
+            scale_color_manual(name = "", values = "black") +
+            guides(
+                fill = guide_legend(order = 1), # bar legend first
+                color = guide_legend(order = 2) # ci legend last
+            )
+    }
     return(out)
 }
 
@@ -1220,8 +1302,6 @@ fig_pccc <- plot_perf_bar(
         ),
     calc_pccc,
     group = "age_label",
-    x_hpos = -0.24,
-    x_expand = expansion(add = 0.25),
     text_scale = 0.95
 )
 
@@ -1261,8 +1341,7 @@ fig_pccc_cod_adult <- plot_perf_bar(
     group = "cod_name",
     title = paste0("Adult Causes of Death, 12+ Years (n=", n_adult, ")"),
     text_scale = 0.7,
-    x_hpos = -0.15,
-    x_expand = expansion(add = 0.15)
+    x_hpos = -0.27
 )
     
 # Save plot
@@ -1299,8 +1378,7 @@ fig_pccc_cod_child <- plot_perf_bar(
     group = "cod_name",
     title = paste0("Child Causes of Death, 28 Days to 11 Years (n=", n_child, ")"),
     text_scale = 0.92,
-    x_hpos = -0.24,
-    x_expand = expansion(add = 0.25)
+    x_hpos = -0.43
 )
 
 # Save plot
@@ -1338,8 +1416,7 @@ fig_pccc_cod_neo <- plot_perf_bar(
     title = paste0("Neonatal Causes of Death, <28 Days (n=", n_neo, ")"),
     x_title = "Partial Chance Corrected Concordance (PCCC)",
     text_scale = 0.92,
-    x_hpos = -0.24,
-    x_expand = expansion(add = 0.25)
+    x_hpos = -0.43
 )
 
 # Save plot
