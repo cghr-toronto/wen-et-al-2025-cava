@@ -21,6 +21,7 @@ options(readr.show_col_types = FALSE)
 #install.packages("glue")
 #install.packages("kableExtra)
 #install.packages("boot")
+#install.pacakges("scales")
 ```
 
 # Libraries
@@ -34,6 +35,7 @@ library(patchwork)
 library(glue)
 library(kableExtra)
 library(boot)
+library(scales)
 ```
 
 ```{r, echo=FALSE}
@@ -937,6 +939,29 @@ df <- df %>%
             str_replace_all(" diseases| disease", "")
     ))
 
+# Rename raw COD names
+df_raw <- df_raw %>%
+    mutate(across(
+        c(
+            physician_cghr10,
+            gpt3_cghr10,
+            gpt4_cghr10,
+            gpt5_cghr10,
+            insilicova_cghr10,
+            interva5_cghr10
+        ),
+        ~ case_when(
+            .x == "Maternal conditions" ~ "Maternal",
+            .x == "Acute respiratory infections" ~ "Pneumonia",
+            .x == "Neonatal infections" ~ "Infections",
+            .x == "Road and transport injuries" ~ "Road/transport injuries",
+            .x == "Liver and alcohol related diseases" ~ "Liver/alcohol",
+            .x == "Birth asphyxia and trauma" ~ "Birth asphyxia/trauma",
+            .default = .x
+        ) %>%
+            str_replace_all(" diseases| disease", "")
+    ))
+
 ```
 
 ## Shorten COD Names
@@ -959,6 +984,20 @@ df <- df %>%
         ~ str_wrap(.x, width = 18)
     ))
 
+# Shorten raw COD names
+df_raw <- df_raw %>%
+    mutate(across(
+        c(
+            physician_cghr10,
+            gpt3_cghr10,
+            gpt4_cghr10,
+            gpt5_cghr10,
+            insilicova_cghr10,
+            interva5_cghr10
+        ),
+        ~ str_wrap(.x, width = 18)
+    ))
+
 ```
 
 ## Standardize Age Ranges
@@ -966,6 +1005,22 @@ df <- df %>%
 Standardize age ranges to follow age range and unit format in lowercase.
 
 ```{r}
+
+# Standardize raw ages to age range + unit
+df_raw <- df_raw %>%
+    mutate(
+        age_range_orig = age_range,
+        age_range = str_to_lower(age_range),
+        age_range = str_replace( # neo ages
+            age_range,
+            " \\(early neonatal\\)| \\(late neonatal\\)",
+            ""
+        ),
+        age_range = case_when( # adult ages
+            age == "adult" ~ paste0(age_range, " years"),
+            .default = age_range
+        )
+    )
 
 # Standardize ages to age range + unit
 df <- df %>%
@@ -1012,6 +1067,16 @@ ages_neo <- df %>%
     pull(age_range) %>%
     unique %>%
     order_arange
+
+# Order raw age ranges as factor
+df_raw <- df_raw %>%
+    mutate(
+        age_range = factor(
+            age_range %>%
+                str_replace(., "10-14 years", "12-14 years"),
+            levels = c(ages_neo, ages_child, ages_adult)
+        )
+    )
 
 # Order age ranges as factor
 df <- df %>%
@@ -1490,12 +1555,28 @@ fig_pccc_age
 
 ```{r}
 
+# Get total records
+tab_all <- df_raw %>%
+    filter(!is.na(physician_cghr10) & !is.null(physician_cghr10)) # remove uncoded cases
+tab_all_n <- tab_all %>% nrow
+
 # Get n records by age group
 tab_agegroup <- df %>%
     group_by(age) %>%
     summarize(
         n = n(),
         n_cod_uniq = n_distinct(physician_cghr10)
+    ) %>%
+    ungroup %>%
+    left_join(
+        tab_all %>%
+            group_by(age) %>%
+            summarize(n_all = n()) %>%
+            ungroup,
+        by = "age"
+    ) %>%
+    mutate(
+        n_agree_perc = round(n / n_all * 100, 1) 
     )
 
 # Get n records by age group and sex
@@ -1517,7 +1598,17 @@ tab_agegroup_sex <- df %>%
 # Get n records by cod
 tab_cod_n <- df %>%
     group_by(age, physician_cghr10) %>%
-    summarize(n_cod = n())
+    summarize(n_cod = n()) %>%
+    left_join(
+        tab_all %>%
+        group_by(age, physician_cghr10) %>%
+        summarize(n_cod_all = n()) %>%
+        ungroup,
+        by = c("age", "physician_cghr10")
+    ) %>%
+    mutate(
+        n_cod_agree_perc = round(n_cod / n_cod_all * 100 , 1)
+    )
 
 # Get n records by cod and sex
 tab_cod_sex <- df %>%
@@ -1552,11 +1643,12 @@ tab_cod <- tab_cod %>%
     mutate(
         age = if_else(age == "neo", "Neonate", str_to_title(age)),
         `Age Group` = glue(
-            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n{age} Female (n={n_female}, {n_female_perc}%)\n{age} Male (n={n_male}, {n_male_perc}%)"
+            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n- Female (n={n_female}, {n_female_perc}%)\n- Male (n={n_male}, {n_male_perc}%)\n- Agree ({n_agree_perc}% of {n_all})"
         ),
         `Cause of Death (COD)` = glue(
             "{str_to_title(physician_cghr10)}"
         ),
+        `Agree` = glue("{n_cod_agree_perc}% of {n_cod_all}"),
         `Female` = glue("{n_cod_female} ({n_cod_female_perc}%)"),
         `Male` = glue("{n_cod_male} ({n_cod_male_perc}%)"),
         `Total` = glue("{n_cod} ({n_cod_perc}%)")
@@ -1578,10 +1670,11 @@ tab_cod
 # Prepare and format the data
 tab_cod_format <- tab_cod %>%
     ungroup %>%
-    select(`Age Group`, `Cause of Death (COD)`, Female, Male, Total) %>%
+    select(`Age Group`, `Cause of Death (COD)`, Agree, Female, Male, Total) %>%
     mutate(
         `Age Group` = str_replace_all(`Age Group`, "\\\\n|\\n", "<br>"),
-        `Cause of Death (COD)` = str_replace_all(`Cause of Death (COD)`, "\\\\n|\\n", "<br>")
+        `Cause of Death (COD)` = str_replace_all(`Cause of Death (COD)`, "\\\\n|\\n", "<br>"),
+        Agree =  str_replace_all(Agree, "\\\\n|\\n", "<br>")
     ) %>%
     group_by(`Age Group`) %>%
     mutate(`Age Group` = ifelse(row_number() == 1, `Age Group`, "")) %>%
@@ -1604,7 +1697,17 @@ tab_cod_html
 # Get n records by age
 tab_age_n <- df %>%
     group_by(age, age_range) %>%
-    summarize(n_age = n())
+    summarize(n_age = n()) %>%
+    left_join(
+        tab_all %>%
+        group_by(age, age_range) %>%
+        summarize(n_age_all = n()) %>%
+        ungroup,
+        by = c("age", "age_range")
+    ) %>%
+    mutate(
+        n_age_agree_perc = round(n_age / n_age_all * 100 , 1)
+    )
 
 # Get n records by age and sex
 tab_age_sex <- df %>%
@@ -1639,11 +1742,12 @@ tab_age <- tab_age %>%
     mutate(
         age = if_else(age == "neo", "Neonate", str_to_title(age)),
         `Age Group` = glue(
-            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n{age} Female (n={n_female}, {n_female_perc}%)\n{age} Male (n={n_male}, {n_male_perc}%)"
+            "{age} (n={n}, {n_perc}%, {n_cod_uniq} CODs)\n- Female (n={n_female}, {n_female_perc}%)\n- Male (n={n_male}, {n_male_perc}%)\n- Agree ({n_agree_perc}% of {n_all})"
         ),
         `Age Range` = glue(
             "{str_to_title(age_range)}"
         ),
+        `Agree` = glue("{n_age_agree_perc}% of {n_age_all}"),
         `Female` = glue("{n_age_female} ({n_age_female_perc}%)"),
         `Male` = glue("{n_age_male} ({n_age_male_perc}%)"),
         `Total` = glue("{n_age} ({n_age_perc}%)")
@@ -1666,10 +1770,11 @@ tab_age
 # Prepare and format the data
 tab_age_format <- tab_age %>%
     ungroup %>%
-    select(`Age Group`, `Age Range`, Female, Male, Total) %>%
+    select(`Age Group`, `Age Range`, Agree, Female, Male, Total) %>%
     mutate(
         `Age Group` = str_replace_all(`Age Group`, "\\\\n|\\n", "<br>"),
-        `Age Range` = str_replace_all(`Age Range`, "\\\\n|\\n", "<br>")
+        `Age Range` = str_replace_all(`Age Range`, "\\\\n|\\n", "<br>"),
+        `Agree` = str_replace_all(`Agree`, "\\\\n|\\n", "<br>")
     ) %>%
     group_by(`Age Group`) %>%
     mutate(`Age Group` = ifelse(row_number() == 1, `Age Group`, "")) %>%
