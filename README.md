@@ -1,6 +1,6 @@
 # Computer Assisted Verbal Autopsy: Comparing Large Language Models to Physicians for Assigning Causes to 6939 Deaths in Sierra Leone from 2019-2022
 
-- [Manuscript](manuscript/wen-et-al-2025-cava-v3.docx)
+- [Preprint](https://www.researchsquare.com/article/rs-7578570/latest)
 
 ## Overview
 
@@ -30,8 +30,8 @@ Files of interest:
 3. Install [R](https://www.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/)
 4. Install [draw.io](https://www.drawio.com/) (to edit diagrams under [src/figures](src/figures))
 5. If on Windows, install [RTools](https://cran.r-project.org/bin/windows/Rtools/)
-6. Open a command line interface and clone this repository `git clone https://github.com/cghr-toronto/healsl-gpt-paper`
-7. Navigate into the cloned folder `cd healsl-gpt-paper`
+6. Open a command line interface and clone this repository `git clone https://github.com/cghr-toronto/wen-et-al-2025-cava`
+7. Navigate into the cloned folder `cd wen-et-al-2025-cava`
 8. Create a tmp folder for temporary files not tracked by git `mkdir tmp`
     * This folder is used for model input and output data
     * Intermediate files from running code may also be stored here
@@ -91,7 +91,7 @@ Files of interest:
     1. Open a command line interface and activate python:
         * MacOS/Linux: `source bin/activate.sh`
         * Windows: `bin\activate`
-    2. Create a `.env` file at `healsl-gpt-paper/.env` and add a line `OPEN_API_KEY=<your_secret_api_key>`
+    2. Create a `.env` file at `wen-et-al-2025-cava/.env` and add a line `OPEN_API_KEY=<your_secret_api_key>`
         * Replace `<your_secret_api_key>` with your [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
         * **CAUTION**: Do not share this file or your key with anyone else, keep it safe from public access
     3. Run [GPT-3.5](https://platform.openai.com/docs/models/gpt-3.5-turbo) in Python `python src/models/gpt3.py`
