@@ -1,7 +1,7 @@
 # Computer Assisted Verbal Autopsy: Comparing Large Language Models to Physicians for Assigning Causes to 6939 Deaths in Sierra Leone from 2019-2022
 
 - [Preprint](https://www.researchsquare.com/article/rs-7578570/latest)
-- [Public Data](http://doi.org/10.7910/DVN/DKJVPG)
+- [Public Data](http://doi.org/10.7910/DVN/QDLJCF)
 
 ## Overview
 
